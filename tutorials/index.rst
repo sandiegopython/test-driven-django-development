@@ -3,13 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Learning Django by Testing's documentation!
-======================================================
+Workshop: Test-Driven Web Development with Django
+=================================================
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   intro
 
 
 
