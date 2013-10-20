@@ -49,7 +49,14 @@ We need to add ``'django.contrib.admin'`` to ``INSTALLED_APPS`` in our settings 
         'django.contrib.admin',
     )
 
-After enabling the admin app we need to enable admin URLs and make enable auto-discovery of ``admin.py`` files in our apps.  To do this we need to uncomment some lines in our project's urls file (``myblog/urls.py``).  Afterward our urls file should look something like this:
+
+After adding the admin to our installed apps we need to have Django create the tables for admin:
+
+.. code-block:: bash
+
+    $ python manage.py syncdb
+
+We also need to enable admin URLs and make enable auto-discovery of ``admin.py`` files in our apps.  To do this we need to uncomment some lines in our project's urls file (``myblog/urls.py``).  Afterward our urls file should look something like this:
 
 .. code-block:: python
 
