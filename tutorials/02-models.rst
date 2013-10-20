@@ -25,6 +25,21 @@ We'll be focusing on the ``models.py`` file below.
 
 Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our settings file (``myblog/settings.py``).  This will allow Django to discover the models in our ``models.py`` file so they can be added to the database when running syncdb.
 
+.. code-block:: python
+
+    INSTALLED_APPS = (
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.sites',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'django.contrib.admin',
+
+        'blog',
+    )
+
+
 
 Creating a model
 ----------------
@@ -70,15 +85,16 @@ Now we can navigate to the admin site (http://localhost:8000/admin/) and create 
 
 First click the "Add" link next to *Posts* in the admin site.
 
-(TODO Insert screenshot of admin homepage)
+.. image:: _static/02-01_add_post.png
 
 Next fill in the details for our first blog post and click the *Save* button.
 
-(TODO Insert screenshot of Post creation form)
+.. image:: _static/02-02_create_post.png
 
 Our post was created
 
-(TODO Insert screenshot of Post change list)
+.. image:: _static/02-03_post_added.png
+
 
 Our first test: __unicode__ method
 ----------------------------------
@@ -145,7 +161,7 @@ Great!  Now we're ready to create a real test.
 
 Let's write our test to ensure that a blog post's unicode representation is equal to its title.  We need to modify our tests file like so:
 
-.. code-block::
+.. code-block:: python
 
     from django.test import TestCase
     from .models import Post
@@ -155,7 +171,7 @@ Let's write our test to ensure that a blog post's unicode representation is equa
 
         def test_unicode_representation(self):
             post = Post(title="My post title")
-            self.assertEqual(unicode(post), "My post title")
+            self.assertEqual(unicode(post), post.title)
 
 
 Now let's run our tests again:
@@ -213,4 +229,4 @@ Now if we run our test again we should see that our single test passes:
 
 We've just written our first test and fixed our code to make our test pass.
 
-(TODO Explain why we wrote the test first)
+Test Driven Development (TDD) is all about writing a failing test and then making it pass. If you were to write your code first, then write tests, it's harder to know that the test you wrote really does test what you want it to.
