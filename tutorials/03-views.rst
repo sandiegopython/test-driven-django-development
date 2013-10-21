@@ -93,5 +93,80 @@ Now let's visit http://localhost:8000/ in a web browser to check our work.  You 
 
 (TODO: Add screenshot)
 
+Using a base template
+~~~~~~~~~~~~~~~~~~~~~
+
+TODO: Explain this
+
+base.html:
+
+.. code-block:: html
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Foundation 4</title>
+        <link rel="stylesheet" href="static/css/foundation.css">
+    </head>
+    <body>
+        {% block content %}{% endblock %}
+    </body>
+    </html>
+
+index.html:
+
+    {% extends "base.html" %}
+
+    {% block content %}
+    <section class="row">
+        <header class="large-12 columns">
+            <h1>Welcome to My Blog</h1>
+            <hr>
+        </header>
+    </section>
+    {% endblock content %}
+
+.. code-block:: html
+
+Adding filler content
+~~~~~~~~~~~~~~~~~~~~~
+
+TODO: Explain this briefly (also briefly note that we're going glossing over the row and columns syntax of Foundation)
+
+.. code-block:: html
+
+    {% extends "base.html" %}
+
+    {% block content %}
+    <section class="row">
+        <header class="large-12 columns">
+            <h1>Welcome to My Blog</h1>
+            <hr>
+        </header>
+    </section>
+
+    <section class="row">
+
+        <div class="large-8 columns">
+            <h2>Post Title</h2>
+            <article>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
+            </article>
+        </div>
+
+        <div class="large-4 columns">
+            <h3>About Me</h3>
+            <p>My name is Caroline Elizondo and this is my blog.</p>
+
+            <h3>Post History</h3>
+            <ul class="disc">
+                <li><a href="">My Second Post</a></li>
+                <li><a href="">My First Post</a></li>
+            </ul>
+        </div>
+
+    </section>
+    {% endblock content %}
+
 
 .. _zurb foundation files: http://foundation.zurb.com/
