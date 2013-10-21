@@ -1,4 +1,4 @@
-Test-driven Django Development
+Test-Driven Django Development
 ==============================
 
 This repository contains code and tutorials used to lead a Test-driven Django
@@ -6,8 +6,8 @@ workshop. These were developed by `San Diego Python`_ and used for a full day
 event where anyone interested can come and learn `Django`_.
 
 The code is not meant as a replacement for the (excellent) `Django tutorials`_
-but rather intended to provide additional insight and knowledge. As a result,
-it is best if users go through the tutorials and understand the absolute basics
+but rather intended to provide additional insight and knowledge.
+It is best if users go through the tutorials and understand the absolute basics
 of Django before the workshop.
 
 .. _Django: https://djangoproject.com
@@ -38,6 +38,6 @@ The tutorials are built using `Sphinx`_:
 Contribute
 ----------
 
-Contributions to these materials is welcome. Please send us a pull request
+Contributions to these materials are welcome. Please send us a pull request
 with your changes. If you want to discuss changes before submitting them,
 feel free to join us on IRC at #sandiegopython on freenode.
