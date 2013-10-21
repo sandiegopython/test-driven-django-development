@@ -11,6 +11,17 @@ Creating the project
     $ django-admin.py startproject myblog
     $ cd myblog
 
+Directory variables
+-------------------
+
+Add the following to the top of your ``myblog/settings.py`` file:
+
+.. code-block:: python
+
+    import os
+    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+
 Creating the database
 ---------------------
 
@@ -21,7 +32,7 @@ First we need to update the ``DATABASES`` variable in our settings file (``myblo
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'myblog.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'myblog.sqlite3'),
     }
 
 Now let's create the database and a super user account for accessing the admin interface:
