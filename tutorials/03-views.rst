@@ -115,6 +115,8 @@ base.html:
 
 index.html:
 
+.. code-block:: html
+
     {% extends "base.html" %}
 
     {% block content %}
@@ -125,8 +127,6 @@ index.html:
         </header>
     </section>
     {% endblock content %}
-
-.. code-block:: html
 
 Adding filler content
 ~~~~~~~~~~~~~~~~~~~~~
