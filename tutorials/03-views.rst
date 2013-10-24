@@ -168,5 +168,7 @@ TODO: Explain this briefly (also briefly note that we're going glossing over the
     </section>
     {% endblock content %}
 
+(TODO: Add sections explaining how to add blog posts to homepage and then how to make an individual page for each post)
+
 
 .. _zurb foundation files: http://foundation.zurb.com/
