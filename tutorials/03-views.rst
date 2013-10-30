@@ -24,7 +24,7 @@ All this does is try to get the homepage ``/``, and then assert that the HTTP re
 Base template and static files
 ------------------------------
 
-Let's start with base templates based on zurb foundation.  First download and extract the `Zurb Foundation files`_.
+Let's start with base templates based on zurb foundation.  First download and extract the `Zurb Foundation files`_ (`direct link`_).
 
 Static files
 ~~~~~~~~~~~~
@@ -42,29 +42,32 @@ Now let's add this new ``static`` directory to our settings file:
 Template files
 ~~~~~~~~~~~~~~
 
-Create a ``templates`` directory in our top-level directory and a ``templates/myblog`` in our myblog folder. Our directory structure should look like
+Create a ``templates`` directory in our top-level directory. Our directory structure should look like
 
 .. code-block:: bash
 
-    ├── blog
-    │   ├── __init__.py
-    │   ├── admin.py
-    │   ├── models.py
-    │   ├── tests.py
-    │   └── views.py
-    ├── manage.py
-    ├── myblog
-    │   ├── __init__.py
-    │   ├── settings.py
-    │   ├── urls.py
-    │   └── wsgi.py
-    ├── myblog.sqlite3
-    └── templates
-        ├── base.html
-        └── index.html # We'll create this file next
-
-
-Why create a template directory in myblog? Namespacing!
+        ├── blog
+        │   ├── __init__.py
+        │   ├── admin.py
+        │   ├── models.py
+        │   ├── tests.py
+        │   └── views.py
+        ├── manage.py
+        ├── myblog
+        │   ├── __init__.py
+        │   ├── settings.py
+        │   ├── urls.py
+        │   ├── views.py
+        │   └── wsgi.py
+        ├── myblog.sqlite3
+        ├── static
+        │   └── css
+        │       ├── foundation.css
+        │       ├── foundation.min.css
+        │       └── normalize.css
+        └── templates
+            ├── base.html
+            └── index.html
 
 Create a basic HTML file like this:
 
@@ -131,12 +134,12 @@ Now we need to route the homepage URL to the home view.  Our URL file should loo
 
 Now let's visit http://localhost:8000/ in a web browser to check our work.  You should see a webpage that looks like this:
 
-(TODO: Add screenshot)
+.. image:: _static/03-01_myblog.png
 
 Using a base template
 ~~~~~~~~~~~~~~~~~~~~~
 
-TODO: Explain this
+Templates in Django are generally built up from smaller pieces. This lets you include things like a consistent header and footer on all your pages. Convention is to call one of your templates `base.html` and have everything inherit from that.
 
 base.html:
 
@@ -172,7 +175,8 @@ index.html:
 Adding filler content
 ~~~~~~~~~~~~~~~~~~~~~
 
-TODO: Explain this briefly (also briefly note that we're going glossing over the row and columns syntax of Foundation)
+Our `base.html` defines some `{% block %}`'s for us. In our `index.html` we only really need to fill in the `content` block. For now please just ignore the `class="large-8 column"` and related stuff. All that does is handle the grid layout from our Zurb Foundation CSS.
+
 
 .. code-block:: html
 
@@ -211,3 +215,4 @@ TODO: Explain this briefly (also briefly note that we're going glossing over the
 
 
 .. _zurb foundation files: http://foundation.zurb.com/
+.. _direct link: http://foundation.zurb.com/files/foundation-4.3.2.zip
