@@ -66,10 +66,8 @@ Create a ``templates`` directory in our top-level directory. Our directory struc
         │       ├── foundation.min.css
         │       └── normalize.css
         └── templates
-            ├── base.html
-            └── index.html
 
-Create a basic HTML file like this:
+Create a basic HTML file like this and name it ``templates/index.html``:
 
 .. code-block:: html
 
