@@ -244,7 +244,7 @@ Let's run our tests again to see whether they pass:
     AssertionError: {'body': [u'This field is required.'], 'name': [u'This field is required.'], 'email': [u'This field is required.']} != {'body': ['required'], 'name': ['required'], 'email': ['required']}
 
     ----------------------------------------------------------------------
-    Ran 6 tests in 0.012s
+    Ran 6 tests in 0.009s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -255,9 +255,9 @@ Our test for blank form data is failing because we aren't checking for the corre
 
     $ python manage.py test blog
     Creating test database for alias 'default'...
-    ....
+    ......
     ----------------------------------------------------------------------
-    Ran 4 tests in 0.004s
+    Ran 6 tests in 0.009s
 
     OK
     Destroying test database for alias 'default'...
