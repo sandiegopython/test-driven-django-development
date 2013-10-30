@@ -4,6 +4,23 @@ Views and Templates
 Now we can create blog posts and see them in the admin interface, but no one else can see our blog posts yet.
 
 
+The easiest test
+----------------
+
+Every site should have a default template. Lets write a failing test for this first. The way the Django test finder works in 1.5 it's easiest to just put this new class in the ``blog/test.py`` file for now.
+
+.. code-block:: python
+
+
+    class ProjectTests(TestCase):
+        def test_homepage(self):
+            response = self.client.get('/')
+            self.assertEqual(response.status_code, 200)
+
+
+All this does is try to get the homepage ``/``, and then assert that the HTTP response code was 200. 200 means it got a page without an error. If we run these tests right now this should fail.
+
+
 Base template and static files
 ------------------------------
 
@@ -25,7 +42,29 @@ Now let's add this new ``static`` directory to our settings file:
 Template files
 ~~~~~~~~~~~~~~
 
-Create a ``templates`` directory in our top-level directory.
+Create a ``templates`` directory in our top-level directory and a ``templates/myblog`` in our myblog folder. Our directory structure should look like
+
+.. code-block:: bash
+
+    ├── blog
+    │   ├── __init__.py
+    │   ├── admin.py
+    │   ├── models.py
+    │   ├── tests.py
+    │   └── views.py
+    ├── manage.py
+    ├── myblog
+    │   ├── __init__.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   └── wsgi.py
+    ├── myblog.sqlite3
+    └── templates
+        ├── base.html
+        └── index.html # We'll create this file next
+
+
+Why create a template directory in myblog? Namespacing!
 
 Create a basic HTML file like this:
 
@@ -74,6 +113,7 @@ Let's start by creating a views file: ``myblog/views.py`` referencing the ``inde
 
     home = HomeView.as_view()
 
+Django will be able to find this template in the ``templates`` folder because of our ``TEMPLATE_DIRS`` setting.
 Now we need to route the homepage URL to the home view.  Our URL file should look something like this:
 
 .. code-block:: python
@@ -115,6 +155,8 @@ base.html:
 
 index.html:
 
+.. code-block:: html
+
     {% extends "base.html" %}
 
     {% block content %}
@@ -126,7 +168,6 @@ index.html:
     </section>
     {% endblock content %}
 
-.. code-block:: html
 
 Adding filler content
 ~~~~~~~~~~~~~~~~~~~~~
