@@ -75,7 +75,7 @@ Create a basic HTML file like this and name it ``templates/index.html``:
     <html>
     <head>
         <title>Foundation 4</title>
-        <link rel="stylesheet" href="css/foundation.css">
+        <link rel="stylesheet" href="static/css/foundation.css">
     </head>
     <body>
         <section class="row">
