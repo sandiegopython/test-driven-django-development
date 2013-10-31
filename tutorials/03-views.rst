@@ -4,10 +4,14 @@ Views and Templates
 Now we can create blog posts and see them in the admin interface, but no one else can see our blog posts yet.
 
 
-The easiest test
-----------------
+The homepage test
+-----------------
 
-Every site should have a default template. Lets write a failing test for this first. The way the Django test finder works in 1.5 it's easiest to just put this new class in the ``blog/test.py`` file for now.
+Every site should have a homepage. Let's write a failing test for that.
+
+We can use the Django ``TestClient`` to create a test to make sure that our homepage returns an HTTP 200 status code (this is the standard response for a successful HTTP request).
+
+Let's add the following to our ``blog/tests.py`` file:
 
 .. code-block:: python
 
@@ -18,7 +22,7 @@ Every site should have a default template. Lets write a failing test for this fi
             self.assertEqual(response.status_code, 200)
 
 
-All this does is try to get the homepage ``/``, and then assert that the HTTP response code was 200. 200 means it got a page without an error. If we run these tests right now this should fail.
+If we run our tests now this test should fail.
 
 
 Base template and static files
