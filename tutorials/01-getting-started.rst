@@ -84,7 +84,7 @@ After running this command, there will be a database file ``myblog.sqlite3``
 in the same directory as ``manage.py``. Right now, this database only has
 a few tables specific to Django. The command looks at ``INSTALLED_APPS`` in
 ``myblog/settings.py`` and creates database tables for models defined in
-those apps ``models.py`` files.
+those apps' ``models.py`` files.
 
 Later in this workshop, we will create models specific to the blog we are
 writing. These models will hold data like blog posts themselves and comments
