@@ -139,7 +139,7 @@ Using a base template
 
 Templates in Django are generally built up from smaller pieces. This lets you include things like a consistent header and footer on all your pages. Convention is to call one of your templates ``base.html`` and have everything inherit from that.
 
-base.html:
+We'll start with putting our header and a sidebar in ``base.html``:
 
 .. code-block:: html
 
@@ -150,23 +150,37 @@ base.html:
         <link rel="stylesheet" href="static/css/foundation.css">
     </head>
     <body>
-        {% block content %}{% endblock %}
+        <section class="row">
+            <header class="large-12 columns">
+                <h1>Welcome to My Blog</h1>
+                <hr>
+            </header>
+        </section>
+
+        <section class="row">
+
+            <div class="large-8 columns">
+                {% block content %}{% endblock %}
+            </div>
+
+            <div class="large-4 columns">
+                <h3>About Me</h3>
+                <p>My name is Caroline Elizondo and this is my blog.</p>
+            </div>
+
+        </section>
+
     </body>
     </html>
 
-index.html:
+Let's put some filler content in ``index.html``:
 
 .. code-block:: html
 
     {% extends "base.html" %}
 
     {% block content %}
-    <section class="row">
-        <header class="large-12 columns">
-            <h1>Welcome to My Blog</h1>
-            <hr>
-        </header>
-    </section>
+    Page body goes here.
     {% endblock content %}
 
 
@@ -181,34 +195,10 @@ Our ``base.html`` defines some ``{% block %}``'s for us. In our ``index.html`` w
     {% extends "base.html" %}
 
     {% block content %}
-    <section class="row">
-        <header class="large-12 columns">
-            <h1>Welcome to My Blog</h1>
-            <hr>
-        </header>
-    </section>
-
-    <section class="row">
-
-        <div class="large-8 columns">
-            <h2>Post Title</h2>
-            <article>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-            </article>
-        </div>
-
-        <div class="large-4 columns">
-            <h3>About Me</h3>
-            <p>My name is Caroline Elizondo and this is my blog.</p>
-
-            <h3>Post History</h3>
-            <ul class="disc">
-                <li><a href="">My Second Post</a></li>
-                <li><a href="">My First Post</a></li>
-            </ul>
-        </div>
-
-    </section>
+        <h2>Post Title</h2>
+        <article>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
+        </article>
     {% endblock content %}
 
 (TODO: Add sections explaining how to add blog posts to homepage and then how to make an individual page for each post)
@@ -217,16 +207,18 @@ Our ``base.html`` defines some ``{% block %}``'s for us. In our ``index.html`` w
 ListViews
 ---------
 
-In our filler view, we just put some hard coded posts in there. Ideally this should come from our DB, so let's get that under test first.
+We put some hard-coded posts in our filler view. These post should come from our models instead. Let's write a test for that.
 
-
-A simple test for "does this show up on the page" is just to use the TestClient to get a page and then check the response text. So in our ``blog/test.py`` file let's add
+The Django ``TestClient`` can be used for a simple test of whether text shows up on a page.  Let's add the following to our ``blog/tests.py`` file:
 
 .. code-block:: python
 
     from django.contrib import auth
 
     class ListPostsOnHomePage(TestCase):
+
+        """Test whether our blog posts show up on the homepage"""
+
         def setUp(self):
             self.user = auth.get_user_model().objects.create(username='some_user')
 
