@@ -352,7 +352,18 @@ Now we need to define a ``post_details`` view in our ``blog/views.py`` file:
     def post_details(request, pk):
         return HttpResponse('empty')
 
-Which we'll be updating later. The final piece is the ``get_absolute_url()`` function. All we need to add to ``blog/models.py`` is
+We'll be updating this view later to return something useful.
+
+Finally we need to create the ``get_absolute_url()`` function which should return the post details URL for each posts. We should create a test first.  Let's add the following test to our ``PostModelTest`` class:
+
+.. code-block:: python
+
+    def test_get_absolute_url(self):
+        user = get_user_model().objects.create(username='some_user')
+        post = Post.objects.create(title="My post title", author=user)
+        self.assertIsNotNone(post.get_absolute_url())
+
+Now we need to add to ``blog/models.py`` is
 
 .. code-block:: python
 
