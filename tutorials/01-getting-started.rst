@@ -73,7 +73,8 @@ First we need to update the ``DATABASES`` variable in our settings file
         }
     }
 
-Now let's create the database:
+Now let's create the database and a super user account for accessing the
+admin interface which we'll get to shortly:
 
 .. code-block:: bash
 
