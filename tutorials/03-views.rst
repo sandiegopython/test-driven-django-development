@@ -363,7 +363,7 @@ Finally we need to create the ``get_absolute_url()`` function which should retur
         post = Post.objects.create(title="My post title", author=user)
         self.assertIsNotNone(post.get_absolute_url())
 
-Now we need to add to ``blog/models.py`` is
+Now we need to implement ``get_absolute_url`` in our ``Post`` class (found in ``blog/models.py``):
 
 .. code-block:: python
 
@@ -374,7 +374,9 @@ Now we need to add to ``blog/models.py`` is
     def get_absolute_url(self):
         return reverse('blog.views.post_details', kwargs={'pk': self.pk})
 
-And after all that we should have passing tests! Lets make it actually display a blog post. The tests for that are
+We should now have passing tests again.
+
+Let's make the blog post details page actually display a blog post.  First we'll write some tests in our ``BlogPostViewTest`` class:
 
 .. code-block:: python
 
@@ -386,11 +388,9 @@ And after all that we should have passing tests! Lets make it actually display a
         response = self.client.get(self.post.get_absolute_url())
         self.assertContains(response, self.post.body)
 
-To stay with our class based views we have the `Detail View`_ which will give us another short piece of code
+To implement our blog post page we'll use another class-based generic view: the `DetailView`_.  Let's replace our ``blog/views.py`` file with the following:
 
 .. code-block:: python
-
-    # blog/views.py
 
     from django.views.generic import DetailView
     from .models import Post
@@ -401,7 +401,7 @@ To stay with our class based views we have the `Detail View`_ which will give us
 
     post_details = PostDetails.as_view()
 
-Which gives us a LOT of errors now that will look like
+Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
 
 .. code-block:: bash
 
@@ -431,7 +431,7 @@ Which gives us a LOT of errors now that will look like
 
     ----------------------------------------------------------------------
 
-Pesky templates. So we need to create ``templates/blog/post_detail.html``, to get back to make the DetailView happy and then we have a ``post`` context variable that we can use. The template then looks like
+These errors are telling us that we're referencing a ``blog/post_details.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/post_detail.html``. The ``DetailView`` should provide us with a ``post`` context variable that we can use to reference our ``Post`` model instance.  Our template should look similar to this:
 
 .. code-block:: html
 
@@ -440,14 +440,25 @@ Pesky templates. So we need to create ``templates/blog/post_detail.html``, to ge
     {% block content %}
     <h2>{{ post.title }}</h2>
     <article>
-    {{ post.body }}
+        {{ post.body }}
     </article>
     {% endblock %}
 
-and we're back to passing tests.
+Now our tests should pass again:
+
+.. code-block:: bash
+
+    $ python manage.py test blog
+    Creating test database for alias 'default'...
+    .............
+    ----------------------------------------------------------------------
+    Ran 13 tests in 0.071s
+
+    OK
+    Destroying test database for alias 'default'...
 
 .. _zurb foundation files: http://foundation.zurb.com/
 .. _direct link: http://foundation.zurb.com/files/foundation-4.3.2.zip
 .. _Classy Class Based Views: http://ccbv.co.uk
 .. _Django Model Instance Documentation: https://docs.djangoproject.com/en/dev/ref/models/instances/#get-absolute-url
-.. _Detail View: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/`
+.. _DetailView: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/`
