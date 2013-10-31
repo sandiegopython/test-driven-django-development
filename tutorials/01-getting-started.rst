@@ -121,7 +121,7 @@ like this:
         'django.contrib.sites',
         'django.contrib.messages',
         'django.contrib.staticfiles',
-        'django.contrib.admin',        # new!
+        'django.contrib.admin',        # we just added this
     )
 
 After adding the admin to our installed apps we need to have Django create
@@ -131,7 +131,7 @@ the database tables for admin:
 
     $ python manage.py syncdb
 
-We also need to enable admin URLs and make enable auto-discovery of
+We also need to enable admin URLs and enable auto-discovery of
 ``admin.py`` files in our apps. We will create one of these ``admin.py`` files
 later to expose our blog post model and comment model to the admin interface.
 To enable auto-discovery, we need to uncomment some lines in our project's
