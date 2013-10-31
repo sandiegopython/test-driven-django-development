@@ -217,14 +217,14 @@ The Django ``TestClient`` can be used for a simple test of whether text shows up
 
 .. code-block:: python
 
-    from django.contrib import auth
+    from django.contrib.auth import get_user_model
 
     class ListPostsOnHomePage(TestCase):
 
         """Test whether our blog posts show up on the homepage"""
 
         def setUp(self):
-            self.user = auth.get_user_model().objects.create(username='some_user')
+            self.user = get_user_model().objects.create(username='some_user')
 
         def test_one_post(self):
             Post.objects.create(title='1-title', body='1-body', author=self.user)
