@@ -51,5 +51,4 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   intro
    01-startproject
