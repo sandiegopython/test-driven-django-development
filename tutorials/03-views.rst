@@ -310,39 +310,39 @@ And now, if we add some posts in our admin, they should show up on the homepage.
 Blog Post Details
 -----------------
 
-To save a bit of time let's make our urls look like ``http://myblog.com/blog/post/ID/`` where ID is the database ID of the blog post we want to see. A quick test for that then becomes
+To save a bit of time let's make our urls look like ``http://myblog.com/blog/post/ID/`` where ID is the database ID of the blog post we want to see. Let's write a test for that:
 
 .. code-block:: python
 
     class BlogPostViewTest(TestCase):
         def setUp(self):
-            self.user = auth.get_user_model().objects.create(username='some_user')
+            self.user = get_user_model().objects.create(username='some_user')
             self.post = Post.objects.create(title='1-title', body='1-body', author=self.user)
 
         def test_basic_view(self):
             response = self.client.get(self.post.get_absolute_url())
             self.assertEqual(response.status_code, 200)
 
-Which of course fails beacuse we didn't define get_absolute_url (`Django Model Instance Documentation`_). That needs a view associated with it, and that kind of a view really is associated with the blog app. We'll need to change both ``myblog/urls.py`` and create a ``blog/urls.py`` file that's included from the ``myblog`` file.
+This test fails beacuse we didn't define get_absolute_url (`Django Model Instance Documentation`_). We need to create a URL and a view for blog post pages now. We'll need to create a ``blog/urls.py`` file and reference it in the ``myblog/urls.py`` file.
 
-So our ``myblog/urls.py`` needs
-
-.. code-block:: python
-
-    url(r'^blog/', include('blog.urls')),
-
-and our ``blog/urls.py`` file is the very short
+Our ``blog/urls.py`` file is the very short
 
 .. code-block:: python
 
-    from django.conf.urls import patterns, include, url
+    from django.conf.urls import patterns, url
 
 
     urlpatterns = patterns('blog.views',
         url(r'^post/(?P<pk>\d+)/$', 'post_details'),
     )
 
-And of course we now need to define a post_details view in our ``blog/views.py`` file.
+The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
+
+.. code-block:: python
+
+    url(r'^blog/', include('blog.urls')),
+
+Now we need to define a ``post_details`` view in our ``blog/views.py`` file:
 
 .. code-block:: python
 
