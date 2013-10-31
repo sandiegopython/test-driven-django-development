@@ -307,8 +307,153 @@ The last change needed then is just to update our ``index.html`` to actually put
     </div>
 
 
-And now, if we add some posts in our admin, they should show up on the homepage.
+And now, if we add some posts in our admin, they should show up on the homepage. What about viewing an individual blog post?
+
+Blog Post Details
+-----------------
+
+To save a bit of time let's make our urls look like ``http://myblog.com/blog/post/ID/`` where ID is the database ID of the blog post we want to see. A quick test for that then becomes
+
+.. code-block:: python
+
+    class BlogPostViewTest(TestCase):
+        def setUp(self):
+            self.user = auth.get_user_model().objects.create(username='some_user')
+            self.post = Post.objects.create(title='1-title', body='1-body', author=self.user)
+
+        def test_basic_view(self):
+            response = self.client.get(self.post.get_absolute_url())
+            self.assertEqual(response.status_code, 200)
+
+Which of course fails beacuse we didn't define get_absolute_url (`Django Model Instance Documentation`_). That needs a view associated with it, and that kind of a view really is associated with the blog app. We'll need to change both ``myblog/urls.py`` and create a ``blog/urls.py`` file that's included from the ``myblog`` file.
+
+So our ``myblog/urls.py`` needs
+
+.. code-block:: python
+
+    url(r'^blog/', include('blog.urls')),
+
+and our ``blog/urls.py`` file is the very short
+
+.. code-block:: python
+
+    from django.conf.urls import patterns, include, url
+
+
+    urlpatterns = patterns('blog.views',
+        url(r'^post/(?P<pk>\d+)/$', 'post_details'),
+    )
+
+And of course we now need to define a post_details view in our ``blog/views.py`` file.
+
+.. code-block:: python
+
+    from django.http import HttpResponse
+
+
+    def post_details(request, pk):
+        return HttpResponse('empty')
+
+Which we'll be updating later. The final piece is the ``get_absolute_url()`` function. All we need to add to ``blog/models.py`` is
+
+.. code-block:: python
+
+    from django.core.urlresolvers import reverse
+
+    # And in our Post model class...
+
+    def get_absolute_url(self):
+        return reverse('blog.views.post_details', kwargs={'pk': self.pk})
+
+And after all that we should have passing tests! Lets make it actually display a blog post. The tests for that are
+
+.. code-block:: python
+
+    def test_blog_title_in_post(self):
+        response = self.client.get(self.post.get_absolute_url())
+        self.assertContains(response, self.post.title)
+
+    def test_blog_body_in_post(self):
+        response = self.client.get(self.post.get_absolute_url())
+        self.assertContains(response, self.post.body)
+
+To stay with our class based views we have the `Detail View`_ which will give us another short piece of code
+
+.. code-block:: python
+
+    # blog/views.py
+
+    from django.views.generic import DetailView
+    from . import models
+
+    class PostDetails(DetailView):
+        model = models.Post
+
+    post_details = PostDetails.as_view()
+
+Which gives us a LOT of errors now that will look like
+
+.. code-block:: bash
+
+    ======================================================================
+    ERROR: test_blog_title_in_post (blog.tests.BlogPostViewTest)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/Users/paulcollins/personal/myblog/blog/tests.py", line 47, in test_blog_title_in_post
+        response = self.client.get(self.post.get_absolute_url())
+      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/test/client.py", line 453, in get
+        response = super(Client, self).get(path, data=data, **extra)
+      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/test/client.py", line 279, in get
+        return self.request(**r)
+      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/test/client.py", line 424, in request
+        six.reraise(*exc_info)
+      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/core/handlers/base.py", line 140, in get_response
+        response = response.render()
+      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/template/response.py", line 105, in render
+        self.content = self.rendered_content
+      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/template/response.py", line 80, in rendered_content
+        template = self.resolve_template(self.template_name)
+      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/template/response.py", line 56, in resolve_template
+        return loader.select_template(template)
+      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/template/loader.py", line 194, in select_template
+        raise TemplateDoesNotExist(', '.join(not_found))
+    TemplateDoesNotExist: blog/post_detail.html
+
+    ----------------------------------------------------------------------
+
+Pesky templates. This brings up something though, notice the template it's looking for is ``blog/post_detail.html``. We could create a folder in ``myblog/templates``, but it's usually best to keep templates next to the app that they're used by. So in ``myblog/blog/templates/blog/post_detail.html`` let's add a blank template. For reference our directory tree should look a bit like
+
+.. code-block:: bash
+
+    ├── blog
+    │   ├── __init__.py
+    │   ├── admin.py
+    │   ├── models.py
+    │   ├── templates
+    │   │   └── blog
+    │   │       └── post_detail.html
+    │   ├── tests.py
+    │   ├── urls.py
+    │   └── views.py
+    ├── manage.py
+    ├── myblog
+    │   ├── __init__.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   ├── views.py
+    │   └── wsgi.py
+    ├── myblog.sqlite3
+    ├── static
+    │   └── css
+    │       ├── foundation.css
+    │       ├── foundation.min.css
+    │       └── normalize.css
+    └── templates
+        ├── base.html
+        └── index.html
 
 .. _zurb foundation files: http://foundation.zurb.com/
 .. _direct link: http://foundation.zurb.com/files/foundation-4.3.2.zip
 .. _Classy Class Based Views: http://ccbv.co.uk
+.. _Django Model Instance Documentation: https://docs.djangoproject.com/en/dev/ref/models/instances/#get-absolute-url
+.. _Detail View: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/`
