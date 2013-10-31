@@ -421,36 +421,20 @@ Which gives us a LOT of errors now that will look like
 
     ----------------------------------------------------------------------
 
-Pesky templates. This brings up something though, notice the template it's looking for is ``blog/post_detail.html``. We could create a folder in ``myblog/templates``, but it's usually best to keep templates next to the app that they're used by. So in ``myblog/blog/templates/blog/post_detail.html`` let's add a blank template. For reference our directory tree should look a bit like
+Pesky templates. So we need to create ``templates/blog/post_detail.html``, to get back to make the DetailView happy and then we have a ``post`` context variable that we can use. The template then looks like
 
-.. code-block:: bash
+.. code-block:: html
 
-    ├── blog
-    │   ├── __init__.py
-    │   ├── admin.py
-    │   ├── models.py
-    │   ├── templates
-    │   │   └── blog
-    │   │       └── post_detail.html
-    │   ├── tests.py
-    │   ├── urls.py
-    │   └── views.py
-    ├── manage.py
-    ├── myblog
-    │   ├── __init__.py
-    │   ├── settings.py
-    │   ├── urls.py
-    │   ├── views.py
-    │   └── wsgi.py
-    ├── myblog.sqlite3
-    ├── static
-    │   └── css
-    │       ├── foundation.css
-    │       ├── foundation.min.css
-    │       └── normalize.css
-    └── templates
-        ├── base.html
-        └── index.html
+    {% extends "base.html" %}
+
+    {% block content %}
+    <h2>{{ post.title }}</h2>
+    <article>
+    {{ post.body }}
+    </article>
+    {% endblock %}
+
+and we're back to passing tests.
 
 .. _zurb foundation files: http://foundation.zurb.com/
 .. _direct link: http://foundation.zurb.com/files/foundation-4.3.2.zip
