@@ -405,28 +405,17 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
 
 .. code-block:: bash
 
+    $ python manage.py test blog
+    ======================================================================
+    ERROR: test_blog_body_in_post (blog.tests.BlogPostViewTest)
+    ----------------------------------------------------------------------
+    ...
+    TemplateDoesNotExist: blog/post_detail.html
+
     ======================================================================
     ERROR: test_blog_title_in_post (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
-    Traceback (most recent call last):
-      File "/Users/paulcollins/personal/myblog/blog/tests.py", line 47, in test_blog_title_in_post
-        response = self.client.get(self.post.get_absolute_url())
-      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/test/client.py", line 453, in get
-        response = super(Client, self).get(path, data=data, **extra)
-      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/test/client.py", line 279, in get
-        return self.request(**r)
-      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/test/client.py", line 424, in request
-        six.reraise(*exc_info)
-      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/core/handlers/base.py", line 140, in get_response
-        response = response.render()
-      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/template/response.py", line 105, in render
-        self.content = self.rendered_content
-      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/template/response.py", line 80, in rendered_content
-        template = self.resolve_template(self.template_name)
-      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/template/response.py", line 56, in resolve_template
-        return loader.select_template(template)
-      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/template/loader.py", line 194, in select_template
-        raise TemplateDoesNotExist(', '.join(not_found))
+    ...
     TemplateDoesNotExist: blog/post_detail.html
 
     ----------------------------------------------------------------------
