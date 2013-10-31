@@ -51,4 +51,4 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   01-startproject
+   01-getting-started
