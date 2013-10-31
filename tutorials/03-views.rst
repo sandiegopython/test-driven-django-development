@@ -297,14 +297,12 @@ The last change needed then is just to update our ``index.html`` to actually put
 
 .. code-block:: html
 
-    <div class="large-8 columns">
-        {% for post in post_list %}
-        <h2>{{ post.title }}</h2>
-        <article>
-          {{ post.body }}
-        </article>
-        {% endfor %}
-    </div>
+    {% for post in post_list %}
+    <h2>{{ post.title }}</h2>
+    <article>
+        {{ post.body }}
+    </article>
+    {% endfor %}
 
 
 And now, if we add some posts in our admin, they should show up on the homepage. What about viewing an individual blog post?
