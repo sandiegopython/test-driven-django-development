@@ -282,12 +282,12 @@ One easy way to get all our posts objects to list is to just use a ``ListView``.
 
     from django.views.generic import ListView
 
-    from blog import models
+    from blog.models import Post
 
 
     class HomeView(ListView):
         template_name = 'index.html'
-        queryset = models.Post.objects.order_by('-created_at')
+        queryset = Post.objects.order_by('-created_at')
 
     home = HomeView.as_view()
 
@@ -393,10 +393,11 @@ To stay with our class based views we have the `Detail View`_ which will give us
     # blog/views.py
 
     from django.views.generic import DetailView
-    from . import models
+    from .models import Post
+
 
     class PostDetails(DetailView):
-        model = models.Post
+        model = Post
 
     post_details = PostDetails.as_view()
 
