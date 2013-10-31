@@ -135,7 +135,7 @@ We also need to enable admin URLs and enable auto-discovery of
 ``admin.py`` files in our apps. We will create one of these ``admin.py`` files
 later to expose our blog post model and comment model to the admin interface.
 To enable auto-discovery, we need to uncomment some lines in our project's
-urls file (``myblog/urls.py``). Afterward our urls fileshould look something
+urls file (``myblog/urls.py``). Afterward our urls file should look something
 like this:
 
 .. code-block:: python
