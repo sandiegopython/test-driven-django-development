@@ -166,7 +166,7 @@ Now visit the admin site in your browser (http://localhost:8000/admin/).
 
 .. HINT::
     The Django development server is a quick and simple web server used for
-    rapid development and not for production long-term use. The development
+    rapid development and not for long-term production use. The development
     server reloads any time the code changes but some actions like adding
     files do not trigger a reload and the server will need to be manually
     restarted.
