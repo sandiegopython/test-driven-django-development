@@ -87,11 +87,11 @@ a few tables specific to Django. The command looks at ``INSTALLED_APPS`` in
 those apps' ``models.py`` files.
 
 Later in this workshop, we will create models specific to the blog we are
-writing. These models will hold data like blog posts themselves and comments
-on blog posts.
+writing. These models will hold data like blog posts and comments on blog
+posts.
 
 .. HINT::
-    SQLite is a self-contained database engine. It is not very good for a
+    SQLite is a self-contained database engine. It is inappropriate for a
     multi-user website but it works great for development. In production,
     you would probably use PostgreSQL or MySQL. For more info on SQLite,
     see the `SQLite documentation`_.
