@@ -21,6 +21,12 @@ Add the following to the top of your ``myblog/settings.py`` file:
     import os
     BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+This arcane bit of code sets up a variable that contains the path on your
+filesystem to the directory above ``settings.py``. Later on in this workshop
+we will be setting up a path to our database, a path to templates and a path
+to static files. All of these paths are relative to each other and so this
+``BASE_DIR`` will be quite useful down the line.
+
 
 Creating the database
 ---------------------

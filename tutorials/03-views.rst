@@ -24,16 +24,27 @@ Let's add the following to our ``blog/tests.py`` file:
 
 If we run our tests now this test should fail.
 
+.. HINT::
+    There's lots more information on the `hypertext transfer protocol`_
+    (HTTP) and its various `status codes`_ on Wikipedia.
+
 
 Base template and static files
 ------------------------------
 
 Let's start with base templates based on zurb foundation.  First download and extract the `Zurb Foundation files`_ (`direct link`_).
 
+Zurb Foundation is a CSS, HTML and JavaScript framework for building the
+front-end of web sites. Rather than attempt to design a web site entirely from
+scratch, Foundation gives a good starting place on which to design and build
+an attractive, standards-compliant web site that works well across devices
+such as laptops, tablets and phones.
+
+
 Static files
 ~~~~~~~~~~~~
 
-Create a ``static`` directory in our top-level directory (the one with the ``manage.py`` file).  Move the ``css`` directory from the foundation archive to this new ``static`` directory.
+Create a ``static`` directory in our top-level directory (the one with the ``manage.py`` file).  Copy the ``css`` directory from the foundation archive to this new ``static`` directory.
 
 Now let's add this new ``static`` directory to our ``myblog/settings.py`` file:
 
@@ -43,8 +54,26 @@ Now let's add this new ``static`` directory to our ``myblog/settings.py`` file:
         os.path.join(BASE_DIR, 'static'),
     )
 
+For more details, see Django's documentation on `static files`_.
+
+.. IMPORTANT::
+    This workshop is focused on Python and Django and so out of necessity we
+    are going to gloss over explaining HTML, CSS and JavaScript a little bit.
+    However, virtually all websites have a front-end built with these
+    fundamental building blocks of the open web.
+
+
 Template files
 ~~~~~~~~~~~~~~
+
+Templates are a way to dynamically generate a number of documents which are
+similar but have some data that is slightly different. In the blogging system
+we are building, we want all of our blog posts to look visually similar but
+the actual text of a given blog post varies. We will have a single template
+for what all of our blog posts and the template will contain variables that
+get replaced when a blog post is rendered. This reuse that Django helps with
+and the concept of keeping things in a single place is called the DRY
+principle for Don't Repeat Yourself.
 
 Create a ``templates`` directory in our top-level directory. Our directory structure should look like
 
@@ -99,6 +128,14 @@ Now let's add this new ``templates`` directory to our ``myblog/settings.py`` fil
         os.path.join(BASE_DIR, 'templates'),
     )
 
+For just about everything there is to know about Django templates, read
+the `template documentation`_.
+
+.. TIP::
+    In our examples, the templates are going to be used to generate similar
+    HTML pages. However, Django's template system can be used to generate
+    any type of plain text document such as CSS, JavaScript, CSV or XML.
+
 
 Views
 -----
@@ -138,6 +175,19 @@ Now let's visit http://localhost:8000/ in a web browser to check our work.  You 
 
 .. image:: _static/03-01_myblog.png
 
+.. HINT::
+    From a code flow perspective, we now have a working example of how Django
+    creates dynamic web pages. When an HTTP request to a Django powered web
+    site is sent, the ``urls.py`` file contains a series of patterns for
+    matching the URL of that web request. The matching URL delegates the
+    request to a corresponding view (or to a another set of URLs which map
+    the request to a view). Finally, the view delegates the request to a
+    template for rendering the actual HTML.
+
+    In web site architecture, this separation of concerns is variously known
+    as a three-tier architecture or a model-view-controller architecture.
+
+
 Using a base template
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -169,7 +219,7 @@ We'll start with putting our header and a sidebar in ``base.html``:
 
             <div class="large-4 columns">
                 <h3>About Me</h3>
-                <p>My name is Caroline Elizondo and this is my blog.</p>
+                <p>I am a Python developer and I like Django.</p>
             </div>
 
         </section>
@@ -211,7 +261,7 @@ Our ``base.html`` defines some ``{% block %}``'s for us. In our ``index.html`` w
 ListViews
 ---------
 
-We put some hard-coded posts in our filler view. These post should come from our models instead. Let's write a test for that.
+We put a hard-coded title and article in our filler view. These post details should come from our models and database instead. Let's write a test for that.
 
 The Django ``TestClient`` can be used for a simple test of whether text shows up on a page.  Let's add the following to our ``blog/tests.py`` file:
 
@@ -298,6 +348,7 @@ The last change needed then is just to update our ``index.html`` to actually put
     </article>
     {% endfor %}
 
+Running the tests here we see that all the tests pass!
 
 And now, if we add some posts in our admin, they should show up on the homepage. What about viewing an individual blog post?
 
@@ -382,7 +433,7 @@ Let's make the blog post details page actually display a blog post.  First we'll
         response = self.client.get(self.post.get_absolute_url())
         self.assertContains(response, self.post.body)
 
-To implement our blog post page we'll use another class-based generic view: the `DetailView`_.  Let's replace our ``blog/views.py`` file with the following:
+To implement our blog post page we'll use another class-based generic view: the `DetailView`_. The ``DetailView`` is a view for displaying the details of an instance of a model and rendering it to a template. Let's replace our ``blog/views.py`` file with the following:
 
 .. code-block:: python
 
@@ -414,7 +465,7 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
 
     ----------------------------------------------------------------------
 
-These errors are telling us that we're referencing a ``blog/post_details.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/post_detail.html``. The ``DetailView`` should provide us with a ``post`` context variable that we can use to reference our ``Post`` model instance.  Our template should look similar to this:
+These errors are telling us that we're referencing a ``blog/post_detail.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/post_detail.html``. The ``DetailView`` should provide us with a ``post`` context variable that we can use to reference our ``Post`` model instance.  Our template should look similar to this:
 
 .. code-block:: html
 
@@ -433,15 +484,19 @@ Now our tests should pass again:
 
     $ python manage.py test blog
     Creating test database for alias 'default'...
-    .............
+    .......
     ----------------------------------------------------------------------
-    Ran 13 tests in 0.071s
+    Ran 8 tests in 0.071s
 
     OK
     Destroying test database for alias 'default'...
 
 .. _zurb foundation files: http://foundation.zurb.com/
 .. _direct link: http://foundation.zurb.com/files/foundation-4.3.2.zip
+.. _static files: https://docs.djangoproject.com/en/1.5/ref/contrib/staticfiles/
+.. _hypertext transfer protocol: http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+.. _status codes: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+.. _template documentation: https://docs.djangoproject.com/en/1.5/topics/templates/
 .. _Classy Class Based Views: http://ccbv.co.uk
 .. _Django Model Instance Documentation: https://docs.djangoproject.com/en/dev/ref/models/instances/#get-absolute-url
-.. _DetailView: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/`
+.. _DetailView: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/
