@@ -250,20 +250,14 @@ which should fail like this
     FAIL: test_one_post (blog.tests.ListPostsOnHomePage)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-      File "/Users/paulcollins/personal/myblog/blog/tests.py", line 25, in test_one_post
-        self.assertContains(response, '1-title')
-      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/test/testcases.py", line 664, in assertContains
-        msg_prefix + "Couldn't find %s in response" % text_repr)
+      ...
     AssertionError: Couldn't find '1-title' in response
 
     ======================================================================
     FAIL: test_two_posts (blog.tests.ListPostsOnHomePage)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-      File "/Users/paulcollins/personal/myblog/blog/tests.py", line 32, in test_two_posts
-        self.assertContains(response, '1-title')
-      File "/opt/boxen/data/virturalenvs/sdpug_tdd_django/lib/python2.7/site-packages/django/test/testcases.py", line 664, in assertContains
-        msg_prefix + "Couldn't find %s in response" % text_repr)
+      ...
     AssertionError: Couldn't find '1-title' in response
 
     ----------------------------------------------------------------------
