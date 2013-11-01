@@ -1,12 +1,11 @@
 Models
 ======
 
-(TODO Explain what models are and why we're using them)
 
 Creating an app
 ---------------
 
-It is generally a good practice to separate your Django projects into multiple specialized (and sometimes reusable) apps.  Additionally every Django model must live in an app so you'll need at least one app for your project.
+It is generally a good practice to separate your Django projects into multiple specialized (and sometimes reusable) apps. Additionally every Django model must live in an app so you'll need at least one app for your project.
 
 Let's create an app for blog posts and related models.  We'll call the app ``blog``:
 
@@ -76,6 +75,8 @@ First let's create a blog post model.  This will correspond to a database table 
         created_at = models.DateTimeField(auto_now_add=True, editable=False)
         modified_at = models.DateTimeField(auto_now=True, editable=False)
 
+If you aren't already familiar with databases, this code may be somewhat daunting. A good way to think about a model (or a database table) is as a sheet in a spreadsheet. Each field like the ``title`` or ``author`` is a column in the spreadsheet and each different instance of the model -- each individual blog post in our project -- is a row in the spreadsheet.
+
 To create the database table for our ``Post`` model we need to run syncdb again:
 
 .. code-block:: bash
@@ -131,7 +132,7 @@ Our post was created
 Our first test: __unicode__ method
 ----------------------------------
 
-In the admin change list our posts all have the unhelpful name *Post object*.  We can customize the way models are referenced by creating a ``__unicode__`` method on our model class.
+In the admin change list our posts all have the unhelpful name *Post object*.  We can customize the way models are referenced by creating a ``__unicode__`` method on our model class. Models are a good place to put this kind of reusable code that is specific to a model.
 
 Let's first create a test demonstrating the behavior we'd like to see.
 
@@ -167,12 +168,18 @@ Now run the test command to ensure our app's single test fails as expected:
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-Great!  Now we're ready to create a real test.
+If we read the output carefully, the ``manage.py test`` command did a few things. First, it created a test database. This is important because we wouldn't want tests to actually modify our real database. Secondly, it executed each "test" in ``blog/tests.py``. If all goes well, the test runner isn't very chatty, but when failures occur like in our test, the test runner prints lots of information to help you debug your failing test.
+
+Now we're ready to create a real test.
 
 .. TIP::
     There are lots of resources on unit testing but a great place to start is
     the official Python documentation on the `unittest`_ module and the
-    `Testing Django applications`_ docs.
+    `Testing Django applications`_ docs. They also have good recommendations
+    on naming conventions which is why our test classes are named like
+    ``SomethingTest`` and our methods named ``test_something``. Because many
+    projects adopt similar conventions, developers can more easily understand
+    the code.
 
     .. _unittest: http://docs.python.org/2.7/library/unittest.html
     .. _Testing Django applications: https://docs.djangoproject.com/en/1.5/topics/testing/overview/
@@ -191,6 +198,12 @@ Let's write our test to ensure that a blog post's unicode representation is equa
             post = Post(title="My post title")
             self.assertEqual(unicode(post), post.title)
 
+.. HINT::
+    ``__unicode__`` may seem like a strange name, but Unicode is a standard
+    for representing and encoding most of the world's writing systems and
+    character sets. All strings that Django passes around are Unicode strings
+    so that Django can be used for applications designed for different
+    languages.
 
 Now let's run our tests again:
 
@@ -249,3 +262,5 @@ Now if we run our test again we should see that our single test passes:
 We've just written our first test and fixed our code to make our test pass.
 
 Test Driven Development (TDD) is all about writing a failing test and then making it pass. If you were to write your code first, then write tests, it's harder to know that the test you wrote really does test what you want it to.
+
+While this may seem like a trivial example, good tests are a way to document the expected behavior of a program. A great test suite is a sign of a mature application since bits and pieces can be changed easily and the tests will ensure that the program still works as intended. The Django framework itself has a massive unit test suite with thousands of tests.
