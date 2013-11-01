@@ -33,9 +33,9 @@ Let's start with base templates based on zurb foundation.  First download and ex
 Static files
 ~~~~~~~~~~~~
 
-Create a ``static`` directory in our top-level directory (the one with the ``manage.py`` file).  Move the ``css`` directory from the foundation archive to this new ``static`` direcotry.
+Create a ``static`` directory in our top-level directory (the one with the ``manage.py`` file).  Move the ``css`` directory from the foundation archive to this new ``static`` directory.
 
-Now let's add this new ``static`` directory to our settings file:
+Now let's add this new ``static`` directory to our ``myblog/settings.py`` file:
 
 .. code-block:: python
 
@@ -91,7 +91,7 @@ Create a basic HTML file like this and name it ``templates/index.html``:
     </body>
     </html>
 
-Now let's add this new ``templates`` directory to our settings file:
+Now let's add this new ``templates`` directory to our ``myblog/settings.py`` file:
 
 .. code-block:: python
 
@@ -119,7 +119,7 @@ Let's start by creating a views file: ``myblog/views.py`` referencing the ``inde
     home = HomeView.as_view()
 
 Django will be able to find this template in the ``templates`` folder because of our ``TEMPLATE_DIRS`` setting.
-Now we need to route the homepage URL to the home view.  Our URL file should look something like this:
+Now we need to route the homepage URL to the home view.  Our URL file ``myblog/urls.py`` should look something like this:
 
 .. code-block:: python
 
