@@ -508,7 +508,7 @@ Finally we need to create the ``get_absolute_url()`` function which should retur
         post = Post.objects.create(title="My post title", author=user)
         self.assertIsNotNone(post.get_absolute_url())
 
-Now we need to implement ``get_absolute_url`` in our ``Post`` class (found in ``blog/models.py``):
+Now we need to implement ``get_absolute_url`` in our ``BlogPost`` class (found in ``blog/models.py``):
 
 .. code-block:: python
 
@@ -574,7 +574,7 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
     FAILED (errors=3)
     Destroying test database for alias 'default'...
 
-These errors are telling us that we're referencing a ``blog/post_detail.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/post_detail.html``. The ``DetailView`` should provide us with a ``post`` context variable that we can use to reference our ``Post`` model instance.  Our template should look similar to this:
+These errors are telling us that we're referencing a ``blog/post_detail.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/post_detail.html``. The ``DetailView`` should provide us with a ``post`` context variable that we can use to reference our ``BlogPost`` model instance.  Our template should look similar to this:
 
 .. code-block:: html
 
