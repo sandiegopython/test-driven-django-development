@@ -252,7 +252,7 @@ We'll start with putting our header and a sidebar in ``templates/base.html``:
 
     We will not explain the CSS classes we used above (e.g. ``large-8``, ``column``, ``row``).  More information on these classes can be found in the Zurb Foundation `grid documentation`_.
 
-Let's put some filler content in ``templates/index.html``:
+Let's put some filler content in our homepage template file.  Let's replace our whole ``templates/index.html`` with the following:
 
 .. code-block:: html
 
