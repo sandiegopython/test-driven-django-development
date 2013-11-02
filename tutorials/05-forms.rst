@@ -5,9 +5,13 @@ Forms
 Adding a Comment form
 ---------------------
 
-To allow users to create comments we need to accept a form submission. HTML forms are the most common method used to accept user input on web sites and send that data to a server. We can use Django's form framework for this task.
+To allow users to create comments we need to accept a form submission. HTML forms are the most common method used to accept user input on web sites and send that data to a server. We can use `Django's form framework`_ for this task.
 
-First let's write some tests.  We'll need to create a blog ``Post`` and a ``User`` for our tests.  Let's make a setup method for our tests which creates a post and adds it to the database. The setup method is called before each test in the given test class so that each test will be able to use the ``User`` and ``Post``.
+.. _Django's form framework: https://docs.djangoproject.com/en/dev/topics/forms/
+
+First let's write some tests.  We'll need to create a blog ``Post`` and a ``User`` for our tests.  Let's make a `setup`_ method for our tests which creates a post and adds it to the database. The `setup`_ method is called before each test in the given test class so that each test will be able to use the ``User`` and ``Post``.
+
+.. _setup: http://docs.python.org/2.7/library/unittest.html#unittest.TestCase.setUp
 
 .. code-block:: python
 
