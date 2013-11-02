@@ -274,13 +274,13 @@ Now let's update our ``PostDetails`` view (in ``blog/views.py``) to inherit from
 
         def dispatch(self, *args, **kwargs):
             self.blog_post = self.get_post()
-            return super(PostDetails, self).dispatch(*args, **kwargs)
+            return super(BlogPostDetails, self).dispatch(*args, **kwargs)
 
         def get_context_data(self, **kwargs):
             kwargs['post'] = self.blog_post
-            return super(PostDetails, self).get_context_data(**kwargs)
+            return super(BlogPostDetails, self).get_context_data(**kwargs)
 
-    post_details = PostDetails.as_view()
+    post_details = BlogPostDetails.as_view()
 
 
 Now if we run our test we'll see 4 failures.  Our blog post detail view is failing to load the page because we aren't passing a ``post`` keyword argument to our form:
@@ -305,7 +305,7 @@ Let's get the ``BlogPost`` from the database and pass it to our form.  Our view 
 
 .. code-block:: python
 
-    class PostDetails(CreateView):
+    class BlogPostDetails(CreateView):
         template_name = 'blog/post_detail.html'
         form_class = CommentForm
 
@@ -314,16 +314,16 @@ Let's get the ``BlogPost`` from the database and pass it to our form.  Our view 
 
         def dispatch(self, *args, **kwargs):
             self.blog_post = self.get_post()
-            return super(PostDetails, self).dispatch(*args, **kwargs)
+            return super(BlogPostDetails, self).dispatch(*args, **kwargs)
 
         def get_form_kwargs(self):
-            kwargs = super(PostDetails, self).get_form_kwargs()
+            kwargs = super(BlogPostDetails, self).get_form_kwargs()
             kwargs['post'] = self.blog_post
             return kwargs
 
         def get_context_data(self, **kwargs):
             kwargs['post'] = self.blog_post
-            return super(PostDetails, self).get_context_data(**kwargs)
+            return super(BlogPostDetails, self).get_context_data(**kwargs)
 
 Now when we run our tests we'll see the following assertion error because we have not yet added the comment form to our blog detail page:
 

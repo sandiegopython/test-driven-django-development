@@ -384,7 +384,7 @@ And that gives us the expected failure
     Creating test database for alias 'default'...
     F....
     ======================================================================
-    FAIL: test_no_posts (blog.tests.ListPostsOnHomePage)
+    FAIL: test_no_posts (blog.tests.ListBlogPostsOnHomePage)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
       ...
@@ -461,7 +461,7 @@ Let's write a test for that:
 
         def setUp(self):
             self.user = get_user_model().objects.create(username='some_user')
-            self.post = Post.objects.create(title='1-title', body='1-body',
+            self.post = BlogPost.objects.create(title='1-title', body='1-body',
                                             author=self.user)
 
         def test_basic_view(self):
@@ -505,7 +505,7 @@ Finally we need to create the ``get_absolute_url()`` function which should retur
 
     def test_get_absolute_url(self):
         user = get_user_model().objects.create(username='some_user')
-        post = Post.objects.create(title="My post title", author=user)
+        post = BlogPost.objects.create(title="My post title", author=user)
         self.assertIsNotNone(post.get_absolute_url())
 
 Now we need to implement ``get_absolute_url`` in our ``BlogPost`` class (found in ``blog/models.py``):
@@ -514,7 +514,7 @@ Now we need to implement ``get_absolute_url`` in our ``BlogPost`` class (found i
 
     from django.core.urlresolvers import reverse
 
-    # And in our Post model class...
+    # And in our BlogPost model class...
 
     def get_absolute_url(self):
         return reverse('blog.views.post_details', kwargs={'pk': self.pk})
@@ -538,13 +538,13 @@ To implement our blog post page we'll use another class-based generic view: the 
 .. code-block:: python
 
     from django.views.generic import DetailView
-    from .models import Post
+    from .models import BlogPost
 
 
-    class PostDetails(DetailView):
-        model = Post
+    class BlogPostDetails(DetailView):
+        model = BlogPost
 
-    post_details = PostDetails.as_view()
+    post_details = BlogPostDetails.as_view()
 
 Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
 
@@ -574,7 +574,7 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
     FAILED (errors=3)
     Destroying test database for alias 'default'...
 
-These errors are telling us that we're referencing a ``blog/post_detail.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/post_detail.html``. The ``DetailView`` should provide us with a ``post`` context variable that we can use to reference our ``BlogPost`` model instance.  Our template should look similar to this:
+These errors are telling us that we're referencing a ``blog/blogpost_detail.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/post_detail.html``. The ``DetailView`` should provide us with a ``post`` context variable that we can use to reference our ``BlogPost`` model instance.  Our template should look similar to this:
 
 .. code-block:: html
 
