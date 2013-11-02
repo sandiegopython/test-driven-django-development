@@ -332,13 +332,12 @@ Now let's create a view and URL for our comment creation page.  Let's start with
 
 .. code-block:: python
 
-from django.views.generic import DetailView, CreateView
-from django.shortcuts import get_object_or_404
-from .models import Post
-from .forms import CommentForm
+    from django.views.generic import DetailView, CreateView
+    from django.shortcuts import get_object_or_404
+    from .models import Post
+    from .forms import CommentForm
 
-
-# ...
+    # ...
 
 
 class CreateComment(CreateView):
