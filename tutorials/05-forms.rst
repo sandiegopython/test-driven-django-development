@@ -405,14 +405,14 @@ Now let's run our tests:
     Creating test database for alias 'default'...
     ...EE............
     ======================================================================
-    ERROR: test_form_error (blog.tests.CommentFormViewTest)
+    ERROR: test_form_error (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
     ...
     AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/post/1)
     ...
 
     ======================================================================
-    ERROR: test_form_success (blog.tests.CommentFormViewTest)
+    ERROR: test_form_success (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
     ...
     AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/post/1)
