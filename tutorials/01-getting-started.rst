@@ -24,7 +24,7 @@ You should also have `pip`_ installed on your machine, along with the `requireme
 
 .. HINT::
    Things you should type into your terminal or command prompt will always
-   start with ``$`` in this workshop.
+   start with ``$`` in this workshop. Don't type the leading ``$`` though.
 
 Running the next command will show the version of Django you have installed.
 For this workshop, a 1.5.x version is required. If instead you see a
