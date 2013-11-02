@@ -252,7 +252,7 @@ Let's create a test to verify that a form is displayed on the page.  Let's add a
                                         kwargs={'blog_pk': self.post.pk}))
             self.assertEqual(len(page.forms), 1)
 
-Now let's create a view and URL for our comment creation page.  Let's start with a view like this:
+Now let's create a view and URL for our comment creation page.  Let's start by updating our ``blog/views.py`` like this:
 
 .. code-block:: python
 
@@ -269,6 +269,20 @@ Now let's create a view and URL for our comment creation page.  Let's start with
         form_class = CommentForm
     
     create_comment = CreateComment.as_view()
+
+The ``blog/urls.py`` should look like this:
+
+.. code-block:: python
+    from django.conf.urls import patterns, url
+
+
+    urlpatterns = patterns('blog.views',
+        url(r'^post/(?P<pk>\d+)/$', 'post_details'),
+        url(r'^post/(?P<blog_pk>\d+)/$', 'create_comment'),
+    )
+
+
+
 
 Now if we run our test we'll see a failure because we aren't passing a ``post`` keyword argument to our form:
 
