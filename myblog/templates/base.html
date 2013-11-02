@@ -1,0 +1,30 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Foundation 4</title>
+    <link rel="stylesheet" href="{% static "css/foundation.css" %}">
+</head>
+<body>
+    <section class="row">
+        <header class="large-12 columns">
+            <h1>Welcome to My Blog</h1>
+            <hr>
+        </header>
+    </section>
+
+    <section class="row">
+
+        <div class="large-8 columns">
+            {% block content %}{% endblock %}
+        </div>
+
+        <div class="large-4 columns">
+            <h3>About Me</h3>
+            <p>I am a Python developer and I like Django.</p>
+        </div>
+
+    </section>
+
+</body>
+</html>

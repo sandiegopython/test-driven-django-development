@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for post in post_list %}
+        {% include "_post.html" with post=post only %}
+    {% empty %}
+        <p>No blog post entries yet.</p>
+    {% endfor %}
+{% endblock content %}
