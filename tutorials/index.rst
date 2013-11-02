@@ -57,3 +57,5 @@ Contents
    01-getting-started
    02-models
    03-views
+   04-more-views
+   05-forms
