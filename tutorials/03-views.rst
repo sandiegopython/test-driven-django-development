@@ -104,11 +104,12 @@ Create a basic HTML file like this and name it ``templates/index.html``:
 
 .. code-block:: html
 
+    {% load staticfiles %}
     <!DOCTYPE html>
     <html>
     <head>
         <title>Foundation 4</title>
-        <link rel="stylesheet" href="static/css/foundation.css">
+        <link rel="stylesheet" href="{% static "css/foundation.css" %}">
     </head>
     <body>
         <section class="row">
@@ -197,11 +198,12 @@ We'll start with putting our header and a sidebar in ``base.html``:
 
 .. code-block:: html
 
+    {% load staticfiles %}
     <!DOCTYPE html>
     <html>
     <head>
         <title>Foundation 4</title>
-        <link rel="stylesheet" href="static/css/foundation.css">
+        <link rel="stylesheet" href="{% static "css/foundation.css" %}">
     </head>
     <body>
         <section class="row">
