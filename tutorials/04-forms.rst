@@ -33,6 +33,10 @@ Now let's start testing our form.  Let's link our comments to post by allowing o
     >>> form = CommentForm(post=post)  # Without form data
     >>> form = CommentForm(request.POST, post=post)  # with form data
 
+.. IMPORTANT::
+    ``request.POST`` refers to HTTP POST data and not to the blog post. This
+    is the data accepted from user input.
+
 Our first test should ensure that our form's ``__init__`` accepts a ``post`` keyword argument:
 
 .. code-block:: python
