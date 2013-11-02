@@ -21,7 +21,7 @@ You should also have `pip`_ installed on your machine, along with the `requireme
 
     # In the same directory where you downloaded requirements.txt
     $ pip install -r requirements.txt
-    
+
 .. HINT::
    Things you should type into your terminal or command prompt will always
    start with ``$`` in this workshop.
@@ -59,6 +59,17 @@ database and ``myblog/urls.py`` which maps URLs called by a web broser
 to the appropriate Python code.
 
 
+Directory variables
+-------------------
+
+Add the following to the top of your ``myblog/settings.py`` file:
+
+.. code-block:: python
+
+    import os
+    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+
 Setting up the database
 -----------------------
 
@@ -76,7 +87,7 @@ First we need to update the ``DATABASES`` variable in our settings file
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'myblog.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'myblog.sqlite3'),
         }
     }
 
