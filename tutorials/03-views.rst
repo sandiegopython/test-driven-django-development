@@ -500,5 +500,5 @@ Now our tests should pass again:
 .. _status codes: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 .. _template documentation: https://docs.djangoproject.com/en/1.5/topics/templates/
 .. _Classy Class Based Views: http://ccbv.co.uk
-.. _Django Model Instance Documentation: https://docs.djangoproject.com/en/dev/ref/models/instances/#get-absolute-url
+.. _Django Model Instance Documentation: https://docs.djangoproject.com/en/1.5/ref/models/instances/#get-absolute-url
 .. _DetailView: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/
