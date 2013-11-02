@@ -31,6 +31,12 @@ First we should create a test in ``blog/tests.py``.  Our test should look very s
             comment = Comment(body="My comment body")
             self.assertEqual(unicode(comment), "My comment body")
 
+Don't forget to import our ``Comment`` model:
+
+.. code-block:: python
+
+    from .models import Post, Comment
+
 
 Now let's run our tests to make sure our new test fails:
 
