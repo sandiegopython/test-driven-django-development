@@ -26,7 +26,14 @@ Let's make sure we've imported ``get_user_model`` and ``CommentForm`` in our tes
     from .models import Post, Comment
     from .forms import CommentForm
 
-Now let's start testing our form.  Remember that we are writing our tests before our code.  First we pretend we've already written our code in the way we want it to work, then we write tests for that not-yet-written code, then we write the code so it actually works.
+Before we start testing our form remember that we are writing our tests before actually writing our CommentForm code. In other words, we're pretending that we've already written our code in the way that we want it to work, then we're writing tests for that not-yet-written code. Once we've seen that the tests have failed, we then write the actual code. Lastly, we run the tests again against our implemented code and, if necessary, modify the actual code so the tests run successfully.
+
+Our first test should ensure that our form's ``__init__`` accepts a ``post`` keyword argument:
+
+.. code-block:: python
+
+    def test_init(self):
+        CommentForm(post=self.post)
 
 We want to link our comments to posts by allowing our form to accept a ``post`` keyword argument.  Assuming our ``CommentForm`` has been written this is how we'd like to use it (**you don't need to type this code anywhere**):
 
@@ -38,13 +45,6 @@ We want to link our comments to posts by allowing our form to accept a ``post`` 
 .. IMPORTANT::
     ``request.POST`` refers to HTTP POST data and not to the blog post. This
     is the data accepted from user input.
-
-Our first test should ensure that our form's ``__init__`` accepts a ``post`` keyword argument:
-
-.. code-block:: python
-
-    def test_init(self):
-        CommentForm(post=self.post)
 
 Our next test should ensure that our test raises an exception if a ``post`` keyword argument isn't specified:
 
