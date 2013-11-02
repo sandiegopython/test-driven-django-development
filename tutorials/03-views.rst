@@ -229,6 +229,10 @@ We'll start with putting our header and a sidebar in ``base.html``:
     </body>
     </html>
 
+.. NOTE::
+
+    We will not explain the CSS classes we used above (e.g. ``large-8``, ``column``, ``row``).  More information on these classes can be found in the Zurb Foundation `grid documentation`_.
+
 Let's put some filler content in ``index.html``:
 
 .. code-block:: html
@@ -238,26 +242,6 @@ Let's put some filler content in ``index.html``:
     {% block content %}
     Page body goes here.
     {% endblock content %}
-
-
-Adding filler content
-~~~~~~~~~~~~~~~~~~~~~
-
-Our ``base.html`` defines some ``{% block %}``'s for us. In our ``index.html`` we only really need to fill in the ``content`` block. For now please just ignore the ``class="large-8 column"`` and related stuff. All that does is handle the grid layout from our Zurb Foundation CSS.
-
-
-.. code-block:: html
-
-    {% extends "base.html" %}
-
-    {% block content %}
-        <h2>Post Title</h2>
-        <article>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-        </article>
-    {% endblock content %}
-
-(TODO: Add sections explaining how to add blog posts to homepage and then how to make an individual page for each post)
 
 
 ListViews
@@ -548,6 +532,7 @@ Now our tests should pass again:
     Destroying test database for alias 'default'...
 
 .. _zurb foundation files: http://foundation.zurb.com/
+.. _grid documentation: http://foundation.zurb.com/docs/components/grid.html
 .. _direct link: http://foundation.zurb.com/files/foundation-4.3.2.zip
 .. _static files: https://docs.djangoproject.com/en/1.5/ref/contrib/staticfiles/
 .. _hypertext transfer protocol: http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
