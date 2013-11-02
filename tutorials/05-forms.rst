@@ -109,7 +109,7 @@ Now our tests should fail because the ``post`` keyword argument is not accepted 
 ::
 
     Creating test database for alias 'default'...
-    EF..
+    ...EF.......
     ======================================================================
     ERROR: test_init (blog.tests.CommentFormTest)
     ----------------------------------------------------------------------
@@ -125,7 +125,7 @@ Now our tests should fail because the ``post`` keyword argument is not accepted 
     AssertionError: KeyError not raised
 
     ----------------------------------------------------------------------
-    Ran 4 tests in 0.005s
+    Ran 12 tests in 0.080s
 
     FAILED (failures=1, errors=1)
     Destroying test database for alias 'default'...
@@ -201,7 +201,7 @@ Let's run our tests again to see whether they pass:
 ::
 
     Creating test database for alias 'default'...
-    F.....
+    ...F..........
     ======================================================================
     FAIL: test_blank_data (blog.tests.CommentFormTest)
     ----------------------------------------------------------------------
@@ -210,7 +210,7 @@ Let's run our tests again to see whether they pass:
     AssertionError: {'body': [u'This field is required.'], 'name': [u'This field is required.'], 'email': [u'This field is required.']} != {'body': ['required'], 'name': ['required'], 'email': ['required']}
 
     ----------------------------------------------------------------------
-    Ran 6 tests in 0.009s
+    Ran 14 tests in 0.086s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -224,24 +224,18 @@ Our test for blank form data is failing because we aren't checking for the corre
 ::
 
     Creating test database for alias 'default'...
-    ......
+    ..............
     ----------------------------------------------------------------------
-    Ran 6 tests in 0.009s
+    Ran 14 tests in 0.085s
 
-    OK
-    Destroying test database for alias 'default'...
+ OK
+ Destroying test database for alias 'default'...
 
 
 Displaying the comment form
 ---------------------------
 
 We've made a form to create comments, but we still don't yet have a way for visitors to use the form.  The Django test client cannot test form submissions, but `WebTest`_ can.  We'll use `django-webtest`_ to handle testing the form submission.
-
-First let's install ``django-webtest``:
-
-.. code-block:: bash
-
-    $ pip install webtest django-webtest
 
 Let's create a test to verify that a form is displayed on our blog post detail page.
 
@@ -279,11 +273,11 @@ Now let's update our ``PostDetails`` view (in ``blog/views.py``) to inherit from
             return get_object_or_404(Post, pk=self.kwargs['pk'])
 
         def dispatch(self, *args, **kwargs):
-            self.post = self.get_post()
+            self.blog_post = self.get_post()
             return super(PostDetails, self).dispatch(*args, **kwargs)
 
         def get_context_data(self, **kwargs):
-            kwargs['post'] = self.post
+            kwargs['post'] = self.blog_post
             return super(PostDetails, self).get_context_data(**kwargs)
 
     post_details = PostDetails.as_view()
@@ -295,7 +289,7 @@ Now if we run our test we'll see 4 failures.  Our blog post detail view is faili
 
     $ python manage.py test
     Creating test database for alias 'default'...
-    EEEE..........
+    EEEE...........
     ======================================================================
     ERROR: test_basic_view (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
@@ -303,7 +297,7 @@ Now if we run our test we'll see 4 failures.  Our blog post detail view is faili
     KeyError: 'post'
 
     ----------------------------------------------------------------------
-    Ran 14 tests in 0.069s
+    Ran 15 tests in 0.079s
 
     FAILED (errors=4)
 
@@ -319,16 +313,16 @@ Let's get the ``Post`` from the database and pass it to our form.  Our view shou
             return get_object_or_404(Post, pk=self.kwargs['pk'])
 
         def dispatch(self, *args, **kwargs):
-            self.post = self.get_post()
+            self.blog_post = self.get_post()
             return super(PostDetails, self).dispatch(*args, **kwargs)
 
         def get_form_kwargs(self):
             kwargs = super(PostDetails, self).get_form_kwargs()
-            kwargs['post'] = self.post
+            kwargs['post'] = self.blog_post
             return kwargs
 
         def get_context_data(self, **kwargs):
-            kwargs['post'] = self.post
+            kwargs['post'] = self.blog_post
             return super(PostDetails, self).get_context_data(**kwargs)
 
 Now when we run our tests we'll see the following assertion error because we have not yet added the comment form to our blog detail page:
@@ -336,18 +330,21 @@ Now when we run our tests we'll see the following assertion error because we hav
 .. code-block:: bash
 
     $ python manage.py test blog
+
+::
+
     Creating test database for alias 'default'...
-    ...F..........
+    ...F...........
     ======================================================================
     FAIL: test_view_page (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-    File "/home/trey/repos/meetups/learning-django-by-testing/myblog/blog/tests.py", line 79, in test_view_page
+      File "/home/zoidberg/learning-django-by-testing/test/myblog/blog/tests.py", line 81, in test_view_page
         self.assertEqual(len(page.forms), 1)
-        AssertionError: 0 != 1
+    AssertionError: 0 != 1
 
     ----------------------------------------------------------------------
-    Ran 14 tests in 0.089s
+    Ran 15 tests in 0.099s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -356,24 +353,27 @@ Let's add a comment form to the bottom of our ``content`` block in our blog post
 
 .. code-block:: html
 
-    <h5>Add a comment</h5>
-    <form method="post">
-        {{ form.as_table }}
-        <input type="submit" value="Create Comment">
-    </form>
+        <h5>Add a comment</h5>
+        <form method="post">
+            {{ form.as_table }}
+            <input type="submit" value="Create Comment">
+        </form>
 
 Now our tests pass again:
 
 .. code-block:: bash
 
     $ python manage.py test blog
-    Creating test database for alias 'default'...
-    ..............
-    ----------------------------------------------------------------------
-    Ran 14 tests in 0.099s
 
-    OK
-    Destroying test database for alias 'default'...
+::
+
+    Creating test database for alias 'default'...
+    ...............
+    ----------------------------------------------------------------------
+    Ran 15 tests in 0.108s
+
+ OK
+ Destroying test database for alias 'default'...
 
 Let's test that our form actually submits.  We should write two tests: one to test for errors, and one to test a successful form submission.
 
@@ -397,8 +397,11 @@ Now let's run our tests:
 .. code-block:: bash
 
     $ python manage.py test blog
+
+::
+
     Creating test database for alias 'default'...
-    .......EE.......
+    ...EE............
     ======================================================================
     ERROR: test_form_error (blog.tests.CommentFormViewTest)
     ----------------------------------------------------------------------
@@ -414,7 +417,7 @@ Now let's run our tests:
     ...
 
     ----------------------------------------------------------------------
-    Ran 16 tests in 0.139s
+    Ran 17 tests in 0.152s
 
     FAILED (errors=2)
 
@@ -422,11 +425,11 @@ We got a HTTP 403 error because we forgot to add the cross-site request forgery 
 
 .. code-block:: html
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_table }}
-        <input type="submit" value="Create Comment">
-    </form>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_table }}
+            <input type="submit" value="Create Comment">
+        </form>
 
 Now only one test fails:
 
@@ -437,7 +440,7 @@ Now only one test fails:
 ::
 
     Creating test database for alias 'default'...
-    ........E.......
+    ....E............
     ======================================================================
     ERROR: test_form_success (blog.tests.CommentFormViewTest)
     ----------------------------------------------------------------------
@@ -445,7 +448,7 @@ Now only one test fails:
     ImproperlyConfigured: No URL to redirect to.  Either provide a url or define a get_absolute_url method on the Model.
 
     ----------------------------------------------------------------------
-    Ran 16 tests in 0.176s
+    Ran 17 tests in 0.0.166s
 
     FAILED (errors=1)
 

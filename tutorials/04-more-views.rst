@@ -31,6 +31,12 @@ First we should create a test in ``blog/tests.py``.  Our test should look very s
             comment = Comment(body="My comment body")
             self.assertEqual(unicode(comment), "My comment body")
 
+Don't forget to import our ``Comment`` model:
+
+.. code-block:: python
+
+    from .models import Post, Comment
+
 
 Now let's run our tests to make sure our new test fails:
 
@@ -50,7 +56,7 @@ Now let's run our tests to make sure our new test fails:
     AssertionError: u'Comment object' != 'My comment body'
 
     ----------------------------------------------------------------------
-    Ran 9 tests in 0.001s
+    Ran 10 tests in 0.077s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -64,9 +70,9 @@ Great.  After we implement our ``__unicode__`` method our tests should pass:
 ::
 
     Creating test database for alias 'default'...
-    ..
+    ..........
     ----------------------------------------------------------------------
-    Ran 2 tests in 0.001s
+    Ran 10 tests in 0.072s
 
     OK
     Destroying test database for alias 'default'...
@@ -116,5 +122,9 @@ At the end of our ``content`` block in ``templates/post_detail.html`` let's add 
     {% empty %}
         No comments yet.
     {% endfor %}
+
+.. IMPORTANT::
+
+    We forgot to add a test for this!  Why don't you add a test to make sure comments appear on the blog post page.
 
 Now we can see our comments on the website.

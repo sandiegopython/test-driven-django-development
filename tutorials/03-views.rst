@@ -9,7 +9,7 @@ The homepage test
 
 Every site should have a homepage. Let's write a failing test for that.
 
-We can use the Django ``TestClient`` to create a test to make sure that our homepage returns an HTTP 200 status code (this is the standard response for a successful HTTP request).
+We can use the Django `test client`_ to create a test to make sure that our homepage returns an HTTP 200 status code (this is the standard response for a successful HTTP request).
 
 Let's add the following to our ``blog/tests.py`` file:
 
@@ -17,6 +17,7 @@ Let's add the following to our ``blog/tests.py`` file:
 
 
     class ProjectTests(TestCase):
+
         def test_homepage(self):
             response = self.client.get('/')
             self.assertEqual(response.status_code, 200)
@@ -177,6 +178,23 @@ Now let's visit http://localhost:8000/ in a web browser to check our work.  You 
 
 .. image:: _static/03-01_myblog.png
 
+Great!  Now let's make sure our new test passes:
+
+.. code-block:: bash
+
+    $ python manage.py test blog
+
+::
+
+    Creating test database for alias 'default'...
+    ..
+    ----------------------------------------------------------------------
+    Ran 2 tests in 0.021s
+
+    OK
+    Destroying test database for alias 'default'...
+
+
 .. HINT::
     From a code flow perspective, we now have a working example of how Django
     creates dynamic web pages. When an HTTP request to a Django powered web
@@ -195,7 +213,7 @@ Using a base template
 
 Templates in Django are generally built up from smaller pieces. This lets you include things like a consistent header and footer on all your pages. Convention is to call one of your templates ``base.html`` and have everything inherit from that.
 
-We'll start with putting our header and a sidebar in ``base.html``:
+We'll start with putting our header and a sidebar in ``templates/base.html``:
 
 .. code-block:: html
 
@@ -234,7 +252,7 @@ We'll start with putting our header and a sidebar in ``base.html``:
 
     We will not explain the CSS classes we used above (e.g. ``large-8``, ``column``, ``row``).  More information on these classes can be found in the Zurb Foundation `grid documentation`_.
 
-Let's put some filler content in ``index.html``:
+Let's put some filler content in ``templates/index.html``:
 
 .. code-block:: html
 
@@ -250,7 +268,7 @@ ListViews
 
 We put a hard-coded title and article in our filler view. These post details should come from our models and database instead. Let's write a test for that.
 
-The Django ``TestClient`` can be used for a simple test of whether text shows up on a page.  Let's add the following to our ``blog/tests.py`` file:
+The Django ``test client`` can be used for a simple test of whether text shows up on a page.  Let's add the following to our ``blog/tests.py`` file:
 
 .. code-block:: python
 
@@ -346,6 +364,10 @@ The last change needed then is just to update our ``index.html`` to actually put
 
 Running the tests here we see that all the tests pass!
 
+.. NOTE::
+
+    Read the Django `built-in template tags and filters`_ documentation for more details on the `linebreaks`_ and `date`_ template filters.
+
 And now, if we add some posts in our admin, they should show up on the homepage. What happens if there are no posts?
 We should add a test for that
 
@@ -359,6 +381,8 @@ And that gives us the expected failure
 
 .. code-block:: bash
 
+    Creating test database for alias 'default'...
+    F....
     ======================================================================
     FAIL: test_no_posts (blog.tests.ListPostsOnHomePage)
     ----------------------------------------------------------------------
@@ -367,6 +391,10 @@ And that gives us the expected failure
     AssertionError: Couldn't find 'No blog post entries yet' in response
 
     ----------------------------------------------------------------------
+    Ran 5 tests in 0.044s
+
+    FAILED (failures=1)
+    Destroying test database for alias 'default'...
 
 The easiest way to add this is to use the `empty`_ clause. See if you can add this in yourself to make the test pass.
 
@@ -399,6 +427,10 @@ Let's make a file called ``templates/_post.html`` and put the following in it:
 
 .. NOTE::
 
+    The ``post.get_absolute_url`` reference doesn't do anything yet.  Later we will add a ``get_absolute_url`` method to the post model which will make these links work.
+
+.. TIP::
+
     The filename of our includable template starts with ``_`` by convention.  This naming convention is recommended by Harris Lapiroff in `An Architecture for Django Templates`_.
 
 Now let's change our homepage template (``templates/index.html``) to include the template file we just made:
@@ -410,6 +442,8 @@ Now let's change our homepage template (``templates/index.html``) to include the
     {% block content %}
         {% for post in post_list %}
             {% include "_post.html" with post=post only %}
+        {% empty %}
+            <p>No blog post entries yet.</p>
         {% endfor %}
     {% endblock content %}
 
@@ -424,9 +458,11 @@ Let's write a test for that:
     from django.contrib.auth import get_user_model
 
     class BlogPostViewTest(TestCase):
+
         def setUp(self):
             self.user = get_user_model().objects.create(username='some_user')
-            self.post = Post.objects.create(title='1-title', body='1-body', author=self.user)
+            self.post = Post.objects.create(title='1-title', body='1-body',
+                                            author=self.user)
 
         def test_basic_view(self):
             response = self.client.get(self.post.get_absolute_url())
@@ -449,7 +485,7 @@ The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
 
 .. code-block:: python
 
-    url(r'^/', include('blog.urls')),
+    url(r'^', include('blog.urls')),
 
 Now we need to define a ``post_details`` view in our ``blog/views.py`` file:
 
@@ -518,6 +554,8 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
 
 ::
 
+    Creating test database for alias 'default'...
+    EEE......
     ======================================================================
     ERROR: test_blog_body_in_post (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
@@ -531,6 +569,10 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
     TemplateDoesNotExist: blog/post_detail.html
 
     ----------------------------------------------------------------------
+    Ran 9 tests in 0.071s
+
+    FAILED (errors=3)
+    Destroying test database for alias 'default'...
 
 These errors are telling us that we're referencing a ``blog/post_detail.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/post_detail.html``. The ``DetailView`` should provide us with a ``post`` context variable that we can use to reference our ``Post`` model instance.  Our template should look similar to this:
 
@@ -558,6 +600,7 @@ Now our tests should pass again:
     OK
     Destroying test database for alias 'default'...
 
+.. _test client: https://docs.djangoproject.com/en/dev/topics/testing/overview/#the-test-client
 .. _zurb foundation files: http://foundation.zurb.com/
 .. _grid documentation: http://foundation.zurb.com/docs/components/grid.html
 .. _direct link: http://foundation.zurb.com/files/foundation-4.3.2.zip
@@ -565,6 +608,9 @@ Now our tests should pass again:
 .. _hypertext transfer protocol: http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
 .. _status codes: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 .. _template documentation: https://docs.djangoproject.com/en/1.5/topics/templates/
+.. _built-in template tags and filters: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/
+.. _date: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#date
+.. _linebreaks: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#linebreaks
 .. _Classy Class Based Views: http://ccbv.co.uk
 .. _Django Model Instance Documentation: https://docs.djangoproject.com/en/1.5/ref/models/instances/#get-absolute-url
 .. _DetailView: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/
