@@ -203,8 +203,8 @@ Let's write our test to ensure that a blog post's unicode representation is equa
 
 .. HINT::
     ``__unicode__`` may seem like a strange name, but Unicode is a standard
-    for representing and encoding most of the world's writing systems and
-    character sets. All strings that Django passes around are Unicode strings
+    for representing and encoding most of the world's writing systems.
+    All strings that Django passes around are Unicode strings
     so that Django can be used for applications designed for different
     languages.
 
