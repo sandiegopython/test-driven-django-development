@@ -342,10 +342,19 @@ The last change needed then is just to update our ``index.html`` to actually put
 .. code-block:: html
 
     {% for post in post_list %}
-    <h2>{{ post.title }}</h2>
-    <article>
-        {{ post.body }}
-    </article>
+        <article>
+
+            <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+
+            <p class="subheader">
+                <time>{{ post.modified_at|date }}</time>
+            </p>
+
+            <p></p>
+
+            {{ post.body|linebreaks }}
+
+        </article>
     {% endfor %}
 
 Running the tests here we see that all the tests pass!
@@ -355,7 +364,49 @@ And now, if we add some posts in our admin, they should show up on the homepage.
 Blog Post Details
 -----------------
 
-To save a bit of time let's make our urls look like ``http://myblog.com/blog/post/ID/`` where ID is the database ID of the blog post we want to see. Let's write a test for that:
+To save a bit of time let's make our urls look like ``http://myblog.com/blog/post/ID/`` where ID is the database ID of the blog post we want to see.
+
+Before we create this page, let's move the template content that displays our blog posts on our homepage into a separate template file so we can reuse it on our blog post details page.
+
+Let's make a file called ``templates/_post.html`` and put the following in it:
+
+.. code-block:: html
+
+    <article>
+
+        <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+
+        <p class="subheader">
+            <time>{{ post.modified_at|date }}</time>
+        </p>
+
+        <p></p>
+
+        {{ post.body|linebreaks }}
+
+    </article>
+
+.. NOTE::
+
+    The filename of our includable template starts with ``_`` by convention.  This naming convention is recommended by Harris Lapiroff in `An Architecture for Django Templates`_.
+
+Now let's change our homepage template (``templates/index.html``) to include the template file we just made:
+
+.. code-block:: html
+
+    {% extends "base.html" %}
+
+    {% block content %}
+        {% for post in post_list %}
+            {% include "_post.html" with post=post only %}
+        {% endfor %}
+    {% endblock content %}
+
+.. TIP::
+
+    We use the ``with=post only`` convention in our ``include`` for better encapsulation (as mentioned in `An Architecture for Django Templates`_).  Check the Django documentation more information on the `include tag`_.
+
+Let's write a test for that:
 
 .. code-block:: python
 
@@ -472,10 +523,7 @@ These errors are telling us that we're referencing a ``blog/post_detail.html`` t
     {% extends "base.html" %}
 
     {% block content %}
-    <h2>{{ post.title }}</h2>
-    <article>
-        {{ post.body }}
-    </article>
+        {% include "_post.html" with post=post only %}
     {% endblock %}
 
 Now our tests should pass again:
@@ -500,3 +548,5 @@ Now our tests should pass again:
 .. _Classy Class Based Views: http://ccbv.co.uk
 .. _Django Model Instance Documentation: https://docs.djangoproject.com/en/dev/ref/models/instances/#get-absolute-url
 .. _DetailView: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/
+.. _an architecture for django templates: https://oncampus.oberlin.edu/webteam/2012/09/architecture-django-templates
+.. _include tag: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#include
