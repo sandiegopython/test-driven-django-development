@@ -5,9 +5,8 @@ Thank you for attending `San Diego Python <http://pythonsd.org/>`_'s workshop on
 development with the `Django <https://www.djangoproject.com/>`_ web framework. In this one-day
 workshop, you will learn to build a well-tested, Django-based website.
 
-This workshop on November 2nd, 2013 was made possible by a grant from the `Python Software Foundation's <http://python.org/psf/>`_
-`Outreach and Education Committee <http://python.org/psf/committees/#outreach-education-committee-orec>`_,
-the location hosted at the `Ansir Innovation Center <http://ansirsd.com/>`_.
+This workshop was made possible by a grant from the `Python Software Foundation <http://python.org/psf/>`_
+`Outreach and Education Committee <http://python.org/psf/committees/#outreach-education-committee-orec>`_.
 
 
 Why test-driven development?
