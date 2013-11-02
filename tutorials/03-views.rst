@@ -104,11 +104,12 @@ Create a basic HTML file like this and name it ``templates/index.html``:
 
 .. code-block:: html
 
+    {% load staticfiles %}
     <!DOCTYPE html>
     <html>
     <head>
         <title>Foundation 4</title>
-        <link rel="stylesheet" href="static/css/foundation.css">
+        <link rel="stylesheet" href="{% static "css/foundation.css" %}">
     </head>
     <body>
         <section class="row">
@@ -197,11 +198,12 @@ We'll start with putting our header and a sidebar in ``base.html``:
 
 .. code-block:: html
 
+    {% load staticfiles %}
     <!DOCTYPE html>
     <html>
     <head>
         <title>Foundation 4</title>
-        <link rel="stylesheet" href="static/css/foundation.css">
+        <link rel="stylesheet" href="{% static "css/foundation.css" %}">
     </head>
     <body>
         <section class="row">
@@ -502,6 +504,9 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
 .. code-block:: bash
 
     $ python manage.py test blog
+
+::
+
     ======================================================================
     ERROR: test_blog_body_in_post (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
@@ -531,6 +536,9 @@ Now our tests should pass again:
 .. code-block:: bash
 
     $ python manage.py test blog
+
+::
+
     Creating test database for alias 'default'...
     .......
     ----------------------------------------------------------------------
@@ -546,7 +554,7 @@ Now our tests should pass again:
 .. _status codes: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 .. _template documentation: https://docs.djangoproject.com/en/1.5/topics/templates/
 .. _Classy Class Based Views: http://ccbv.co.uk
-.. _Django Model Instance Documentation: https://docs.djangoproject.com/en/dev/ref/models/instances/#get-absolute-url
+.. _Django Model Instance Documentation: https://docs.djangoproject.com/en/1.5/ref/models/instances/#get-absolute-url
 .. _DetailView: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/
 .. _an architecture for django templates: https://oncampus.oberlin.edu/webteam/2012/09/architecture-django-templates
 .. _include tag: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#include
