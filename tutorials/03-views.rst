@@ -477,7 +477,7 @@ Now let's change our homepage template (``templates/index.html``) to include the
 
 .. TIP::
 
-    We use the ``with=post only`` convention in our ``include`` for better encapsulation (as mentioned in `An Architecture for Django Templates`_).  Check the Django documentation more information on the `include tag`_.
+    We use the ``with post=post only`` convention in our ``include`` tag for better encapsulation (as mentioned in `An Architecture for Django Templates`_).  Check the Django documentation more information on the `include tag`_.
 
 Let's write a test for that:
 
