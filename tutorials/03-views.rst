@@ -177,6 +177,23 @@ Now let's visit http://localhost:8000/ in a web browser to check our work.  You 
 
 .. image:: _static/03-01_myblog.png
 
+Great!  Now let's make sure our new test passes:
+
+.. code-block:: bash
+
+    $ python manage.py test blog
+
+::
+
+    Creating test database for alias 'default'...
+    ..
+    ----------------------------------------------------------------------
+    Ran 2 tests in 0.021s
+
+    OK
+    Destroying test database for alias 'default'...
+
+
 .. HINT::
     From a code flow perspective, we now have a working example of how Django
     creates dynamic web pages. When an HTTP request to a Django powered web
@@ -359,6 +376,8 @@ And that gives us the expected failure
 
 .. code-block:: bash
 
+    Creating test database for alias 'default'...
+    F....
     ======================================================================
     FAIL: test_no_posts (blog.tests.ListPostsOnHomePage)
     ----------------------------------------------------------------------
@@ -367,6 +386,10 @@ And that gives us the expected failure
     AssertionError: Couldn't find 'No blog post entries yet' in response
 
     ----------------------------------------------------------------------
+    Ran 5 tests in 0.044s
+
+    FAILED (failures=1)
+    Destroying test database for alias 'default'...
 
 The easiest way to add this is to use the `empty`_ clause. See if you can add this in yourself to make the test pass.
 
@@ -518,6 +541,8 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
 
 ::
 
+    Creating test database for alias 'default'...
+    EEE......
     ======================================================================
     ERROR: test_blog_body_in_post (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
@@ -531,6 +556,10 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
     TemplateDoesNotExist: blog/post_detail.html
 
     ----------------------------------------------------------------------
+    Ran 9 tests in 0.071s
+
+    FAILED (errors=3)
+    Destroying test database for alias 'default'...
 
 These errors are telling us that we're referencing a ``blog/post_detail.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/post_detail.html``. The ``DetailView`` should provide us with a ``post`` context variable that we can use to reference our ``Post`` model instance.  Our template should look similar to this:
 
