@@ -478,7 +478,7 @@ Our ``blog/urls.py`` file is the very short
 
 
     urlpatterns = patterns('blog.views',
-        url(r'^post/(?P<pk>\d+)/$', 'post_details'),
+        url(r'^post/(?P<pk>\d+)/$', 'blogpost_detail'),
     )
 
 The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
@@ -487,7 +487,7 @@ The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
 
     url(r'^', include('blog.urls')),
 
-Now we need to define a ``post_details`` view in our ``blog/views.py`` file:
+Now we need to define a ``blogpost_detail`` view in our ``blog/views.py`` file:
 
 .. code-block:: python
 
@@ -560,13 +560,13 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
     ERROR: test_blog_body_in_post (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
     ...
-    TemplateDoesNotExist: blog/post_detail.html
+    TemplateDoesNotExist: blog/blogpost_detail.html
 
     ======================================================================
     ERROR: test_blog_title_in_post (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
     ...
-    TemplateDoesNotExist: blog/post_detail.html
+    TemplateDoesNotExist: blog/blogpost_detail.html
 
     ----------------------------------------------------------------------
     Ran 9 tests in 0.071s

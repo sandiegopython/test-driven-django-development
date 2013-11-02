@@ -15,7 +15,7 @@ First let's write some tests.  We'll need to create a blog ``BlogPost`` and a ``
 
         def setUp(self):
             user = get_user_model().objects.create_user('zoidberg')
-            self.post = BlogPost.objects.create(author=user, title="My post title")
+            self.blogpost = BlogPost.objects.create(author=user, title="My post title")
 
 Let's make sure we've imported ``get_user_model`` and ``CommentForm`` in our tests file.  Our imports should look like this:
 
@@ -266,7 +266,7 @@ Now let's update our ``PostDetails`` view (in ``blog/views.py``) to inherit from
 
 
     class PostDetails(CreateView):
-        template_name = 'blog/post_detail.html'
+        template_name = 'blog/blogpost_detail.html'
         form_class = CommentForm
 
         def get_post(self):
@@ -280,10 +280,10 @@ Now let's update our ``PostDetails`` view (in ``blog/views.py``) to inherit from
             kwargs['post'] = self.blog_post
             return super(BlogPostDetails, self).get_context_data(**kwargs)
 
-    post_details = BlogPostDetails.as_view()
+    blogpost_details = BlogPostDetails.as_view()
 
 
-Now if we run our test we'll see 4 failures.  Our blog post detail view is failing to load the page because we aren't passing a ``post`` keyword argument to our form:
+Now if we run our test we'll see 4 failures.  Our blog post detail view is failing to load the page because we aren't passing a ``blogpost`` keyword argument to our form:
 
 .. code-block:: python
 
@@ -294,7 +294,7 @@ Now if we run our test we'll see 4 failures.  Our blog post detail view is faili
     ERROR: test_basic_view (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
     ...
-    KeyError: 'post'
+    KeyError: 'blogpost'
 
     ----------------------------------------------------------------------
     Ran 15 tests in 0.079s
@@ -306,23 +306,23 @@ Let's get the ``BlogPost`` from the database and pass it to our form.  Our view 
 .. code-block:: python
 
     class BlogPostDetails(CreateView):
-        template_name = 'blog/post_detail.html'
+        template_name = 'blog/blogpost_detail.html'
         form_class = CommentForm
 
-        def get_post(self):
+        def get_blogpost(self):
             return get_object_or_404(BlogPost, pk=self.kwargs['pk'])
 
         def dispatch(self, *args, **kwargs):
-            self.blog_post = self.get_post()
+            self.blogpost = self.get_post()
             return super(BlogPostDetails, self).dispatch(*args, **kwargs)
 
         def get_form_kwargs(self):
             kwargs = super(BlogPostDetails, self).get_form_kwargs()
-            kwargs['post'] = self.blog_post
+            kwargs['blogpost'] = self.blogpost
             return kwargs
 
         def get_context_data(self, **kwargs):
-            kwargs['post'] = self.blog_post
+            kwargs['blogpost'] = self.blogpost
             return super(BlogPostDetails, self).get_context_data(**kwargs)
 
 Now when we run our tests we'll see the following assertion error because we have not yet added the comment form to our blog detail page:
@@ -349,7 +349,7 @@ Now when we run our tests we'll see the following assertion error because we hav
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-Let's add a comment form to the bottom of our ``content`` block in our blog post detail template (``templates/post_detail.html``):
+Let's add a comment form to the bottom of our ``content`` block in our blog post detail template (``templates/blogpost_detail.html``):
 
 .. code-block:: html
 
@@ -380,17 +380,17 @@ Let's test that our form actually submits.  We should write two tests: one to te
 .. code-block:: python
 
     def test_form_error(self):
-        page = self.app.get(self.post.get_absolute_url())
+        page = self.app.get(self.blogpost.get_absolute_url())
         page = page.form.submit()
         self.assertContains(page, "This field is required.")
 
     def test_form_success(self):
-        page = self.app.get(self.post.get_absolute_url())
+        page = self.app.get(self.blogpost.get_absolute_url())
         page.form['name'] = "Phillip"
         page.form['email'] = "phillip@example.com"
         page.form['body'] = "Test comment body."
         page = page.form.submit()
-        self.assertRedirects(page, self.post.get_absolute_url())
+        self.assertRedirects(page, self.blogpost.get_absolute_url())
 
 Now let's run our tests:
 
@@ -406,14 +406,14 @@ Now let's run our tests:
     ERROR: test_form_error (blog.tests.CommentFormViewTest)
     ----------------------------------------------------------------------
     ...
-    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/post/1)
+    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/1)
     ...
 
     ======================================================================
     ERROR: test_form_success (blog.tests.CommentFormViewTest)
     ----------------------------------------------------------------------
     ...
-    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/post/1)
+    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/1)
     ...
 
     ----------------------------------------------------------------------
