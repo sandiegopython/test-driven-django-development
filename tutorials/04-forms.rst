@@ -352,7 +352,8 @@ Now let's create a view and URL for our comment creation page.  Let's start with
     class CreateComment(CreateView):
         template_name = 'blog/create_comment.html'
         form_class = CommentForm
-        create_comment = CreateComment.as_view()
+    
+    create_comment = CreateComment.as_view()
 
 Now if we run our test we'll see a failure because we aren't passing a ``post`` keyword argument to our form:
 
