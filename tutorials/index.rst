@@ -56,3 +56,4 @@ Contents
 
    01-getting-started
    02-models
+   03-views
