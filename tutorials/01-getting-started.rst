@@ -21,7 +21,7 @@ You should also have `pip`_ installed on your machine, along with the `requireme
 
     # In the same directory where you downloaded requirements.txt
     $ pip install -r requirements.txt
-    
+
 .. HINT::
    Things you should type into your terminal or command prompt will always
    start with ``$`` in this workshop.
