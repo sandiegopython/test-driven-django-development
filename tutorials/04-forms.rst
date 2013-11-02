@@ -140,7 +140,7 @@ Now we get:
 
     ImportError: cannot import name CommentForm
 
-We need to create our ``CommentForm`` model form.  Let's start with something simple:
+We need to create our ``CommentForm`` model form in ``blog/forms.py``.  Let's start with something simple:
 
 .. code-block:: python
 
