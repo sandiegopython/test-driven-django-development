@@ -425,11 +425,11 @@ We got a HTTP 403 error because we forgot to add the cross-site request forgery 
 
 .. code-block:: html
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_table }}
-        <input type="submit" value="Create Comment">
-    </form>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_table }}
+            <input type="submit" value="Create Comment">
+        </form>
 
 Now only one test fails:
 

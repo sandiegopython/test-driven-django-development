@@ -458,6 +458,7 @@ Let's write a test for that:
     from django.contrib.auth import get_user_model
 
     class BlogPostViewTest(TestCase):
+
         def setUp(self):
             self.user = get_user_model().objects.create(username='some_user')
             self.post = Post.objects.create(title='1-title', body='1-body',
