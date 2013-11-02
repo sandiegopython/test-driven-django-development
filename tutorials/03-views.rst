@@ -354,25 +354,29 @@ One easy way to get all our posts objects to list is to just use a ``ListView``.
 
 That small change will provide a ``post_list`` object to our template ``index.html`` which we can then loop over. For some quick documentation on all the Class Based Views in django, take a look at `Classy Class Based Views`_
 
-The last change needed then is just to update our ``index.html`` to actually put those blog posts in there.
+The last change needed then is just to update our ``templates/index.html`` to actually put those blog posts in there.
 
 .. code-block:: html
 
-    {% for post in post_list %}
-        <article>
+    {% extends "base.html" %}
 
-            <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+    {% block content %}
+        {% for post in post_list %}
+            <article>
 
-            <p class="subheader">
-                <time>{{ post.modified_at|date }}</time>
-            </p>
+                <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
 
-            <p></p>
+                <p class="subheader">
+                    <time>{{ post.modified_at|date }}</time>
+                </p>
 
-            {{ post.body|linebreaks }}
+                <p></p>
 
-        </article>
-    {% endfor %}
+                {{ post.body|linebreaks }}
+
+            </article>
+        {% endfor %}
+    {% endblock content %}
 
 Running the tests here we see that all the tests pass!
 
