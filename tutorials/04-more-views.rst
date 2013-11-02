@@ -56,7 +56,7 @@ Now let's run our tests to make sure our new test fails:
     AssertionError: u'Comment object' != 'My comment body'
 
     ----------------------------------------------------------------------
-    Ran 9 tests in 0.001s
+    Ran 10 tests in 0.077s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -70,9 +70,9 @@ Great.  After we implement our ``__unicode__`` method our tests should pass:
 ::
 
     Creating test database for alias 'default'...
-    ..
+    ..........
     ----------------------------------------------------------------------
-    Ran 2 tests in 0.001s
+    Ran 10 tests in 0.072s
 
     OK
     Destroying test database for alias 'default'...
