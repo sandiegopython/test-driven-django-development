@@ -174,7 +174,7 @@ Okay now let's write finally write our form code.
     class CommentForm(forms.ModelForm):
 
         def __init__(self, *args, **kwargs):
-            self.post = kwargs.pop('post')
+            self.post = kwargs.pop('post')   # the blog post instance
             super(CommentForm, self).__init__(*args, **kwargs)
 
         def save(self):
@@ -186,6 +186,11 @@ Okay now let's write finally write our form code.
         class Meta:
             model = Comment
             fields = ('name', 'email', 'body')
+
+The ``CommentForm`` class is instantiated by passing the blog post that the
+comment was written against as well as the HTTP POST data containing the
+remaining fields such as comment body and email. The ``save`` method is
+overridden here to set the associated blog post before saving the comment.
 
 Let's run our tests again to see whether they pass:
 
