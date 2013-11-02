@@ -26,7 +26,9 @@ Let's make sure we've imported ``get_user_model`` and ``CommentForm`` in our tes
     from .models import Post, Comment
     from .forms import CommentForm
 
-Now let's start testing our form.  Let's link our comments to post by allowing our form accept a ``post`` keyword argument like this:
+Now let's start testing our form.  Remember that we are writing our tests before our code.  First we pretend we've already written our code in the way we want it to work, then we write tests for that not-yet-written code, then we write the code so it actually works.
+
+We want to link our comments to posts by allowing our form to accept a ``post`` keyword argument.  Assuming our ``CommentForm`` has been written this is how we'd like to use it (**you don't need to type this code anywhere**):
 
 .. code-block:: pycon
 
