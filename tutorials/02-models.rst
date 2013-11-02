@@ -153,6 +153,9 @@ Now run the test command to ensure our app's single test fails as expected:
 .. code-block:: bash
 
     $ python manage.py test blog
+
+::
+
     Creating test database for alias 'default'...
     F
     ======================================================================
@@ -210,6 +213,9 @@ Now let's run our tests again:
 .. code-block:: bash
 
     $ python manage.py test blog
+
+::
+
     Creating test database for alias 'default'...
     F
     ======================================================================
@@ -251,6 +257,9 @@ Now if we run our test again we should see that our single test passes:
 .. code-block:: bash
 
     $ python manage.py test blog
+
+::
+
     Creating test database for alias 'default'...
     .
     ----------------------------------------------------------------------
