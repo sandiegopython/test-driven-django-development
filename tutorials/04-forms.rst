@@ -43,8 +43,7 @@ Now let's run our tests to make sure our new test fails:
     FAIL: test_unicode_representation (blog.tests.CommentModelTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-    File "/home/zoidberg/learning-django-by-testing/myblog/blog/tests.py", line 16, in test_unicode_representation
-    self.assertEqual(unicode(comment), "My comment body")
+    ...
     AssertionError: u'Comment object' != 'My comment body'
 
     ----------------------------------------------------------------------
@@ -153,16 +152,14 @@ Now our tests should fail because the ``post`` keyword argument is not accepted 
     ERROR: test_init (blog.tests.CommentFormTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-    File "/home/zoidberg/learning-django-by-testing/myblog/blog/tests.py", line 28, in test_init
-        CommentForm(post=self.post)
+    ...
     TypeError: __init__() got an unexpected keyword argument 'post'
 
     ======================================================================
     FAIL: test_init_without_post (blog.tests.CommentFormTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-    File "/home/zoidberg/learning-django-by-testing/myblog/blog/tests.py", line 32, in test_init_without_post
-        CommentForm()
+    ...
     AssertionError: KeyError not raised
 
     ----------------------------------------------------------------------
@@ -239,8 +236,7 @@ Let's run our tests again to see whether they pass:
     FAIL: test_blank_data (blog.tests.CommentFormTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-    File "/home/zoidberg/learning-django-by-testing/myblog/blog/tests.py", line 53, in test_blank_data
-    'body': ['required'],
+    ...
     AssertionError: {'body': [u'This field is required.'], 'name': [u'This field is required.'], 'email': [u'This field is required.']} != {'body': ['required'], 'name': ['required'], 'email': ['required']}
 
     ----------------------------------------------------------------------
