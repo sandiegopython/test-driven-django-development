@@ -252,7 +252,13 @@ We'll start with putting our header and a sidebar in ``templates/base.html``:
 
     We will not explain the CSS classes we used above (e.g. ``large-8``, ``column``, ``row``).  More information on these classes can be found in the Zurb Foundation `grid documentation`_.
 
-Let's put some filler content in ``templates/index.html``:
+There's a lot of duplicate code between our ``templates/base.html`` and
+``templates/index.html``. Django's templates provide a way of having templates
+inherit the structure of other templates. This allows a template to define
+only a few elements, but retain the overall structure of its parent template.
+
+If we replace all the content in ``templates/index.html`` with the following,
+we can see this in action.
 
 .. code-block:: html
 
@@ -261,6 +267,12 @@ Let's put some filler content in ``templates/index.html``:
     {% block content %}
     Page body goes here.
     {% endblock content %}
+
+Now our ``templates/index.html`` just overrides the ``content`` block in
+``templates/base.html``. For more details on this powerful Django feature,
+you can read the documentation on `template inheritance`_.
+
+.. _template inheritance: https://docs.djangoproject.com/en/1.5/topics/templates/#template-inheritance
 
 
 ListViews
