@@ -237,12 +237,6 @@ Displaying the comment form
 
 We've made a form to create comments, but we still don't yet have a way for visitors to use the form.  The Django test client cannot test form submissions, but `WebTest`_ can.  We'll use `django-webtest`_ to handle testing the form submission.
 
-First let's install ``django-webtest``:
-
-.. code-block:: bash
-
-    $ pip install webtest django-webtest
-
 Let's create a test to verify that a form is displayed on our blog post detail page.
 
 First we need to import the ``WebTest`` class (in ``blog/tests.py``):
