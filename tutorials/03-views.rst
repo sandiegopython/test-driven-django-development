@@ -261,8 +261,9 @@ There's a lot of duplicate code between our ``templates/base.html`` and
 inherit the structure of other templates. This allows a template to define
 only a few elements, but retain the overall structure of its parent template.
 
-If we replace all the content in ``templates/index.html`` with the following,
-we can see this in action.
+If we update our ``index.html`` template to extend ``base.html`` we can see
+this in action.  Delete everything in ``templates/index.html`` and replace it
+with the following:
 
 .. code-block:: html
 
