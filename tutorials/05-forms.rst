@@ -255,6 +255,8 @@ Now let's make our ``BlogPostViewTest`` class inherit from ``WebTest``.  Change 
 
     **Do not** create a new ``BlogPostViewTest`` class.  We already have a ``BlogPostViewTest`` class with tests in it.  If we create a new one, our old class will be overwritten and those tests won't run anymore.  All we want to do is change the parent class for our test from ``TestCase`` to ``WebTest``.
 
+Our tests should continue to pass after this because ``WebTest`` is a subclass of the Django ``TestCase`` class that we were using before.
+
 Now let's add a test to this class:
 
 .. code-block:: python
