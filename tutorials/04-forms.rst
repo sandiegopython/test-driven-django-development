@@ -132,8 +132,8 @@ Now our tests should fail because the ``post`` keyword argument is not accepted 
 
 Our two form tests fail as expected.  Let's create a couple more tests for our form before we start fixing it.  We should create at least two tests to make sure our form validation works:
 
-1. Assert ``form.is_valid()`` is ``True`` for a form submission with valid data
-2. Assert ``form.is_valid()`` is ``False`` for a form submission with invalid data (preferably a separate test for each type of error)
+1. Ensure that ``form.is_valid()`` is ``True`` for a form submission with valid data
+2. Ensure that ``form.is_valid()`` is ``False`` for a form submission with invalid data (preferably a separate test for each type of error)
 
 This is a good start:
 
