@@ -453,6 +453,9 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
 .. code-block:: bash
 
     $ python manage.py test blog
+
+::
+
     ======================================================================
     ERROR: test_blog_body_in_post (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
@@ -485,6 +488,9 @@ Now our tests should pass again:
 .. code-block:: bash
 
     $ python manage.py test blog
+
+::
+
     Creating test database for alias 'default'...
     .......
     ----------------------------------------------------------------------
