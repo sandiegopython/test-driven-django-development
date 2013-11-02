@@ -74,7 +74,7 @@ Now we get:
 
     ImportError: cannot import name CommentForm
 
-We need to create our ``CommentForm`` model form in ``blog/forms.py``.  Let's start with something simple:
+We need to create our ``CommentForm`` model form in ``blog/forms.py``. This form will process the data sent from users trying to comment on a blog post and ensure that it can be saved to our blog database. Let's start with something simple:
 
 .. code-block:: python
 
@@ -86,6 +86,10 @@ We need to create our ``CommentForm`` model form in ``blog/forms.py``.  Let's st
         class Meta:
             model = Comment
             fields = ('name', 'email', 'body')
+
+Here we have created a simple form associated with our Comment model and we
+have specified that the form handle only a subset of all of the fields on
+the comment.
 
 .. IMPORTANT::
     `Django forms`_ are a powerful way to handle HTML forms. They provide
