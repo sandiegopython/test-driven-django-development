@@ -230,125 +230,149 @@ First let's install ``django-webtest``:
 
     $ pip install webtest django-webtest
 
-Let's create a test to verify that a form is displayed on the page.  Let's add a test:
+Let's create a test to verify that a form is displayed on our blog post detail page.
+
+First we need to import the ``WebTest`` class (in ``blog/tests.py``):
 
 .. code-block:: python
 
-    # ...
-    from django.core.urlresolvers import reverse
     from django_webtest import WebTest
-    # ...
 
+Now let's make our ``BlogPostViewTest`` class inherit from ``WebTest``:
 
-    class CommentFormViewTest(WebTest):
+.. code-block:: python
 
-        def setUp(self):
-            user = get_user_model().objects.create_user('zoidberg')
-            self.post = Post.objects.create(author=user, title="My post title")
+    class BlogPostViewTest(WebTest):
 
         def test_view_page(self):
-            page = self.app.get(reverse('blog.views.create_comment',
-                                        kwargs={'blog_pk': self.post.pk}))
+            page = self.app.get(self.post.get_absolute_url())
             self.assertEqual(len(page.forms), 1)
 
-Now let's create a view and URL for our comment creation page.  Let's start by updating our ``blog/views.py`` like this:
+Now let's update our ``PostDetails`` view (in ``blog/views.py``) to inherit from ``CreateView`` so we can use it to handle submissions to a ``CommentForm``:
 
 .. code-block:: python
 
-    from django.views.generic import DetailView, CreateView
+    from django.views.generic import CreateView
     from django.shortcuts import get_object_or_404
     from .models import Post
     from .forms import CommentForm
 
-    # ...
 
-
-    class CreateComment(CreateView):
-        template_name = 'blog/create_comment.html'
+    class PostDetails(CreateView):
+        template_name = 'blog/post_detail.html'
         form_class = CommentForm
 
-    create_comment = CreateComment.as_view()
+        def get_post(self):
+            return get_object_or_404(Post, pk=self.kwargs['pk'])
 
-The ``blog/urls.py`` should look like this:
+        def dispatch(self, *args, **kwargs):
+            self.post = self.get_post()
+            return super(PostDetails, self).dispatch(*args, **kwargs)
 
-.. code-block:: python
+        def get_context_data(self, **kwargs):
+            kwargs['post'] = self.post
+            return super(PostDetails, self).get_context_data(**kwargs)
 
-    from django.conf.urls import patterns, url
-
-
-    urlpatterns = patterns('blog.views',
-        url(r'^post/(?P<pk>\d+)/$', 'post_details'),
-        url(r'^post/(?P<blog_pk>\d+)/$', 'create_comment'),
-    )
-
+    post_details = PostDetails.as_view()
 
 
-
-Now if we run our test we'll see a failure because we aren't passing a ``post`` keyword argument to our form:
+Now if we run our test we'll see 4 failures.  Our blog post detail view is failing to load the page because we aren't passing a ``post`` keyword argument to our form:
 
 .. code-block:: python
 
     $ python manage.py test
     Creating test database for alias 'default'...
-    .......E......
+    EEEE..........
     ======================================================================
-    ERROR: test_view_page (blog.tests.CommentFormViewTest)
+    ERROR: test_basic_view (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
-    Traceback (most recent call last):
     ...
     KeyError: 'post'
 
     ----------------------------------------------------------------------
-    Ran 14 tests in 0.073s
+    Ran 14 tests in 0.069s
 
-    FAILED (errors=1)
+    FAILED (errors=4)
 
 Let's get the ``Post`` from the database and pass it to our form.  Our view should look something like this now:
 
 .. code-block:: python
 
-    class CreateComment(CreateView):
-        template_name = 'blog/create_comment.html'
+    class PostDetails(CreateView):
+        template_name = 'blog/post_detail.html'
         form_class = CommentForm
 
         def get_post(self):
-            return get_object_or_404(Post, pk=self.kwargs['blog_pk'])
+            return get_object_or_404(Post, pk=self.kwargs['pk'])
+
+        def dispatch(self, *args, **kwargs):
+            self.post = self.get_post()
+            return super(PostDetails, self).dispatch(*args, **kwargs)
 
         def get_form_kwargs(self):
-            kwargs = super(CreateComment, self).get_form_kwargs()
-            kwargs['post'] = self.get_post()
+            kwargs = super(PostDetails, self).get_form_kwargs()
+            kwargs['post'] = self.post
             return kwargs
 
-Now when we run our tests we'll see a ``TemplateDoesNotExist`` error because we haven't created the ``blog/create_comment.html`` template yet.
+        def get_context_data(self, **kwargs):
+            kwargs['post'] = self.post
+            return super(PostDetails, self).get_context_data(**kwargs)
 
-Let's create a simple template in ``templates/blog/create_comment.html``:
+Now when we run our tests we'll see the following assertion error because we have not yet added the comment form to our blog detail page:
+
+.. code-block:: bash
+
+    $ python manage.py test blog
+    Creating test database for alias 'default'...
+    ...F..........
+    ======================================================================
+    FAIL: test_view_page (blog.tests.BlogPostViewTest)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+    File "/home/trey/repos/meetups/learning-django-by-testing/myblog/blog/tests.py", line 79, in test_view_page
+        self.assertEqual(len(page.forms), 1)
+        AssertionError: 0 != 1
+
+    ----------------------------------------------------------------------
+    Ran 14 tests in 0.089s
+
+    FAILED (failures=1)
+    Destroying test database for alias 'default'...
+
+Let's add a comment form to the bottom of our ``content`` block in our blog post detail template (``templates/post_detail.html``):
 
 .. code-block:: html
 
-    {% extends "base.html" %}
-
-    {% block content %}
+    <h5>Add a comment</h5>
     <form method="post">
         {{ form.as_table }}
         <input type="submit" value="Create Comment">
     </form>
-    {% endblock content %}
 
-Now our test should pass.
+Now our tests pass again:
+
+.. code-block:: bash
+
+    $ python manage.py test blog
+    Creating test database for alias 'default'...
+    ..............
+    ----------------------------------------------------------------------
+    Ran 14 tests in 0.099s
+
+    OK
+    Destroying test database for alias 'default'...
 
 Let's test that our form actually submits.  We should write two tests: one to test for errors, and one to test a successful form submission.
 
 .. code-block:: python
 
     def test_form_error(self):
-        page = self.app.get(reverse('blog.views.create_comment',
-                                    kwargs={'blog_pk': self.post.pk}))
+        page = self.app.get(self.post.get_absolute_url())
         page = page.form.submit()
         self.assertContains(page, "This field is required.")
 
     def test_form_success(self):
-        page = self.app.get(reverse('blog.views.create_comment',
-                                    kwargs={'blog_pk': self.post.pk}))
+        page = self.app.get(self.post.get_absolute_url())
         page.form['name'] = "Phillip"
         page.form['email'] = "phillip@example.com"
         page.form['body'] = "Test comment body."
@@ -366,36 +390,32 @@ Now let's run our tests:
     ERROR: test_form_error (blog.tests.CommentFormViewTest)
     ----------------------------------------------------------------------
     ...
-    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/post/1/comment)
+    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/post/1)
     ...
 
     ======================================================================
     ERROR: test_form_success (blog.tests.CommentFormViewTest)
     ----------------------------------------------------------------------
     ...
-    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/post/1/comment)
+    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/post/1)
     ...
 
     ----------------------------------------------------------------------
-    Ran 16 tests in 0.118s
+    Ran 16 tests in 0.139s
 
     FAILED (errors=2)
 
-We got a HTTP 403 error because we forgot to add the cross-site request forgery token to our form.  Every HTTP POST request made to our Django site needs to include a CSRF token.  Let's add that to our template ``templates/blog/create_comment.html``:
+We got a HTTP 403 error because we forgot to add the cross-site request forgery token to our form.  Every HTTP POST request made to our Django site needs to include a CSRF token.  Let's change our form to add a CSRF token field to it:
 
 .. code-block:: html
 
-    {% extends "base.html" %}
-
-    {% block content %}
     <form method="post">
         {% csrf_token %}
         {{ form.as_table }}
         <input type="submit" value="Create Comment">
     </form>
-    {% endblock content %}
 
-Now only one of our tests fails:
+Now only one test fails:
 
 .. code-block:: bash
 
@@ -412,7 +432,7 @@ Now only one of our tests fails:
     ImproperlyConfigured: No URL to redirect to.  Either provide a url or define a get_absolute_url method on the Model.
 
     ----------------------------------------------------------------------
-    Ran 16 tests in 0.056s
+    Ran 16 tests in 0.176s
 
     FAILED (errors=1)
 
@@ -423,9 +443,7 @@ Let's fix this by adding a ``get_success_url`` to our view:
     def get_success_url(self):
         return self.get_post().get_absolute_url()
 
-Now our tests should pass.
-
-TODO: Add comments to post page
+Now our tests pass again and we can submit comments as expected.
 
 .. _WebTest: http://webtest.pythonpaste.org/en/latest/
 .. _django-webtest: https://bitbucket.org/kmike/django-webtest/
