@@ -92,3 +92,22 @@ in the admin and you can add comments to the blog posts. However, the point
 of a blog is to let other users and not only the admin post comments.
 
 
+Displaying comments on the website
+----------------------------------
+
+Now we can create comments in the admin interface, but we can't see them on the website yet.  Let's display comments on the detail page for each blog post.
+
+At the end of our ``content`` block in ``templates/post_detail.html`` let's add the following:
+
+.. code-block:: html
+
+    <hr>
+    <h4>Comments</h4>
+    {% for comment in post.comment_set.all %}
+        <p><em>Posted by {{ comment.name }}</em></p>
+        {{ comment|linebreaks }}
+    {% empty %}
+        No comments yet.
+    {% endfor %}
+
+Now we can see our comments on the website.
