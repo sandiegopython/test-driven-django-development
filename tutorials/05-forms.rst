@@ -336,6 +336,9 @@ Now when we run our tests we'll see the following assertion error because we hav
 .. code-block:: bash
 
     $ python manage.py test blog
+
+::
+
     Creating test database for alias 'default'...
     ...F...........
     ======================================================================
@@ -356,17 +359,20 @@ Let's add a comment form to the bottom of our ``content`` block in our blog post
 
 .. code-block:: html
 
-    <h5>Add a comment</h5>
-    <form method="post">
-        {{ form.as_table }}
-        <input type="submit" value="Create Comment">
-    </form>
+        <h5>Add a comment</h5>
+        <form method="post">
+            {{ form.as_table }}
+            <input type="submit" value="Create Comment">
+        </form>
 
 Now our tests pass again:
 
 .. code-block:: bash
 
     $ python manage.py test blog
+
+::
+
     Creating test database for alias 'default'...
     ...............
     ----------------------------------------------------------------------
