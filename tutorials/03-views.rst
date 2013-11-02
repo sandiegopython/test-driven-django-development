@@ -346,7 +346,31 @@ The last change needed then is just to update our ``index.html`` to actually put
 
 Running the tests here we see that all the tests pass!
 
-And now, if we add some posts in our admin, they should show up on the homepage. What about viewing an individual blog post?
+And now, if we add some posts in our admin, they should show up on the homepage. What happens if there are no posts?
+We should add a test for that
+
+.. code-block:: python
+
+    def test_no_posts(self):
+        response = self.client.get('/')
+        self.assertContains(response, 'No blog post entries yet.')
+
+And that gives us the expected failure
+
+.. code-block:: bash
+
+    ======================================================================
+    FAIL: test_no_posts (blog.tests.ListPostsOnHomePage)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      ...
+    AssertionError: Couldn't find 'No blog post entries yet' in response
+
+    ----------------------------------------------------------------------
+
+The easiest way to add this is to use the `empty`_ clause. See if you can add this in yourself to make the test pass.
+
+What about viewing an individual blog post?
 
 Blog Post Details
 -----------------
@@ -546,3 +570,4 @@ Now our tests should pass again:
 .. _DetailView: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/
 .. _an architecture for django templates: https://oncampus.oberlin.edu/webteam/2012/09/architecture-django-templates
 .. _include tag: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#include
+.. _empty: https://docs.djangoproject.com/en/dev/ref/templates/builtins/#for-empty
