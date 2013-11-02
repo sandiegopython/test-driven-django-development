@@ -37,6 +37,9 @@ Now let's run our tests to make sure our new test fails:
 .. code-block:: bash
 
     $ python manage.py test blog
+    
+::
+
     Creating test database for alias 'default'...
     F.
     ======================================================================
@@ -57,6 +60,9 @@ Great.  After we implement our ``__unicode__`` method our tests should pass:
 .. code-block:: bash
 
     $ python manage.py test blog
+    
+::
+
     Creating test database for alias 'default'...
     ..
     ----------------------------------------------------------------------
@@ -117,6 +123,9 @@ Let's run our tests:
 .. code-block:: bash
 
     $ python manage.py test blog
+    
+::
+
     ImportError: No module named forms
 
 We haven't created our forms file yet so our import is failing.  Let's create an empty ``blog/forms.py`` file.
@@ -126,6 +135,9 @@ Now we get:
 .. code-block:: bash
 
     $ python manage.py test blog
+    
+::
+
     ImportError: cannot import name CommentForm
 
 We need to create our ``CommentForm`` model form.  Let's start with something simple:
@@ -146,6 +158,9 @@ Now our tests should fail because the ``post`` keyword argument is not accepted 
 .. code-block:: bash
 
     $ python manage.py test blog
+    
+::
+
     Creating test database for alias 'default'...
     EF..
     ======================================================================
@@ -230,6 +245,9 @@ Let's run our tests again to see whether they pass:
 .. code-block:: bash
 
     $ python manage.py test blog
+    
+::
+
     Creating test database for alias 'default'...
     F.....
     ======================================================================
@@ -250,6 +268,9 @@ Our test for blank form data is failing because we aren't checking for the corre
 .. code-block:: bash
 
     $ python manage.py test blog
+    
+::
+
     Creating test database for alias 'default'...
     ......
     ----------------------------------------------------------------------
@@ -426,6 +447,9 @@ Now only one of our tests fails:
 .. code-block:: bash
 
     $ python manage.py test blog
+    
+::
+
     Creating test database for alias 'default'...
     ........E.......
     ======================================================================
