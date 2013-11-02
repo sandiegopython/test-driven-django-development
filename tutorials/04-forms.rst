@@ -1,14 +1,13 @@
 Forms
 =====
 
-TODO: Blah blah blah
 
 Adding a Comment form
 ---------------------
 
-To allow users to create comments we need to accept a form submission.  We can use Django's form framework for this task.
+To allow users to create comments we need to accept a form submission. HTML forms are the most common method used to accept user input on web sites and send that data to a server. We can use Django's form framework for this task.
 
-First let's write some tests.  We'll need to create a ``Post`` and a ``User`` for our tests.  Let's make a setup method for our tests which creates a post and adds it to the database:
+First let's write some tests.  We'll need to create a blog ``Post`` and a ``User`` for our tests.  Let's make a setup method for our tests which creates a post and adds it to the database. The setup method is called before each test in the given test class so that each test will be able to use the ``User`` and ``Post``.
 
 .. code-block:: python
 
@@ -252,7 +251,7 @@ Let's create a test to verify that a form is displayed on the page.  Let's add a
                                         kwargs={'blog_pk': self.post.pk}))
             self.assertEqual(len(page.forms), 1)
 
-Now let's create a view and URL for our comment creation page.  Let's start with a view like this:
+Now let's create a view and URL for our comment creation page.  Let's start by updating our ``blog/views.py`` like this:
 
 .. code-block:: python
 
@@ -267,8 +266,23 @@ Now let's create a view and URL for our comment creation page.  Let's start with
     class CreateComment(CreateView):
         template_name = 'blog/create_comment.html'
         form_class = CommentForm
-    
+
     create_comment = CreateComment.as_view()
+
+The ``blog/urls.py`` should look like this:
+
+.. code-block:: python
+
+    from django.conf.urls import patterns, url
+
+
+    urlpatterns = patterns('blog.views',
+        url(r'^post/(?P<pk>\d+)/$', 'post_details'),
+        url(r'^post/(?P<blog_pk>\d+)/$', 'create_comment'),
+    )
+
+
+
 
 Now if we run our test we'll see a failure because we aren't passing a ``post`` keyword argument to our form:
 
@@ -367,7 +381,7 @@ Now let's run our tests:
 
     FAILED (errors=2)
 
-We got a HTTP 403 error because we forgot to add the cross-site request forgery token to our form.  Every HTTP POST request made to our Django site needs to include a CSRF token.  Let's add that to our template:
+We got a HTTP 403 error because we forgot to add the cross-site request forgery token to our form.  Every HTTP POST request made to our Django site needs to include a CSRF token.  Let's add that to our template ``templates/blog/create_comment.html``:
 
 .. code-block:: html
 

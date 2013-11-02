@@ -71,6 +71,13 @@ Great.  After we implement our ``__unicode__`` method our tests should pass:
     OK
     Destroying test database for alias 'default'...
 
+Since we have added a new model, we also need to make sure that this model
+gets synched to our SQLite database.
+
+.. code-block:: bash
+
+    $ python manage.py syncdb
+
 
 Adding comments on the admin site
 ----------------------------------
