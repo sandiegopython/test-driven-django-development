@@ -11,7 +11,7 @@ First we need to add a ``Comment`` model in ``blog/models.py``.
 .. code-block:: python
 
     class Comment(models.Model):
-        post = models.ForeignKey(Post)
+        post = models.ForeignKey(BlogPost)
         name = models.CharField(max_length=100)
         email = models.EmailField()
         body = models.TextField()
@@ -19,7 +19,7 @@ First we need to add a ``Comment`` model in ``blog/models.py``.
         modified_at = models.DateTimeField(auto_now=True, editable=False)
 
 
-Let's write a ``__unicode___`` method for our ``Comment`` model like we did for our ``Post`` model earlier.
+Let's write a ``__unicode___`` method for our ``Comment`` model like we did for our ``BlogPost`` model earlier.
 
 First we should create a test in ``blog/tests.py``.  Our test should look very similar to the ``__unicode__`` test we wrote for posts earlier.  This should suffice:
 
@@ -35,7 +35,7 @@ Don't forget to import our ``Comment`` model:
 
 .. code-block:: python
 
-    from .models import Post, Comment
+    from .models import BlogPost, Comment
 
 
 Now let's run our tests to make sure our new test fails:
@@ -88,16 +88,16 @@ gets synched to our SQLite database.
 Adding comments on the admin site
 ----------------------------------
 
-Let's add the Comment model to the admin just like we did with the Post
+Let's add the Comment model to the admin just like we did with the BlogPost
 model. This involves editing ``blog/admin.py`` to look like this:
 
 .. code-block:: python
 
     from django.contrib import admin
-    from .models import Post, Comment
+    from .models import BlogPost, Comment
 
 
-    admin.site.register(Post)
+    admin.site.register(BlogPost)
     admin.site.register(Comment)
 
 If you start the development server again, you will see the Comment model

@@ -7,7 +7,7 @@ Adding a Comment form
 
 To allow users to create comments we need to accept a form submission. HTML forms are the most common method used to accept user input on web sites and send that data to a server. We can use Django's form framework for this task.
 
-First let's write some tests.  We'll need to create a blog ``Post`` and a ``User`` for our tests.  Let's make a setup method for our tests which creates a post and adds it to the database. The setup method is called before each test in the given test class so that each test will be able to use the ``User`` and ``Post``.
+First let's write some tests.  We'll need to create a blog ``BlogPost`` and a ``User`` for our tests.  Let's make a setup method for our tests which creates a post and adds it to the database. The setup method is called before each test in the given test class so that each test will be able to use the ``User`` and ``BlogPost``.
 
 .. code-block:: python
 
@@ -15,7 +15,7 @@ First let's write some tests.  We'll need to create a blog ``Post`` and a ``User
 
         def setUp(self):
             user = get_user_model().objects.create_user('zoidberg')
-            self.post = Post.objects.create(author=user, title="My post title")
+            self.post = BlogPost.objects.create(author=user, title="My post title")
 
 Let's make sure we've imported ``get_user_model`` and ``CommentForm`` in our tests file.  Our imports should look like this:
 
@@ -23,7 +23,7 @@ Let's make sure we've imported ``get_user_model`` and ``CommentForm`` in our tes
 
     from django.test import TestCase
     from django.contrib.auth import get_user_model
-    from .models import Post, Comment
+    from .models import BlogPost, Comment
     from .forms import CommentForm
 
 Now let's start testing our form.  Let's link our comments to post by allowing our form accept a ``post`` keyword argument like this:
@@ -261,7 +261,7 @@ Now let's update our ``PostDetails`` view (in ``blog/views.py``) to inherit from
 
     from django.views.generic import CreateView
     from django.shortcuts import get_object_or_404
-    from .models import Post
+    from .models import BlogPost
     from .forms import CommentForm
 
 
@@ -270,7 +270,7 @@ Now let's update our ``PostDetails`` view (in ``blog/views.py``) to inherit from
         form_class = CommentForm
 
         def get_post(self):
-            return get_object_or_404(Post, pk=self.kwargs['pk'])
+            return get_object_or_404(BlogPost, pk=self.kwargs['pk'])
 
         def dispatch(self, *args, **kwargs):
             self.blog_post = self.get_post()
@@ -301,7 +301,7 @@ Now if we run our test we'll see 4 failures.  Our blog post detail view is faili
 
     FAILED (errors=4)
 
-Let's get the ``Post`` from the database and pass it to our form.  Our view should look something like this now:
+Let's get the ``BlogPost`` from the database and pass it to our form.  Our view should look something like this now:
 
 .. code-block:: python
 
@@ -310,7 +310,7 @@ Let's get the ``Post`` from the database and pass it to our form.  Our view shou
         form_class = CommentForm
 
         def get_post(self):
-            return get_object_or_404(Post, pk=self.kwargs['pk'])
+            return get_object_or_404(BlogPost, pk=self.kwargs['pk'])
 
         def dispatch(self, *args, **kwargs):
             self.blog_post = self.get_post()

@@ -282,14 +282,14 @@ The Django ``test client`` can be used for a simple test of whether text shows u
             self.user = get_user_model().objects.create(username='some_user')
 
         def test_one_post(self):
-            Post.objects.create(title='1-title', body='1-body', author=self.user)
+            BlogPost.objects.create(title='1-title', body='1-body', author=self.user)
             response = self.client.get('/')
             self.assertContains(response, '1-title')
             self.assertContains(response, '1-body')
 
         def test_two_posts(self):
-            Post.objects.create(title='1-title', body='1-body', author=self.user)
-            Post.objects.create(title='2-title', body='2-body', author=self.user)
+            BlogPost.objects.create(title='1-title', body='1-body', author=self.user)
+            BlogPost.objects.create(title='2-title', body='2-body', author=self.user)
             response = self.client.get('/')
             self.assertContains(response, '1-title')
             self.assertContains(response, '1-body')
@@ -331,12 +331,12 @@ One easy way to get all our posts objects to list is to just use a ``ListView``.
 
     from django.views.generic import ListView
 
-    from blog.models import Post
+    from blog.models import BlogPost
 
 
     class HomeView(ListView):
         template_name = 'index.html'
-        queryset = Post.objects.order_by('-created_at')
+        queryset = BlogPost.objects.order_by('-created_at')
 
     home = HomeView.as_view()
 
@@ -346,7 +346,7 @@ The last change needed then is just to update our ``index.html`` to actually put
 
 .. code-block:: html
 
-    {% for post in post_list %}
+    {% for post in blogpost_list %}
         <article>
 
             <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
