@@ -92,7 +92,7 @@ Let's make sure we've imported ``get_user_model`` and ``CommentForm`` in our tes
 .. code-block:: python
 
     from django.test import TestCase
-    from django.contrib.auth.models import get_user_model
+    from django.contrib.auth import get_user_model
     from .models import Post, Comment
     from .forms import CommentForm
 
