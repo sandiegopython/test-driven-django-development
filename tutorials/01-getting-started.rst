@@ -196,4 +196,4 @@ Now visit the admin site in your browser (http://localhost:8000/admin/).
     .. _official documentation: https://docs.djangoproject.com/en/1.5/intro/tutorial01/#the-development-server
 
 .. _pip: http://www.pip-installer.org/en/latest/installing.html
-.. _requirements.txt: _static/requirements.txt
+.. _requirements.txt: https://raw.github.com/pythonsd/test-driven-django-development/master/myblog/requirements.txt
