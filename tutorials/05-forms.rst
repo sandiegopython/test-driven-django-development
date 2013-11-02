@@ -245,11 +245,19 @@ First we need to import the ``WebTest`` class (in ``blog/tests.py``):
 
     from django_webtest import WebTest
 
-Now let's make our ``BlogPostViewTest`` class inherit from ``WebTest``:
+Now let's make our ``BlogPostViewTest`` class inherit from ``WebTest``.  Change our ``BlogPostViewTest`` to inherit from ``WebTest`` instead of from ``TestCase``:
 
 .. code-block:: python
 
     class BlogPostViewTest(WebTest):
+
+.. CAUTION::
+
+    **Do not** create a new ``BlogPostViewTest`` class.  We already have a ``BlogPostViewTest`` class with tests in it.  If we create a new one, our old class will be overwritten and those tests won't run anymore.  All we want to do is change the parent class for our test from ``TestCase`` to ``WebTest``.
+
+Now let's add a test to this class:
+
+.. code-block:: python
 
         def test_view_page(self):
             page = self.app.get(self.post.get_absolute_url())
