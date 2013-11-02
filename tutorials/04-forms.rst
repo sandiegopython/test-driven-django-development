@@ -84,15 +84,15 @@ First let's write some tests.  We'll need to create a ``Post`` and a ``User`` fo
     class CommentFormTest(TestCase):
 
         def setUp(self):
-            user = User.objects.create_user('zoidberg')
+            user = get_user_model().objects.create_user('zoidberg')
             self.post = Post.objects.create(author=user, title="My post title")
 
-Let's make sure we've imported ``User`` and ``CommentForm`` in our tests file.  Our imports should look like this:
+Let's make sure we've imported ``get_user_model`` and ``CommentForm`` in our tests file.  Our imports should look like this:
 
 .. code-block:: python
 
     from django.test import TestCase
-    from django.contrib.auth.models import User
+    from django.contrib.auth.models import get_user_model
     from .models import Post, Comment
     from .forms import CommentForm
 
