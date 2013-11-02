@@ -158,6 +158,10 @@ Let's start by creating a views file: ``myblog/views.py`` referencing the ``inde
 
     home = HomeView.as_view()
 
+.. IMPORTANT::
+
+    We are making this views file in the ``myblog`` project directory (next to the ``myblog/urls.py`` file we are about to change).  We are **not** changing the ``blog/views.py`` file yet.  We will use that file later.
+
 Django will be able to find this template in the ``templates`` folder because of our ``TEMPLATE_DIRS`` setting.
 Now we need to route the homepage URL to the home view.  Our URL file ``myblog/urls.py`` should look something like this:
 
