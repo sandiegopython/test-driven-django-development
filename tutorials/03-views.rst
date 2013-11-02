@@ -482,7 +482,7 @@ The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
 
 .. code-block:: python
 
-    url(r'^/', include('blog.urls')),
+    url(r'^', include('blog.urls')),
 
 Now we need to define a ``post_details`` view in our ``blog/views.py`` file:
 
