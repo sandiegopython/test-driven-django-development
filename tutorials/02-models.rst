@@ -61,14 +61,14 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
 Creating a model
 ----------------
 
-First let's create a blog post model.  This will correspond to a database table which will hold our blog posts.  A blog post will be represented by an instance of our ``Post`` model class and each ``Post`` model instance will identify a row in our database table.
+First let's create a blog post model.  This will correspond to a database table which will hold our blog posts.  A blog post will be represented by an instance of our ``BlogPost`` model class and each ``BlogPost`` model instance will identify a row in our database table.
 
 .. code-block:: python
 
     from django.db import models
 
 
-    class Post(models.Model):
+    class BlogPost(models.Model):
         title = models.CharField(max_length=500)
         author = models.ForeignKey('auth.User')
         body = models.TextField()
@@ -77,7 +77,7 @@ First let's create a blog post model.  This will correspond to a database table 
 
 If you aren't already familiar with databases, this code may be somewhat daunting. A good way to think about a model (or a database table) is as a sheet in a spreadsheet. Each field like the ``title`` or ``author`` is a column in the spreadsheet and each different instance of the model -- each individual blog post in our project -- is a row in the spreadsheet.
 
-To create the database table for our ``Post`` model we need to run syncdb again:
+To create the database table for our ``BlogPost`` model we need to run syncdb again:
 
 .. code-block:: bash
 
@@ -99,16 +99,16 @@ Creating posts from the admin site
 
 We don't want to manually add posts to the database every time we want to update our blog.  It would be nice if we could use a login-secured webpage to create blog posts.  Fortunately Django's admin interface can do just that.
 
-In order to create blog posts from the admin interface we need to register our Post model with the admin site.  We can do this by creating a new ``blog/admin.py`` file with the following code:
+In order to create blog posts from the admin interface we need to register our BlogPost model with the admin site.  We can do this by creating a new ``blog/admin.py`` file with the following code:
 
 
 .. code-block:: python
 
     from django.contrib import admin
-    from .models import Post
+    from .models import BlogPost
 
 
-    admin.site.register(Post)
+    admin.site.register(BlogPost)
 
 Now, start up the development server again and navigate to the admin site (http://localhost:8000/admin/) and create a blog post.
 
@@ -116,7 +116,7 @@ Now, start up the development server again and navigate to the admin site (http:
 
     $ python manage.py runserver
 
-First click the "Add" link next to *Posts* in the admin site.
+First click the "Add" link next to *BlogPosts* in the admin site.
 
 .. image:: _static/02-01_add_post.png
 
@@ -132,7 +132,7 @@ Our post was created
 Our first test: __unicode__ method
 ----------------------------------
 
-In the admin change list our posts all have the unhelpful name *Post object*.  We can customize the way models are referenced by creating a ``__unicode__`` method on our model class. Models are a good place to put this kind of reusable code that is specific to a model.
+In the admin change list our posts all have the unhelpful name *BlogPost object*.  We can customize the way models are referenced by creating a ``__unicode__`` method on our model class. Models are a good place to put this kind of reusable code that is specific to a model.
 
 Let's first create a test demonstrating the behavior we'd like to see.
 
@@ -143,7 +143,7 @@ All the tests for our app will live in the ``blog/tests.py`` file. Delete everyt
     from django.test import TestCase
 
 
-    class PostModelTest(TestCase):
+    class BlogPostModelTest(TestCase):
 
         def test_unicode_representation(self):
             self.fail("TODO Test incomplete")
@@ -159,7 +159,7 @@ Now run the test command to ensure our app's single test fails as expected:
     Creating test database for alias 'default'...
     F
     ======================================================================
-    FAIL: test_unicode_representation (blog.tests.PostModelTest)
+    FAIL: test_unicode_representation (blog.tests.BlogPostModelTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
     ...
@@ -192,13 +192,13 @@ Let's write our test to ensure that a blog post's unicode representation is equa
 .. code-block:: python
 
     from django.test import TestCase
-    from .models import Post
+    from .models import BlogPost
 
 
-    class PostModelTest(TestCase):
+    class BlogPostModelTest(TestCase):
 
         def test_unicode_representation(self):
-            post = Post(title="My post title")
+            post = BlogPost(title="My post title")
             self.assertEqual(unicode(post), post.title)
 
 .. HINT::
@@ -219,11 +219,11 @@ Now let's run our tests again:
     Creating test database for alias 'default'...
     F
     ======================================================================
-    FAIL: test_unicode_representation (blog.tests.PostModelTest)
+    FAIL: test_unicode_representation (blog.tests.BlogPostModelTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
     ...
-    AssertionError: u'Post object' != 'My post title'
+    AssertionError: u'BlogPost object' != 'My post title'
 
     ----------------------------------------------------------------------
     Ran 1 test in 0.001s
@@ -231,7 +231,7 @@ Now let's run our tests again:
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-Our test fails again, but this time it fails because we haven't customized our ``__unicode__`` method yet so the unicode representation for our model is still the default *Post object*.
+Our test fails again, but this time it fails because we haven't customized our ``__unicode__`` method yet so the unicode representation for our model is still the default *BlogPost object*.
 
 Let's add a ``__unicode__`` method to our model that returns the post title.  Our ``models.py`` file should look something like this:
 
@@ -240,7 +240,7 @@ Let's add a ``__unicode__`` method to our model that returns the post title.  Ou
     from django.db import models
 
 
-    class Post(models.Model):
+    class BlogPost(models.Model):
         title = models.CharField(max_length=500)
         author = models.ForeignKey('auth.User')
         body = models.TextField()

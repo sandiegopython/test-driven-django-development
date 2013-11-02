@@ -298,14 +298,14 @@ The Django ``test client`` can be used for a simple test of whether text shows u
             self.user = get_user_model().objects.create(username='some_user')
 
         def test_one_post(self):
-            Post.objects.create(title='1-title', body='1-body', author=self.user)
+            BlogPost.objects.create(title='1-title', body='1-body', author=self.user)
             response = self.client.get('/')
             self.assertContains(response, '1-title')
             self.assertContains(response, '1-body')
 
         def test_two_posts(self):
-            Post.objects.create(title='1-title', body='1-body', author=self.user)
-            Post.objects.create(title='2-title', body='2-body', author=self.user)
+            BlogPost.objects.create(title='1-title', body='1-body', author=self.user)
+            BlogPost.objects.create(title='2-title', body='2-body', author=self.user)
             response = self.client.get('/')
             self.assertContains(response, '1-title')
             self.assertContains(response, '1-body')
@@ -347,12 +347,12 @@ One easy way to get all our posts objects to list is to just use a ``ListView``.
 
     from django.views.generic import ListView
 
-    from blog.models import Post
+    from blog.models import BlogPost
 
 
     class HomeView(ListView):
         template_name = 'index.html'
-        queryset = Post.objects.order_by('-created_at')
+        queryset = BlogPost.objects.order_by('-created_at')
 
     home = HomeView.as_view()
 
@@ -366,7 +366,7 @@ The last change needed then is just to update our ``index.html`` to actually put
 
 .. code-block:: html
 
-    {% for post in post_list %}
+    {% for post in blogpost_list %}
         <article>
 
             <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
@@ -408,7 +408,7 @@ And that gives us the expected failure
     Creating test database for alias 'default'...
     F....
     ======================================================================
-    FAIL: test_no_posts (blog.tests.ListPostsOnHomePage)
+    FAIL: test_no_posts (blog.tests.ListBlogPostsOnHomePage)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
       ...
@@ -485,7 +485,7 @@ Let's write a test for that:
 
         def setUp(self):
             self.user = get_user_model().objects.create(username='some_user')
-            self.post = Post.objects.create(title='1-title', body='1-body',
+            self.post = BlogPost.objects.create(title='1-title', body='1-body',
                                             author=self.user)
 
         def test_basic_view(self):
@@ -502,7 +502,7 @@ Our ``blog/urls.py`` file is the very short
 
 
     urlpatterns = patterns('blog.views',
-        url(r'^post/(?P<pk>\d+)/$', 'post_details'),
+        url(r'^post/(?P<pk>\d+)/$', 'blogpost_detail'),
     )
 
 The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
@@ -511,7 +511,7 @@ The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
 
     url(r'^', include('blog.urls')),
 
-Now we need to define a ``post_details`` view in our ``blog/views.py`` file:
+Now we need to define a ``blogpost_detail`` view in our ``blog/views.py`` file:
 
 .. code-block:: python
 
@@ -529,16 +529,16 @@ Finally we need to create the ``get_absolute_url()`` function which should retur
 
     def test_get_absolute_url(self):
         user = get_user_model().objects.create(username='some_user')
-        post = Post.objects.create(title="My post title", author=user)
+        post = BlogPost.objects.create(title="My post title", author=user)
         self.assertIsNotNone(post.get_absolute_url())
 
-Now we need to implement ``get_absolute_url`` in our ``Post`` class (found in ``blog/models.py``):
+Now we need to implement ``get_absolute_url`` in our ``BlogPost`` class (found in ``blog/models.py``):
 
 .. code-block:: python
 
     from django.core.urlresolvers import reverse
 
-    # And in our Post model class...
+    # And in our BlogPost model class...
 
     def get_absolute_url(self):
         return reverse('blog.views.post_details', kwargs={'pk': self.pk})
@@ -562,13 +562,13 @@ To implement our blog post page we'll use another class-based generic view: the 
 .. code-block:: python
 
     from django.views.generic import DetailView
-    from .models import Post
+    from .models import BlogPost
 
 
-    class PostDetails(DetailView):
-        model = Post
+    class BlogPostDetails(DetailView):
+        model = BlogPost
 
-    post_details = PostDetails.as_view()
+    post_details = BlogPostDetails.as_view()
 
 Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
 
@@ -584,13 +584,13 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
     ERROR: test_blog_body_in_post (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
     ...
-    TemplateDoesNotExist: blog/post_detail.html
+    TemplateDoesNotExist: blog/blogpost_detail.html
 
     ======================================================================
     ERROR: test_blog_title_in_post (blog.tests.BlogPostViewTest)
     ----------------------------------------------------------------------
     ...
-    TemplateDoesNotExist: blog/post_detail.html
+    TemplateDoesNotExist: blog/blogpost_detail.html
 
     ----------------------------------------------------------------------
     Ran 9 tests in 0.071s
@@ -598,7 +598,7 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
     FAILED (errors=3)
     Destroying test database for alias 'default'...
 
-These errors are telling us that we're referencing a ``blog/post_detail.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/post_detail.html``. The ``DetailView`` should provide us with a ``post`` context variable that we can use to reference our ``Post`` model instance.  Our template should look similar to this:
+These errors are telling us that we're referencing a ``blog/blogpost_detail.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/post_detail.html``. The ``DetailView`` should provide us with a ``post`` context variable that we can use to reference our ``BlogPost`` model instance.  Our template should look similar to this:
 
 .. code-block:: html
 
