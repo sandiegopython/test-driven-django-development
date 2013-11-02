@@ -23,9 +23,6 @@ application will break another part. A good collection of automated tests that
 go along with an application can verify that changes you make to one part of
 the software do not break another.
 
-   intro
-   01-startproject
-   02-models
 
 Prerequisites
 -------------
@@ -59,3 +56,4 @@ Contents
    :maxdepth: 2
 
    01-getting-started
+   02-models
