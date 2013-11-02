@@ -17,6 +17,7 @@ Let's add the following to our ``blog/tests.py`` file:
 
 
     class ProjectTests(TestCase):
+
         def test_homepage(self):
             response = self.client.get('/')
             self.assertEqual(response.status_code, 200)
@@ -459,7 +460,8 @@ Let's write a test for that:
     class BlogPostViewTest(TestCase):
         def setUp(self):
             self.user = get_user_model().objects.create(username='some_user')
-            self.post = Post.objects.create(title='1-title', body='1-body', author=self.user)
+            self.post = Post.objects.create(title='1-title', body='1-body',
+                                            author=self.user)
 
         def test_basic_view(self):
             response = self.client.get(self.post.get_absolute_url())
