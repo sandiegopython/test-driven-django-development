@@ -1,6 +1,9 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
-from .models import Post
+from django.contrib.auth import get_user_model
+from .models import Post, Comment
+from .forms import CommentForm
+from django.core.urlresolvers import reverse
+from django_webtest import WebTest
 
 
 class PostModelTest(TestCase):
@@ -57,3 +60,71 @@ class BlogPostViewTest(TestCase):
     def test_blog_body_in_post(self):
         response = self.client.get(self.post.get_absolute_url())
         self.assertContains(response, self.post.body)
+
+class CommentModelTest(TestCase):
+
+    def test_unicode_representation(self):
+        comment = Comment(body="My comment body")
+        self.assertEqual(unicode(comment), "My comment body")
+
+class CommentFormTest(TestCase):
+
+    def setUp(self):
+        user = get_user_model().objects.create_user('zoidberg')
+        self.post = Post.objects.create(author=user, title="My post title")
+
+    def test_init(self):
+        CommentForm(post=self.post)
+
+    def test_init_without_post(self):
+        with self.assertRaises(KeyError):
+            CommentForm()
+
+    def test_valid_data(self):
+        form = CommentForm({
+            'name': "Turanga Leela",
+            'email': "leela@example.com",
+            'body': "Hi there",
+        }, post=self.post)
+        self.assertTrue(form.is_valid())
+        comment = form.save()
+        self.assertEqual(comment.name, "Turanga Leela")
+        self.assertEqual(comment.email, "leela@example.com")
+        self.assertEqual(comment.body, "Hi there")
+        self.assertEqual(comment.post, self.post)
+
+    def test_blank_data(self):
+        form = CommentForm({}, post=self.post)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {
+            'name': ['This field is required.'],
+            'email': ['This field is required.'],
+            'body': ['This field is required.'],
+        })
+
+class CommentFormViewTest(WebTest):
+
+    def setUp(self):
+        user = get_user_model().objects.create_user('zoidberg')
+        self.post = Post.objects.create(author=user, title="My post title")
+
+    def test_view_page(self):
+        page = self.app.get(reverse('blog.views.create_comment',
+                                    kwargs={'blog_pk': self.post.pk}))
+        self.assertEqual(len(page.forms), 1)
+
+    def test_form_error(self):
+        page = self.app.get(reverse('blog.views.create_comment',
+                                    kwargs={'blog_pk': self.post.pk}))
+        page = page.form.submit()
+        self.assertContains(page, "This field is required.")
+
+    def test_form_success(self):
+        page = self.app.get(reverse('blog.views.create_comment',
+                                    kwargs={'blog_pk': self.post.pk}))
+        page.form['name'] = "Phillip"
+        page.form['email'] = "phillip@example.com"
+        page.form['body'] = "Test comment body."
+        page = page.form.submit()
+        self.assertRedirects(page, self.post.get_absolute_url())
+
