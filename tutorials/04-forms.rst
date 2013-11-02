@@ -37,7 +37,7 @@ Now let's run our tests to make sure our new test fails:
 .. code-block:: bash
 
     $ python manage.py test blog
-    
+
 ::
 
     Creating test database for alias 'default'...
@@ -60,7 +60,7 @@ Great.  After we implement our ``__unicode__`` method our tests should pass:
 .. code-block:: bash
 
     $ python manage.py test blog
-    
+
 ::
 
     Creating test database for alias 'default'...
@@ -70,6 +70,22 @@ Great.  After we implement our ``__unicode__`` method our tests should pass:
 
     OK
     Destroying test database for alias 'default'...
+
+Let's add the Comment model to the admin just like we did with the Post
+model. This involves editing ``blog/admin.py`` to look like this:
+
+.. code-block:: python
+
+    from django.contrib import admin
+    from .models import Post, Comment
+
+
+    admin.site.register(Post)
+    admin.site.register(Comment)
+
+If you start the development server again, you will see the Comment model
+in the admin and you can add comments to the blog posts. However, the point
+of a blog is to let other users and not only the admin post comments.
 
 
 Adding a Comment form
@@ -123,7 +139,7 @@ Let's run our tests:
 .. code-block:: bash
 
     $ python manage.py test blog
-    
+
 ::
 
     ImportError: No module named forms
@@ -135,7 +151,7 @@ Now we get:
 .. code-block:: bash
 
     $ python manage.py test blog
-    
+
 ::
 
     ImportError: cannot import name CommentForm
@@ -158,7 +174,7 @@ Now our tests should fail because the ``post`` keyword argument is not accepted 
 .. code-block:: bash
 
     $ python manage.py test blog
-    
+
 ::
 
     Creating test database for alias 'default'...
@@ -245,7 +261,7 @@ Let's run our tests again to see whether they pass:
 .. code-block:: bash
 
     $ python manage.py test blog
-    
+
 ::
 
     Creating test database for alias 'default'...
@@ -268,7 +284,7 @@ Our test for blank form data is failing because we aren't checking for the corre
 .. code-block:: bash
 
     $ python manage.py test blog
-    
+
 ::
 
     Creating test database for alias 'default'...
@@ -447,7 +463,7 @@ Now only one of our tests fails:
 .. code-block:: bash
 
     $ python manage.py test blog
-    
+
 ::
 
     Creating test database for alias 'default'...
