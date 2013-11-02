@@ -350,7 +350,7 @@ And now, if we add some posts in our admin, they should show up on the homepage.
 Blog Post Details
 -----------------
 
-To save a bit of time let's make our urls look like ``http://myblog.com/blog/post/ID/`` where ID is the database ID of the blog post we want to see.
+To save a bit of time let's make our urls look like ``http://myblog.com/post/ID/`` where ID is the database ID of the blog post we want to see.
 
 Before we create this page, let's move the template content that displays our blog posts on our homepage into a separate template file so we can reuse it on our blog post details page.
 
@@ -422,7 +422,7 @@ The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
 
 .. code-block:: python
 
-    url(r'^blog/', include('blog.urls')),
+    url(r'^/', include('blog.urls')),
 
 Now we need to define a ``post_details`` view in our ``blog/views.py`` file:
 
