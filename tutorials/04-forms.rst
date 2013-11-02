@@ -47,7 +47,7 @@ Now let's run our tests to make sure our new test fails:
     AssertionError: u'Comment object' != 'My comment body'
 
     ----------------------------------------------------------------------
-    Ran 2 tests in 0.001s
+    Ran 9 tests in 0.001s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
