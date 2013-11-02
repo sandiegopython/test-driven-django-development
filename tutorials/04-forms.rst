@@ -381,7 +381,7 @@ Now let's run our tests:
 
     FAILED (errors=2)
 
-We got a HTTP 403 error because we forgot to add the cross-site request forgery token to our form.  Every HTTP POST request made to our Django site needs to include a CSRF token.  Let's add that to our template:
+We got a HTTP 403 error because we forgot to add the cross-site request forgery token to our form.  Every HTTP POST request made to our Django site needs to include a CSRF token.  Let's add that to our template ``templates/blog/create_comment.html``:
 
 .. code-block:: html
 
