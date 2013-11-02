@@ -6,7 +6,7 @@ Blogs should be interactive.  Let's allow visitors to comment on each post.
 Adding a Comment model
 ----------------------
 
-First we need to add a ``Comment`` model.
+First we need to add a ``Comment`` model in ``blog/models.py``.
 
 .. code-block:: python
 
@@ -21,7 +21,7 @@ First we need to add a ``Comment`` model.
 
 Let's write a ``__unicode___`` method for our ``Comment`` model like we did for our ``Post`` model earlier.
 
-First we should create a test.  Our test should look very similar to the ``__unicode__`` test we wrote for posts earlier.  This should suffice:
+First we should create a test in ``blog/tests.py``.  Our test should look very similar to the ``__unicode__`` test we wrote for posts earlier.  This should suffice:
 
 .. code-block:: python
 
