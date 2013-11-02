@@ -84,6 +84,15 @@ We need to create our ``CommentForm`` model form in ``blog/forms.py``.  Let's st
             model = Comment
             fields = ('name', 'email', 'body')
 
+.. IMPORTANT::
+    `Django forms`_ are a powerful way to handle HTML forms. They provide
+    a unified way to check submissions against validation rules and
+    in the case of ``ModelForm`` subclasses, share any of the associated
+    model's validators. In our example, this will ensure that the
+    Comment ``email`` is a valid email address.
+
+    .. _Django forms: https://docs.djangoproject.com/en/1.5/topics/forms/
+
 Now our tests should fail because the ``post`` keyword argument is not accepted nor required:
 
 .. code-block:: bash
@@ -258,7 +267,8 @@ Now let's create a view and URL for our comment creation page.  Let's start with
     class CreateComment(CreateView):
         template_name = 'blog/create_comment.html'
         form_class = CommentForm
-        create_comment = CreateComment.as_view()
+    
+    create_comment = CreateComment.as_view()
 
 Now if we run our test we'll see a failure because we aren't passing a ``post`` keyword argument to our form:
 
