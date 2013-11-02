@@ -427,14 +427,14 @@ Now let's run our tests:
     ERROR: test_form_error (blog.tests.CommentFormViewTest)
     ----------------------------------------------------------------------
     ...
-    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/blog/post/1/comment)
+    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/post/1/comment)
     ...
 
     ======================================================================
     ERROR: test_form_success (blog.tests.CommentFormViewTest)
     ----------------------------------------------------------------------
     ...
-    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/blog/post/1/comment)
+    AppError: Bad response: 403 FORBIDDEN (not 200 OK or 3xx redirect for http://localhost/post/1/comment)
     ...
 
     ----------------------------------------------------------------------
