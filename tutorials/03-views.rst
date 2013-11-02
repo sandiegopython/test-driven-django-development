@@ -22,11 +22,12 @@ Let's add the following to our ``blog/tests.py`` file:
             self.assertEqual(response.status_code, 200)
 
 
-If we run our tests now this test should fail.
+If we run our tests now this test should fail because we haven't created a homepage yet.
 
 .. HINT::
     There's lots more information on the `hypertext transfer protocol`_
-    (HTTP) and its various `status codes`_ on Wikipedia.
+    (HTTP) and its various `status codes`_ on Wikipedia. Quick reference,
+    200 = OK; 404 = Not Found; 500 = Server Error
 
 
 Base template and static files
@@ -395,6 +396,8 @@ Now let's change our homepage template (``templates/index.html``) to include the
 Let's write a test for that:
 
 .. code-block:: python
+
+    from django.contrib.auth import get_user_model
 
     class BlogPostViewTest(TestCase):
         def setUp(self):
