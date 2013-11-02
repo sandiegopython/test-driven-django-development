@@ -123,6 +123,10 @@ At the end of our ``content`` block in ``templates/blog/post_detail.html`` let's
         No comments yet.
     {% endfor %}
 
+.. HINT::
+
+    Remember that in a template that **extends** another template, all code needs to go in a named ``{% block %}`` section.  HTML outside of a ``{% block %}`` sction will not be used.
+
 .. IMPORTANT::
 
     We forgot to add a test for this!  Why don't you add a test to make sure comments appear on the blog post page.
