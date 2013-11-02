@@ -9,7 +9,7 @@ The homepage test
 
 Every site should have a homepage. Let's write a failing test for that.
 
-We can use the Django ``TestClient`` to create a test to make sure that our homepage returns an HTTP 200 status code (this is the standard response for a successful HTTP request).
+We can use the Django `test client`_ to create a test to make sure that our homepage returns an HTTP 200 status code (this is the standard response for a successful HTTP request).
 
 Let's add the following to our ``blog/tests.py`` file:
 
@@ -250,7 +250,7 @@ ListViews
 
 We put a hard-coded title and article in our filler view. These post details should come from our models and database instead. Let's write a test for that.
 
-The Django ``TestClient`` can be used for a simple test of whether text shows up on a page.  Let's add the following to our ``blog/tests.py`` file:
+The Django ``test client`` can be used for a simple test of whether text shows up on a page.  Let's add the following to our ``blog/tests.py`` file:
 
 .. code-block:: python
 
@@ -558,6 +558,7 @@ Now our tests should pass again:
     OK
     Destroying test database for alias 'default'...
 
+.. _test client: https://docs.djangoproject.com/en/dev/topics/testing/overview/#the-test-client
 .. _zurb foundation files: http://foundation.zurb.com/
 .. _grid documentation: http://foundation.zurb.com/docs/components/grid.html
 .. _direct link: http://foundation.zurb.com/files/foundation-4.3.2.zip
