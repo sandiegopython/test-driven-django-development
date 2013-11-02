@@ -123,4 +123,8 @@ At the end of our ``content`` block in ``templates/post_detail.html`` let's add 
         No comments yet.
     {% endfor %}
 
+.. IMPORTANT::
+
+    We forgot to add a test for this!  Why don't you add a test to make sure comments appear on the blog post page.
+
 Now we can see our comments on the website.
