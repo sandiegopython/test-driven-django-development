@@ -349,9 +349,9 @@ Let's get the ``Post`` from the database and pass it to our form.  Our view shou
             kwargs['post'] = self.get_post()
             return kwargs
 
-Now when we run our tests we'll see a ``TemplateDoesNotExist`` error because we haven't created the ``blog/create_comments.html`` template yet.
+Now when we run our tests we'll see a ``TemplateDoesNotExist`` error because we haven't created the ``blog/create_comment.html`` template yet.
 
-Let's create a simple template in ``templates/blog/create_comments.html``:
+Let's create a simple template in ``templates/blog/create_comment.html``:
 
 .. code-block:: html
 
