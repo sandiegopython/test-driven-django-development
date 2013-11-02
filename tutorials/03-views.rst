@@ -363,6 +363,10 @@ The last change needed then is just to update our ``index.html`` to actually put
 
 Running the tests here we see that all the tests pass!
 
+.. NOTE::
+
+    Read the Django `built-in template tags and filters`_ documentation for more details on the `linebreaks`_ and `date`_ template filters.
+
 And now, if we add some posts in our admin, they should show up on the homepage. What happens if there are no posts?
 We should add a test for that
 
@@ -421,6 +425,10 @@ Let's make a file called ``templates/_post.html`` and put the following in it:
     </article>
 
 .. NOTE::
+
+    The ``post.get_absolute_url`` reference doesn't do anything yet.  Later we will add a ``get_absolute_url`` method to the post model which will make these links work.
+
+.. TIP::
 
     The filename of our includable template starts with ``_`` by convention.  This naming convention is recommended by Harris Lapiroff in `An Architecture for Django Templates`_.
 
@@ -595,6 +603,9 @@ Now our tests should pass again:
 .. _hypertext transfer protocol: http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
 .. _status codes: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 .. _template documentation: https://docs.djangoproject.com/en/1.5/topics/templates/
+.. _built-in template tags and filters: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/
+.. _date: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#date
+.. _linebreaks: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#linebreaks
 .. _Classy Class Based Views: http://ccbv.co.uk
 .. _Django Model Instance Documentation: https://docs.djangoproject.com/en/1.5/ref/models/instances/#get-absolute-url
 .. _DetailView: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/
