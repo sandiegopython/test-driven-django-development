@@ -441,6 +441,8 @@ Now let's change our homepage template (``templates/index.html``) to include the
     {% block content %}
         {% for post in post_list %}
             {% include "_post.html" with post=post only %}
+        {% empty %}
+            <p>No blog post entries yet.</p>
         {% endfor %}
     {% endblock content %}
 
