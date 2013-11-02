@@ -273,6 +273,7 @@ Now let's create a view and URL for our comment creation page.  Let's start by u
 The ``blog/urls.py`` should look like this:
 
 .. code-block:: python
+
     from django.conf.urls import patterns, url
 
 
