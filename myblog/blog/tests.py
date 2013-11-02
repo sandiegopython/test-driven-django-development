@@ -1,12 +1,12 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django_webtest import WebTest
 from .models import Post, Comment
 from .forms import CommentForm
-from django.core.urlresolvers import reverse
-from django_webtest import WebTest
 
 
 class PostModelTest(TestCase):
+
     def test_unicode_representation(self):
         post = Post(title="My post title")
         self.assertEqual(unicode(post), post.title)
@@ -17,7 +17,15 @@ class PostModelTest(TestCase):
         self.assertIsNotNone(post.get_absolute_url())
 
 
+class CommentModelTest(TestCase):
+
+    def test_unicode_representation(self):
+        comment = Comment(body="My comment body")
+        self.assertEqual(unicode(comment), "My comment body")
+
+
 class ProjectTests(TestCase):
+
     def test_homepage(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
@@ -44,10 +52,17 @@ class ListPostsOnHomePage(TestCase):
         self.assertContains(response, '1-body')
         self.assertContains(response, '2-title')
 
-class BlogPostViewTest(TestCase):
+    def test_no_posts(self):
+        response = self.client.get('/')
+        self.assertContains(response, 'No blog post entries yet.')
+
+
+class BlogPostViewTest(WebTest):
+
     def setUp(self):
         self.user = get_user_model().objects.create(username='some_user')
-        self.post = Post.objects.create(title='1-title', body='1-body', author=self.user)
+        self.post = Post.objects.create(title='1-title', body='1-body',
+                                        author=self.user)
 
     def test_basic_view(self):
         response = self.client.get(self.post.get_absolute_url())
@@ -61,11 +76,23 @@ class BlogPostViewTest(TestCase):
         response = self.client.get(self.post.get_absolute_url())
         self.assertContains(response, self.post.body)
 
-class CommentModelTest(TestCase):
+    def test_view_page(self):
+        page = self.app.get(self.post.get_absolute_url())
+        self.assertEqual(len(page.forms), 1)
 
-    def test_unicode_representation(self):
-        comment = Comment(body="My comment body")
-        self.assertEqual(unicode(comment), "My comment body")
+    def test_form_error(self):
+        page = self.app.get(self.post.get_absolute_url())
+        page = page.form.submit()
+        self.assertContains(page, "This field is required.")
+
+    def test_form_success(self):
+        page = self.app.get(self.post.get_absolute_url())
+        page.form['name'] = "Phillip"
+        page.form['email'] = "phillip@example.com"
+        page.form['body'] = "Test comment body."
+        page = page.form.submit()
+        self.assertRedirects(page, self.post.get_absolute_url())
+
 
 class CommentFormTest(TestCase):
 
@@ -101,30 +128,3 @@ class CommentFormTest(TestCase):
             'email': ['This field is required.'],
             'body': ['This field is required.'],
         })
-
-class CommentFormViewTest(WebTest):
-
-    def setUp(self):
-        user = get_user_model().objects.create_user('zoidberg')
-        self.post = Post.objects.create(author=user, title="My post title")
-
-    def test_view_page(self):
-        page = self.app.get(reverse('blog.views.create_comment',
-                                    kwargs={'blog_pk': self.post.pk}))
-        self.assertEqual(len(page.forms), 1)
-
-    def test_form_error(self):
-        page = self.app.get(reverse('blog.views.create_comment',
-                                    kwargs={'blog_pk': self.post.pk}))
-        page = page.form.submit()
-        self.assertContains(page, "This field is required.")
-
-    def test_form_success(self):
-        page = self.app.get(reverse('blog.views.create_comment',
-                                    kwargs={'blog_pk': self.post.pk}))
-        page.form['name'] = "Phillip"
-        page.form['email'] = "phillip@example.com"
-        page.form['body'] = "Test comment body."
-        page = page.form.submit()
-        self.assertRedirects(page, self.post.get_absolute_url())
-

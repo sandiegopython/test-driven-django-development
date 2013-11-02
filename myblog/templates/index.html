@@ -2,9 +2,8 @@
 
 {% block content %}
     {% for post in post_list %}
-    <h2>{{ post.title }}</h2>
-    <article>
-        {{ post.body }}
-    </article>
+        {% include "_post.html" with post=post only %}
+    {% empty %}
+        <p>No blog post entries yet.</p>
     {% endfor %}
 {% endblock content %}
