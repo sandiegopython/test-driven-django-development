@@ -212,7 +212,7 @@ Using a base template
 
 Templates in Django are generally built up from smaller pieces. This lets you include things like a consistent header and footer on all your pages. Convention is to call one of your templates ``base.html`` and have everything inherit from that.
 
-We'll start with putting our header and a sidebar in ``base.html``:
+We'll start with putting our header and a sidebar in ``templates/base.html``:
 
 .. code-block:: html
 
@@ -251,7 +251,7 @@ We'll start with putting our header and a sidebar in ``base.html``:
 
     We will not explain the CSS classes we used above (e.g. ``large-8``, ``column``, ``row``).  More information on these classes can be found in the Zurb Foundation `grid documentation`_.
 
-Let's put some filler content in ``index.html``:
+Let's put some filler content in ``templates/index.html``:
 
 .. code-block:: html
 
