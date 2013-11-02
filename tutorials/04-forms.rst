@@ -33,6 +33,10 @@ Now let's start testing our form.  Let's link our comments to post by allowing o
     >>> form = CommentForm(post=post)  # Without form data
     >>> form = CommentForm(request.POST, post=post)  # with form data
 
+.. IMPORTANT::
+    ``request.POST`` refers to HTTP POST data and not to the blog post. This
+    is the data accepted from user input.
+
 Our first test should ensure that our form's ``__init__`` accepts a ``post`` keyword argument:
 
 .. code-block:: python
@@ -70,7 +74,7 @@ Now we get:
 
     ImportError: cannot import name CommentForm
 
-We need to create our ``CommentForm`` model form in ``blog/forms.py``.  Let's start with something simple:
+We need to create our ``CommentForm`` model form in ``blog/forms.py``. This form will process the data sent from users trying to comment on a blog post and ensure that it can be saved to our blog database. Let's start with something simple:
 
 .. code-block:: python
 
@@ -82,6 +86,10 @@ We need to create our ``CommentForm`` model form in ``blog/forms.py``.  Let's st
         class Meta:
             model = Comment
             fields = ('name', 'email', 'body')
+
+Here we have created a simple form associated with our Comment model and we
+have specified that the form handle only a subset of all of the fields on
+the comment.
 
 .. IMPORTANT::
     `Django forms`_ are a powerful way to handle HTML forms. They provide
@@ -124,8 +132,8 @@ Now our tests should fail because the ``post`` keyword argument is not accepted 
 
 Our two form tests fail as expected.  Let's create a couple more tests for our form before we start fixing it.  We should create at least two tests to make sure our form validation works:
 
-1. Assert ``form.is_valid()`` is ``True`` for a form submission with valid data
-2. Assert ``form.is_valid()`` is ``False`` for a form submission with invalid data (preferably a separate test for each type of error)
+1. Ensure that ``form.is_valid()`` is ``True`` for a form submission with valid data
+2. Ensure that ``form.is_valid()`` is ``False`` for a form submission with invalid data (preferably a separate test for each type of error)
 
 This is a good start:
 
@@ -166,7 +174,7 @@ Okay now let's write finally write our form code.
     class CommentForm(forms.ModelForm):
 
         def __init__(self, *args, **kwargs):
-            self.post = kwargs.pop('post')
+            self.post = kwargs.pop('post')   # the blog post instance
             super(CommentForm, self).__init__(*args, **kwargs)
 
         def save(self):
@@ -178,6 +186,11 @@ Okay now let's write finally write our form code.
         class Meta:
             model = Comment
             fields = ('name', 'email', 'body')
+
+The ``CommentForm`` class is instantiated by passing the blog post that the
+comment was written against as well as the HTTP POST data containing the
+remaining fields such as comment body and email. The ``save`` method is
+overridden here to set the associated blog post before saving the comment.
 
 Let's run our tests again to see whether they pass:
 
