@@ -374,6 +374,10 @@ The last change needed then is just to update our ``index.html`` to actually put
         </article>
     {% endfor %}
 
+.. TIP::
+
+    Notice that we didn't specify the name ``post_list`` in our code.  Django's class-based generic views often add automatically-named variables to your template context based on your model names.   In this particular case the context object name was automatically defined by the `get_context_object_name`_ method in the ``ListView``.  Instead of referencing ``post_list`` in our template we could have also referenced the template context variable ``object_list`` instead.
+
 Running the tests here we see that all the tests pass!
 
 .. NOTE::
@@ -621,6 +625,7 @@ Now our tests should pass again:
 .. _status codes: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 .. _template documentation: https://docs.djangoproject.com/en/1.5/topics/templates/
 .. _built-in template tags and filters: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/
+.. _get_context_object_name: https://docs.djangoproject.com/en/1.5/ref/class-based-views/mixins-multiple-object/#django.views.generic.list.MultipleObjectMixin.get_context_object_name
 .. _date: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#date
 .. _linebreaks: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#linebreaks
 .. _Classy Class Based Views: http://ccbv.co.uk
