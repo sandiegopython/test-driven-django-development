@@ -7,7 +7,7 @@ Creating an app
 
 It is generally a good practice to separate your Django projects into multiple specialized (and sometimes reusable) apps. Additionally every Django model must live in an app so you'll need at least one app for your project.
 
-Let's create an app for blog posts and related models.  We'll call the app ``blog``:
+Let's create an app for blog entries and related models.  We'll call the app ``blog``:
 
 .. code-block:: bash
 
@@ -61,23 +61,23 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
 Creating a model
 ----------------
 
-First let's create a blog post model.  This will correspond to a database table which will hold our blog posts.  A blog post will be represented by an instance of our ``Post`` model class and each ``Post`` model instance will identify a row in our database table.
+First let's create a blog entry model.  This will correspond to a database table which will hold our blog entries.  A blog entry will be represented by an instance of our ``Entry`` model class and each ``Entry`` model instance will identify a row in our database table.
 
 .. code-block:: python
 
     from django.db import models
 
 
-    class Post(models.Model):
+    class Entry(models.Model):
         title = models.CharField(max_length=500)
         author = models.ForeignKey('auth.User')
         body = models.TextField()
         created_at = models.DateTimeField(auto_now_add=True, editable=False)
         modified_at = models.DateTimeField(auto_now=True, editable=False)
 
-If you aren't already familiar with databases, this code may be somewhat daunting. A good way to think about a model (or a database table) is as a sheet in a spreadsheet. Each field like the ``title`` or ``author`` is a column in the spreadsheet and each different instance of the model -- each individual blog post in our project -- is a row in the spreadsheet.
+If you aren't already familiar with databases, this code may be somewhat daunting. A good way to think about a model (or a database table) is as a sheet in a spreadsheet. Each field like the ``title`` or ``author`` is a column in the spreadsheet and each different instance of the model -- each individual blog entry in our project -- is a row in the spreadsheet.
 
-To create the database table for our ``Post`` model we need to run syncdb again:
+To create the database table for our ``Entry`` model we need to run syncdb again:
 
 .. code-block:: bash
 
@@ -94,45 +94,45 @@ To create the database table for our ``Post`` model we need to run syncdb again:
     .. _PEP8: http://www.python.org/dev/peps/pep-0008/
 
 
-Creating posts from the admin site
+Creating entries from the admin site
 ----------------------------------
 
-We don't want to manually add posts to the database every time we want to update our blog.  It would be nice if we could use a login-secured webpage to create blog posts.  Fortunately Django's admin interface can do just that.
+We don't want to manually add entries to the database every time we want to update our blog.  It would be nice if we could use a login-secured webpage to create blog entries.  Fortunately Django's admin interface can do just that.
 
-In order to create blog posts from the admin interface we need to register our Post model with the admin site.  We can do this by creating a new ``blog/admin.py`` file with the following code:
+In order to create blog entries from the admin interface we need to register our ``Entry`` model with the admin site.  We can do this by creating a new ``blog/admin.py`` file with the following code:
 
 
 .. code-block:: python
 
     from django.contrib import admin
-    from .models import Post
+    from .models import Entry
 
 
-    admin.site.register(Post)
+    admin.site.register(Entry)
 
-Now, start up the development server again and navigate to the admin site (http://localhost:8000/admin/) and create a blog post.
+Now, start up the development server again and navigate to the admin site (http://localhost:8000/admin/) and create a blog entry.
 
 .. code-block:: bash
 
     $ python manage.py runserver
 
-First click the "Add" link next to *Posts* in the admin site.
+First click the "Add" link next to *Entries* in the admin site.
 
-.. image:: _static/02-01_add_post.png
+.. image:: _static/02-01_add_entry.png
 
-Next fill in the details for our first blog post and click the *Save* button.
+Next fill in the details for our first blog entry and click the *Save* button.
 
-.. image:: _static/02-02_create_post.png
+.. image:: _static/02-02_create_entry.png
 
-Our post was created
+Our blog entry was created
 
-.. image:: _static/02-03_post_added.png
+.. image:: _static/02-03_entry_added.png
 
 
 Our first test: __unicode__ method
 ----------------------------------
 
-In the admin change list our posts all have the unhelpful name *Post object*.  We can customize the way models are referenced by creating a ``__unicode__`` method on our model class. Models are a good place to put this kind of reusable code that is specific to a model.
+In the admin change list our entries all have the unhelpful name *Entry object*.  We can customize the way models are referenced by creating a ``__unicode__`` method on our model class. Models are a good place to put this kind of reusable code that is specific to a model.
 
 Let's first create a test demonstrating the behavior we'd like to see.
 
@@ -143,7 +143,7 @@ All the tests for our app will live in the ``blog/tests.py`` file. Delete everyt
     from django.test import TestCase
 
 
-    class PostModelTest(TestCase):
+    class EntryModelTest(TestCase):
 
         def test_unicode_representation(self):
             self.fail("TODO Test incomplete")
@@ -159,7 +159,7 @@ Now run the test command to ensure our app's single test fails as expected:
     Creating test database for alias 'default'...
     F
     ======================================================================
-    FAIL: test_unicode_representation (blog.tests.PostModelTest)
+    FAIL: test_unicode_representation (blog.tests.EntryModelTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
     ...
@@ -187,19 +187,19 @@ Now we're ready to create a real test.
     .. _unittest: http://docs.python.org/2.7/library/unittest.html
     .. _Testing Django applications: https://docs.djangoproject.com/en/1.5/topics/testing/overview/
 
-Let's write our test to ensure that a blog post's unicode representation is equal to its title.  We need to modify our tests file like so:
+Let's write our test to ensure that a blog entry's unicode representation is equal to its title.  We need to modify our tests file like so:
 
 .. code-block:: python
 
     from django.test import TestCase
-    from .models import Post
+    from .models import Entry
 
 
-    class PostModelTest(TestCase):
+    class EntryModelTest(TestCase):
 
         def test_unicode_representation(self):
-            post = Post(title="My post title")
-            self.assertEqual(unicode(post), post.title)
+            entry = Entry(title="My entry title")
+            self.assertEqual(unicode(entry), entry.title)
 
 .. HINT::
     ``__unicode__`` may seem like a strange name, but Unicode is a standard
@@ -219,11 +219,11 @@ Now let's run our tests again:
     Creating test database for alias 'default'...
     F
     ======================================================================
-    FAIL: test_unicode_representation (blog.tests.PostModelTest)
+    FAIL: test_unicode_representation (blog.tests.EntryModelTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
     ...
-    AssertionError: u'Post object' != 'My post title'
+    AssertionError: u'Entry object' != 'My entry title'
 
     ----------------------------------------------------------------------
     Ran 1 test in 0.001s
@@ -231,16 +231,16 @@ Now let's run our tests again:
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-Our test fails again, but this time it fails because we haven't customized our ``__unicode__`` method yet so the unicode representation for our model is still the default *Post object*.
+Our test fails again, but this time it fails because we haven't customized our ``__unicode__`` method yet so the unicode representation for our model is still the default *Entry object*.
 
-Let's add a ``__unicode__`` method to our model that returns the post title.  Our ``models.py`` file should look something like this:
+Let's add a ``__unicode__`` method to our model that returns the entry title.  Our ``models.py`` file should look something like this:
 
 .. code-block:: python
 
     from django.db import models
 
 
-    class Post(models.Model):
+    class Entry(models.Model):
         title = models.CharField(max_length=500)
         author = models.ForeignKey('auth.User')
         body = models.TextField()
@@ -250,7 +250,7 @@ Let's add a ``__unicode__`` method to our model that returns the post title.  Ou
         def __unicode__(self):
             return self.title
 
-If you start the development server and take a look at the admin interface (http://localhost:8000/admin/) again, you will see the post titles in the list of posts.
+If you start the development server and take a look at the admin interface (http://localhost:8000/admin/) again, you will see the entry titles in the list of entries.
 
 Now if we run our test again we should see that our single test passes:
 

@@ -1,10 +1,10 @@
 from django.views.generic import ListView
 
-from blog.models import Post
+from blog.models import Entry
 
 
 class HomeView(ListView):
     template_name = 'index.html'
-    queryset = Post.objects.order_by('-created_at')
+    queryset = Entry.objects.order_by('-created_at')
 
 home = HomeView.as_view()
