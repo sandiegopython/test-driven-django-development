@@ -3,6 +3,29 @@ The Testing Game
 
 TODO: Code coverage and stuff
 
+.. code-block:: bash
+
+    $ pip install coverage
+    $ coverage run --include='./*' --branch manage.py test blog
+    $ coverage report
+    Name              Stmts   Miss Branch BrMiss  Cover
+    ---------------------------------------------------
+    blog/__init__         0      0      0      0   100%
+    blog/admin            4      0      0      0   100%
+    blog/forms           14      0      0      0   100%
+    blog/models          21      0      0      0   100%
+    blog/tests           87      0      0      0   100%
+    blog/urls             2      0      0      0   100%
+    blog/views           22      0      0      0   100%
+    manage                6      0      2      1    88%
+    myblog/__init__       0      0      0      0   100%
+    myblog/settings      29      0      0      0   100%
+    myblog/urls           5      0      0      0   100%
+    myblog/views          6      0      0      0   100%
+    ---------------------------------------------------
+    TOTAL               196      0      2      1    99%
+
+
 Adding Gravatars
 ----------------
 
