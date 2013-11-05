@@ -19,7 +19,7 @@ Tutorials
 ---------
 
 The latest version of the tutorials is available at
-http://learning-django-by-testing.rtfd.org
+http://test-driven-django-development.readthedocs.org
 
 
 Building
