@@ -64,7 +64,7 @@ Creating a model
 First let's create a blog post model.  Models are objects used to interface with your data, and are described in the `Django model documentation`_.
 This will correspond to a database table which will hold our blog posts.  A blog post will be represented by an instance of our ``Post`` model class and each ``Post`` model instance will identify a row in our database table.
 
-.. _Django model documentation: https://docs.djangoproject.com/en/dev/topics/db/models/
+.. _Django model documentation: https://docs.djangoproject.com/en/1.5/topics/db/models/
 
 
 .. code-block:: python
@@ -106,7 +106,7 @@ We don't want to manually add posts to the database every time we want to update
 In order to create blog posts from the `admin interface`_ we need to register our Post model with the admin site.  We can do this by creating a new ``blog/admin.py`` file with the following code:
 
 
-.. _admin interface: https://docs.djangoproject.com/en/dev/ref/contrib/admin/
+.. _admin interface: https://docs.djangoproject.com/en/1.5/ref/contrib/admin/
 
 .. code-block:: python
 
