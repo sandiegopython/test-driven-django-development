@@ -41,3 +41,10 @@ Contribute
 Contributions to these materials are welcome. Please send us a pull request
 with your changes. If you want to discuss changes before submitting them,
 feel free to join us on IRC at #sandiegopython on freenode.
+
+
+License
+-------
+
+This material is provided under a Creative Commons (CC BY-SA 3.0) license.
+Please see the LICENSE file for details.
