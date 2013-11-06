@@ -15,6 +15,7 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('blog.views.post_details', kwargs={'pk': self.pk})
 
+
 class Comment(models.Model):
     post = models.ForeignKey(Post)
     name = models.CharField(max_length=100)
