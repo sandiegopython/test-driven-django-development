@@ -168,7 +168,7 @@ Now we need to route the homepage URL to the home view.  Our URL file ``myblog/u
 .. code-block:: python
 
     from django.conf.urls import patterns, include, url
-    from myblog import views
+    from blog import views
 
     from django.contrib import admin
     admin.autodiscover()
