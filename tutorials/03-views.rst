@@ -348,7 +348,7 @@ One easy way to get all our posts objects to list is to just use a ``ListView``.
 
     from django.views.generic import ListView
 
-    from blog.models import Post
+    from .models import Post
 
 
     class HomeView(ListView):
