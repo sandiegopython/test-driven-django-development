@@ -105,8 +105,8 @@ a few tables specific to Django. The command looks at ``INSTALLED_APPS`` in
 those apps' ``models.py`` files.
 
 Later in this workshop, we will create models specific to the blog we are
-writing. These models will hold data like blog posts and comments on blog
-posts.
+writing. These models will hold data like blog entries and comments on blog
+entries.
 
 .. HINT::
     SQLite is a self-contained database engine. It is inappropriate for a
@@ -124,7 +124,7 @@ One of the killer features Django provides is an admin interface. An admin
 interface is a way for an administrator of a website to interact with the
 database through a web interface which regular website visitors are not
 allowed to use. On a blog, this would be where the author writes new blog
-posts.
+entries.
 
 We need to add ``'django.contrib.admin'`` to ``INSTALLED_APPS`` in our
 settings file (``myblog/settings.py``).  Afterward it should look something
@@ -151,7 +151,7 @@ the database tables for admin:
 
 We also need to enable admin URLs and enable auto-discovery of
 ``admin.py`` files in our apps. We will create one of these ``admin.py`` files
-later to expose our blog post model and comment model to the admin interface.
+later to expose our blog entry model and comment model to the admin interface.
 To enable auto-discovery, we need to uncomment some lines in our project's
 urls file (``myblog/urls.py``). Afterward our urls file should look something
 like this:
