@@ -1,33 +1,90 @@
 The Testing Game
 ================
 
-TODO: Code coverage and stuff
+
+Test Coverage
+-------------
+
+It's important to ensure all your code is tested.  Code coverage is frequetly used as a measuring stick for quality tests.  The basic idea behind code coverage is that if your tests are comprehensive all of your code should be executed.
+
+Using Coverage
+--------------
+
+First let's install coverage:
 
 .. code-block:: bash
 
     $ pip install coverage
-    $ coverage run --include='./*' --branch manage.py test blog
-    $ coverage report
-    Name              Stmts   Miss Branch BrMiss  Cover
-    ---------------------------------------------------
-    blog/__init__         0      0      0      0   100%
-    blog/admin            4      0      0      0   100%
-    blog/forms           14      0      0      0   100%
-    blog/models          21      0      0      0   100%
-    blog/tests           87      0      0      0   100%
-    blog/urls             2      0      0      0   100%
-    blog/views           22      0      0      0   100%
-    manage                6      0      2      1    88%
-    myblog/__init__       0      0      0      0   100%
-    myblog/settings      29      0      0      0   100%
-    myblog/urls           5      0      0      0   100%
-    myblog/views          6      0      0      0   100%
-    ---------------------------------------------------
-    TOTAL               196      0      2      1    99%
 
+Now let's try running our tests while recording code coverage:
+
+.. code-block:: bash
+
+    $ coverage run --include='./*' manage.py test blog
+    Creating test database for alias 'default'...
+    .................
+    ----------------------------------------------------------------------
+    Ran 17 tests in 0.234s
+
+    OK
+    Destroying test database for alias 'default'...
+
+Now let's view our code coverage report:
+
+.. code-block:: bash
+
+    $ coverage report
+    Name              Stmts   Miss  Cover
+    -------------------------------------
+    blog/__init__         0      0   100%
+    blog/admin            4      0   100%
+    blog/forms           14      0   100%
+    blog/models          21      0   100%
+    blog/tests           87      0   100%
+    blog/urls             2      0   100%
+    blog/views           22      0   100%
+    manage                6      0   100%
+    myblog/__init__       0      0   100%
+    myblog/settings      29      0   100%
+    myblog/urls           5      0   100%
+    myblog/views          6      0   100%
+    -------------------------------------
+    TOTAL               196      0   100%
+
+
+TODO: explain what this means.
+
+
+Branch Coverage
+---------------
+
+TODO: Explain line coverage vs. branch coverage
+
+TODO: Add ``--branch`` argument to our code coverage
+
+Coverage Configuration
+----------------------
+
+TODO: Add a ``.coveragerc`` file with our defaults::
+
+    [run]
+    include = ./*
+    branch = 1
+
+HTML Coverage Report
+--------------------
+
+TODO: show how an HTML coverage report can be generated
+
+Full coverage isn't enough
+--------------------------
+
+TODO: coverage can only indicate that you've forgotten tests; it doesn't tell you whether your tests are good
 
 Adding Gravatars
 ----------------
+
+TODO: Move this section to another file?
 
 Wouldn't it be cool if we could show user avatars next to comments?  Let's use the free `Gravatar`_ for this.  As usual, we'll start with a test.
 
