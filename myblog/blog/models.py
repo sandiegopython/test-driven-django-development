@@ -16,6 +16,7 @@ class Entry(models.Model):
         return reverse('blog.views.entry_detail', kwargs={'pk': self.pk})
 
 
+
 class Comment(models.Model):
     entry = models.ForeignKey(Entry)
     name = models.CharField(max_length=100)
