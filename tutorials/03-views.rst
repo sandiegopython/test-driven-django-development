@@ -68,7 +68,7 @@ For more details, see Django's documentation on `static files`_.
 Template files
 ~~~~~~~~~~~~~~
 
-Templates are a way to dynamically generate a number of documents which are
+`Templates`_ are a way to dynamically generate a number of documents which are
 similar but have some data that is slightly different. In the blogging system
 we are building, we want all of our blog posts to look visually similar but
 the actual text of a given blog post varies. We will have a single template
@@ -76,6 +76,8 @@ for what all of our blog posts and the template will contain variables that
 get replaced when a blog post is rendered. This reuse that Django helps with
 and the concept of keeping things in a single place is called the DRY
 principle for Don't Repeat Yourself.
+
+.. _Templates: https://docs.djangoproject.com/en/1.5/ref/templates/
 
 Create a ``templates`` directory in our top-level directory. Our directory structure should look like
 
@@ -215,7 +217,9 @@ Great!  Now let's make sure our new test passes:
 Using a base template
 ~~~~~~~~~~~~~~~~~~~~~
 
-Templates in Django are generally built up from smaller pieces. This lets you include things like a consistent header and footer on all your pages. Convention is to call one of your templates ``base.html`` and have everything inherit from that.
+Templates in Django are generally built up from smaller pieces. This lets you include things like a consistent header and footer on all your pages. Convention is to call one of your templates ``base.html`` and have everything inherit from that. Here is more information on `template inheritance with blocks`_.
+
+.. _template inheritance with blocks: https://docs.djangoproject.com/en/1.5/topics/templates/#template-inheritance
 
 We'll start with putting our header and a sidebar in ``templates/base.html``:
 
@@ -537,7 +541,7 @@ Finally we need to create the ``get_absolute_url()`` function which should retur
         post = Post.objects.create(title="My post title", author=user)
         self.assertIsNotNone(post.get_absolute_url())
 
-Now we need to implement ``get_absolute_url`` in our ``Post`` class (found in ``blog/models.py``):
+Now we need to implement our ``get_absolute_url`` method in our ``Post`` class (found in ``blog/models.py``):
 
 .. code-block:: python
 
@@ -629,7 +633,7 @@ Now our tests should pass again:
     OK
     Destroying test database for alias 'default'...
 
-.. _test client: https://docs.djangoproject.com/en/dev/topics/testing/overview/#the-test-client
+.. _test client: https://docs.djangoproject.com/en/1.5/topics/testing/overview/#module-django.test.client
 .. _zurb foundation files: http://foundation.zurb.com/
 .. _grid documentation: http://foundation.zurb.com/docs/components/grid.html
 .. _direct link: http://foundation.zurb.com/files/foundation-4.3.2.zip
@@ -646,4 +650,4 @@ Now our tests should pass again:
 .. _DetailView: http://ccbv.co.uk/projects/Django/1.5/django.views.generic.detail/DetailView/
 .. _an architecture for django templates: https://oncampus.oberlin.edu/webteam/2012/09/architecture-django-templates
 .. _include tag: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#include
-.. _empty: https://docs.djangoproject.com/en/dev/ref/templates/builtins/#for-empty
+.. _empty: https://docs.djangoproject.com/en/1.5/ref/templates/builtins/#for-empty
