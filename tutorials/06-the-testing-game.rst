@@ -5,7 +5,7 @@ The Testing Game
 Test Coverage
 -------------
 
-It's important to ensure all your code is tested.  Code coverage is frequetly used as a measuring stick for quality tests.  The basic idea behind code coverage is that if your tests are comprehensive all of your code should be executed.
+It's important to test all your code.  Code coverage allows you to make sure every line of code is executed.  Code coverage is frequetly used as a measuring stick for quality tests.  The basic idea behind code coverage is that if your tests are comprehensive all of your code should be executed.
 
 Using Coverage
 --------------
