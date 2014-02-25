@@ -7,7 +7,7 @@ Adding a Comment form
 
 To allow users to create comments we need to accept a form submission. HTML forms are the most common method used to accept user input on web sites and send that data to a server. We can use `Django's form framework`_ for this task.
 
-.. _Django's form framework: https://docs.djangoproject.com/en/1.5/topics/forms/
+.. _Django's form framework: https://docs.djangoproject.com/en/1.6/topics/forms/
 
 First let's write some tests.  We'll need to create a blog ``Post`` and a ``User`` for our tests.  Let's make a `setup`_ method for our tests which creates a post and adds it to the database. The `setup`_ method is called before each test in the given test class so that each test will be able to use the ``User`` and ``Post``.
 
@@ -104,7 +104,7 @@ the comment.
     model's validators. In our example, this will ensure that the
     Comment ``email`` is a valid email address.
 
-    .. _Django forms: https://docs.djangoproject.com/en/1.5/topics/forms/
+    .. _Django forms: https://docs.djangoproject.com/en/1.6/topics/forms/
 
 Now our tests should fail because the ``post`` keyword argument is not accepted nor required:
 

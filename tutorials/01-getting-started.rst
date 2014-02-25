@@ -31,7 +31,7 @@ For this workshop, a 1.5.x version is required. If instead you see a
 "No module named django" message, please follow the Django
 `installation instructions`_.
 
-.. _installation instructions: https://docs.djangoproject.com/en/1.5/topics/install/
+.. _installation instructions: https://docs.djangoproject.com/en/1.6/topics/install/
 
 .. code-block:: bash
 
@@ -193,7 +193,7 @@ Now visit the admin site in your browser (http://localhost:8000/admin/).
 
     Quit the server by holding the control key and pressing C.
 
-    .. _official documentation: https://docs.djangoproject.com/en/1.5/intro/tutorial01/#the-development-server
+    .. _official documentation: https://docs.djangoproject.com/en/1.6/intro/tutorial01/#the-development-server
 
 .. _pip: http://www.pip-installer.org/en/latest/installing.html
 .. _requirements.txt: https://raw.github.com/pythonsd/test-driven-django-development/master/myblog/requirements.txt
