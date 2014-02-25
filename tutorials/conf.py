@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Test-Driven Django Development'
-copyright = u'2013, San Diego Python'
+copyright = u'2014, San Diego Python'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
