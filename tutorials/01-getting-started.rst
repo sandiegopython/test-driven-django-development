@@ -59,17 +59,6 @@ database and ``myblog/urls.py`` which maps URLs called by a web broser
 to the appropriate Python code.
 
 
-Directory variables
--------------------
-
-Add the following to the top of your ``myblog/settings.py`` file:
-
-.. code-block:: python
-
-    import os
-    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
-
 Setting up the database
 -----------------------
 
