@@ -55,12 +55,57 @@ Now let's view our code coverage report:
 TODO: explain what this means.
 
 
+HTML Coverage Report
+--------------------
+
+TODO: Show off coverage html
+
+
 Branch Coverage
 ---------------
 
-TODO: Explain line coverage vs. branch coverage
+So far we've been testing "line coverage" to ensure we execute every line of code during our tests.  We can do better by ensuring every code branch is taken.
 
-TODO: Add ``--branch`` argument to our code coverage
+For example let's say we have a file called ``example.py``::
+
+    a = 0
+    if not a:
+        a = 1
+
+Let's execute this file with code coverage including branch coverage and then view the coverage report:
+
+.. code-block:: bash
+
+    $ coverage run --branch example.py
+    $ coverage report
+    Name    Stmts   Miss Branch BrMiss  Cover
+    -----------------------------------------
+    test        3      0      2      1    80%
+
+The two new columns in our coverage report count the total number of branches and the number of missed branches.  In this case our code always executes the "if" branch and never skips it so we miss the negative branch in our if condition.
+
+From now on we will add the ``--branch`` argument when we record code coverage.  Let's try it on our tests:
+
+.. code-block:: bash
+
+    $ coverage run --include='./*' manage.py test blog
+    $ coverage report
+    Name              Stmts   Miss Branch BrMiss  Cover
+    ---------------------------------------------------
+    blog/__init__         0      0      0      0   100%
+    blog/admin            4      0      0      0   100%
+    blog/forms           14      0      0      0   100%
+    blog/models          21      0      0      0   100%
+    blog/tests           87      0      0      0   100%
+    blog/urls             2      0      0      0   100%
+    blog/views           22      0      0      0   100%
+    manage                6      0      2      1    88%
+    myblog/__init__       0      0      0      0   100%
+    myblog/settings      29      0      0      0   100%
+    myblog/urls           5      0      0      0   100%
+    myblog/views          6      0      0      0   100%
+    ---------------------------------------------------
+    TOTAL               196      0      2      1    99%
 
 Coverage Configuration
 ----------------------
