@@ -5,10 +5,12 @@ The Testing Game
 Test Coverage
 -------------
 
-It's important to test all your code.  Code coverage allows you to make sure every line of code is executed.  Code coverage is frequetly used as a measuring stick for quality tests.  The basic idea behind code coverage is that if your tests are comprehensive all of your code should be executed.
+It's important to test all your code. Code coverage is frequently used as a measuring stick for quality tests. Code coverage allows you to make sure that every line of code is executed. The basic idea behind code coverage is that if your tests are comprehensive, all of your code should be executed. 
 
 Using Coverage
 --------------
+
+Let's demonstrate this idea by using `Coverage`_, a tool that measures code coverage of Python programs. 
 
 First let's install coverage:
 
@@ -16,7 +18,7 @@ First let's install coverage:
 
     $ pip install coverage
 
-Now let's try running our tests while recording code coverage:
+Now let's run our tests. As we run our tests, coverage records and creates a coverage report:
 
 .. code-block:: bash
 
@@ -29,7 +31,7 @@ Now let's try running our tests while recording code coverage:
     OK
     Destroying test database for alias 'default'...
 
-Now let's view our code coverage report:
+Let's take a look at our code coverage report:
 
 .. code-block:: bash
 
@@ -58,8 +60,15 @@ TODO: explain what this means.
 HTML Coverage Report
 --------------------
 
-TODO: Show off coverage html
+You can prettify the coverage report above into html format by running the following command:
 
+.. code-block:: bash
+
+    $ coverage html
+
+This command will create a directory/file called ``htmlcov/index.html`` and save it in your current directory. You can then view this file in your web browser as below. Or if you prefer, take a `look at our report`_ on Github.
+
+.. image:: _static/06-01_coverage_report.png
 
 Branch Coverage
 ---------------
@@ -162,6 +171,8 @@ Instead of adding a ``gravatar_url`` method to the ``Entry`` and ``Comment`` mod
 
 TODO: Add tests for gravatar image URLs for comments
 
+.. _coverage: http://nedbatchelder.com/code/coverage/
+.. _look at our report: https://raw.github.com/pythonsd/test-driven-django-development/master/myblog/htmlcov/index.html
 .. _gravatar: http://gravatar.com/
 .. _gravatar documentation: http://en.gravatar.com/site/implement/images/
 .. _hashlib: http://docs.python.org/2/library/hashlib.html
