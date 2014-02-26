@@ -103,7 +103,7 @@ To create the database table for our ``Entry`` model we need to run syncdb again
 
 
 Creating entries from the admin site
-----------------------------------
+------------------------------------
 
 We don't want to manually add entries to the database every time we want to update our blog.  It would be nice if we could use a login-secured webpage to create blog entries.  Fortunately Django's admin interface can do just that.
 
