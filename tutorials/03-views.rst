@@ -96,7 +96,7 @@ Create a ``templates`` directory in our top-level directory. Our directory struc
         │   ├── urls.py
         │   ├── views.py
         │   └── wsgi.py
-        ├── myblog.sqlite3
+        ├── db.sqlite3
         ├── static
         │   └── css
         │       ├── foundation.css

@@ -75,7 +75,7 @@ admin interface which we'll get to shortly:
 
     $ python manage.py syncdb
 
-After running this command, there will be a database file ``myblog.sqlite3``
+After running this command, there will be a database file ``db.sqlite3``
 in the same directory as ``manage.py``. Right now, this database only has
 a few tables specific to Django. The command looks at ``INSTALLED_APPS`` in
 ``myblog/settings.py`` and creates database tables for models defined in
