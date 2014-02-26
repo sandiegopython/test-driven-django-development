@@ -204,3 +204,5 @@ This file will allow us to install all Python dependencies at once with just one
 .. _WebTest: http://webtest.readthedocs.org/en/latest/
 .. _django-webtest: https://pypi.python.org/pypi/django-webtest/
 .. _pip: http://www.pip-installer.org/en/latest/installing.html
+.. _pip freeze: http://pip.readthedocs.org/en/latest/reference/pip_freeze.html
+.. _requirements file: http://pip.readthedocs.org/en/latest/user_guide.html#requirements-files
