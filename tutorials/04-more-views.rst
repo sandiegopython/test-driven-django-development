@@ -1,7 +1,7 @@
 More Views
 ==========
 
-Blogs should be interactive.  Let's allow visitors to comment on each post.
+Blogs should be interactive.  Let's allow visitors to comment on each entry.
 
 Adding a Comment model
 ----------------------
@@ -11,7 +11,7 @@ First we need to add a ``Comment`` model in ``blog/models.py``.
 .. code-block:: python
 
     class Comment(models.Model):
-        post = models.ForeignKey(Post)
+        entry = models.ForeignKey(Entry)
         name = models.CharField(max_length=100)
         email = models.EmailField()
         body = models.TextField()
@@ -19,9 +19,9 @@ First we need to add a ``Comment`` model in ``blog/models.py``.
         modified_at = models.DateTimeField(auto_now=True, editable=False)
 
 
-Let's write a ``__unicode___`` method for our ``Comment`` model like we did for our ``Post`` model earlier.
+Let's write a ``__unicode___`` method for our ``Comment`` model like we did for our ``Entry`` model earlier.
 
-First we should create a test in ``blog/tests.py``.  Our test should look very similar to the ``__unicode__`` test we wrote for posts earlier.  This should suffice:
+First we should create a test in ``blog/tests.py``.  Our test should look very similar to the ``__unicode__`` test we wrote for entries earlier.  This should suffice:
 
 .. code-block:: python
 
@@ -35,7 +35,7 @@ Don't forget to import our ``Comment`` model:
 
 .. code-block:: python
 
-    from .models import Post, Comment
+    from .models import Entry, Comment
 
 
 Now let's run our tests to make sure our new test fails:
@@ -88,35 +88,35 @@ gets synched to our SQLite database.
 Adding comments on the admin site
 ----------------------------------
 
-Let's add the Comment model to the admin just like we did with the Post
+Let's add the Comment model to the admin just like we did with the Entry
 model. This involves editing ``blog/admin.py`` to look like this:
 
 .. code-block:: python
 
     from django.contrib import admin
-    from .models import Post, Comment
+    from .models import Entry, Comment
 
 
-    admin.site.register(Post)
+    admin.site.register(Entry)
     admin.site.register(Comment)
 
 If you start the development server again, you will see the Comment model
-in the admin and you can add comments to the blog posts. However, the point
-of a blog is to let other users and not only the admin post comments.
+in the admin and you can add comments to the blog entries. However, the point
+of a blog is to let other users and not only the admin entry comments.
 
 
 Displaying comments on the website
 ----------------------------------
 
-Now we can create comments in the admin interface, but we can't see them on the website yet.  Let's display comments on the detail page for each blog post.
+Now we can create comments in the admin interface, but we can't see them on the website yet.  Let's display comments on the detail page for each blog entry.
 
-At the end of our ``content`` block in ``templates/blog/post_detail.html`` let's add the following:
+At the end of our ``content`` block in ``templates/blog/entry_detail.html`` let's add the following:
 
 .. code-block:: html
 
     <hr>
     <h4>Comments</h4>
-    {% for comment in post.comment_set.all %}
+    {% for comment in entry.comment_set.all %}
         <p><em>Posted by {{ comment.name }}</em></p>
         {{ comment|linebreaks }}
     {% empty %}
@@ -125,6 +125,6 @@ At the end of our ``content`` block in ``templates/blog/post_detail.html`` let's
 
 .. IMPORTANT::
 
-    We forgot to add a test for this!  Why don't you add a test to make sure comments appear on the blog post page.
+    We forgot to add a test for this!  Why don't you add a test to make sure comments appear on the blog entry page.
 
 Now we can see our comments on the website.

@@ -1,20 +1,20 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django_webtest import WebTest
-from .models import Post, Comment
+from .models import Entry, Comment
 from .forms import CommentForm
 
 
-class PostModelTest(TestCase):
+class EntryModelTest(TestCase):
 
     def test_unicode_representation(self):
-        post = Post(title="My post title")
-        self.assertEqual(unicode(post), post.title)
+        entry = Entry(title="My entry title")
+        self.assertEqual(unicode(entry), entry.title)
 
     def test_get_absolute_url(self):
         user = get_user_model().objects.create(username='some_user')
-        post = Post.objects.create(title="My post title", author=user)
-        self.assertIsNotNone(post.get_absolute_url())
+        entry = Entry.objects.create(title="My entry title", author=user)
+        self.assertIsNotNone(entry.get_absolute_url())
 
 
 class CommentModelTest(TestCase):
@@ -31,79 +31,79 @@ class ProjectTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class ListPostsOnHomePage(TestCase):
+class HomePageTests(TestCase):
 
-    """Test whether our blog posts show up on the homepage"""
+    """Test whether our blog entries show up on the homepage"""
 
     def setUp(self):
         self.user = get_user_model().objects.create(username='some_user')
 
-    def test_one_post(self):
-        Post.objects.create(title='1-title', body='1-body', author=self.user)
+    def test_one_entry(self):
+        Entry.objects.create(title='1-title', body='1-body', author=self.user)
         response = self.client.get('/')
         self.assertContains(response, '1-title')
         self.assertContains(response, '1-body')
 
-    def test_two_posts(self):
-        Post.objects.create(title='1-title', body='1-body', author=self.user)
-        Post.objects.create(title='2-title', body='2-body', author=self.user)
+    def test_two_entries(self):
+        Entry.objects.create(title='1-title', body='1-body', author=self.user)
+        Entry.objects.create(title='2-title', body='2-body', author=self.user)
         response = self.client.get('/')
         self.assertContains(response, '1-title')
         self.assertContains(response, '1-body')
         self.assertContains(response, '2-title')
 
-    def test_no_posts(self):
+    def test_no_entries(self):
         response = self.client.get('/')
-        self.assertContains(response, 'No blog post entries yet.')
+        self.assertContains(response, 'No blog entries yet.')
 
 
-class BlogPostViewTest(WebTest):
+class EntryViewTest(WebTest):
 
     def setUp(self):
         self.user = get_user_model().objects.create(username='some_user')
-        self.post = Post.objects.create(title='1-title', body='1-body',
+        self.entry = Entry.objects.create(title='1-title', body='1-body',
                                         author=self.user)
 
     def test_basic_view(self):
-        response = self.client.get(self.post.get_absolute_url())
+        response = self.client.get(self.entry.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
-    def test_blog_title_in_post(self):
-        response = self.client.get(self.post.get_absolute_url())
-        self.assertContains(response, self.post.title)
+    def test_blog_title_in_entry(self):
+        response = self.client.get(self.entry.get_absolute_url())
+        self.assertContains(response, self.entry.title)
 
-    def test_blog_body_in_post(self):
-        response = self.client.get(self.post.get_absolute_url())
-        self.assertContains(response, self.post.body)
+    def test_blog_body_in_entry(self):
+        response = self.client.get(self.entry.get_absolute_url())
+        self.assertContains(response, self.entry.body)
 
     def test_view_page(self):
-        page = self.app.get(self.post.get_absolute_url())
+        page = self.app.get(self.entry.get_absolute_url())
         self.assertEqual(len(page.forms), 1)
 
     def test_form_error(self):
-        page = self.app.get(self.post.get_absolute_url())
+        page = self.app.get(self.entry.get_absolute_url())
         page = page.form.submit()
         self.assertContains(page, "This field is required.")
 
     def test_form_success(self):
-        page = self.app.get(self.post.get_absolute_url())
+        page = self.app.get(self.entry.get_absolute_url())
         page.form['name'] = "Phillip"
         page.form['email'] = "phillip@example.com"
         page.form['body'] = "Test comment body."
         page = page.form.submit()
-        self.assertRedirects(page, self.post.get_absolute_url())
+        self.assertRedirects(page, self.entry.get_absolute_url())
 
 
 class CommentFormTest(TestCase):
 
     def setUp(self):
         user = get_user_model().objects.create_user('zoidberg')
-        self.post = Post.objects.create(author=user, title="My post title")
+        self.entry = Entry.objects.create(author=user, title="My entry title")
 
     def test_init(self):
-        CommentForm(post=self.post)
+        CommentForm(entry=self.entry)
 
-    def test_init_without_post(self):
+    def test_init_without_entry(self):
         with self.assertRaises(KeyError):
             CommentForm()
 
@@ -112,16 +112,16 @@ class CommentFormTest(TestCase):
             'name': "Turanga Leela",
             'email': "leela@example.com",
             'body': "Hi there",
-        }, post=self.post)
+        }, entry=self.entry)
         self.assertTrue(form.is_valid())
         comment = form.save()
         self.assertEqual(comment.name, "Turanga Leela")
         self.assertEqual(comment.email, "leela@example.com")
         self.assertEqual(comment.body, "Hi there")
-        self.assertEqual(comment.post, self.post)
+        self.assertEqual(comment.entry, self.entry)
 
     def test_blank_data(self):
-        form = CommentForm({}, post=self.post)
+        form = CommentForm({}, entry=self.entry)
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {
             'name': ['This field is required.'],
