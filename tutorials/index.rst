@@ -26,10 +26,10 @@ the software do not break another.
 Prerequisites
 -------------
 
-* `Python <http://www.python.org/download/>`_ 2.6 or 2.7 (2.7 is recommended)
-* `Install Django <https://docs.djangoproject.com/en/1.5/intro/install/>`_
-  1.5
-* The `Django tutorials <https://docs.djangoproject.com/en/1.5/intro/tutorial01/>`_
+* `Python <http://www.python.org/download/>`_ 2.6.5 or 2.7 (2.7 is recommended)
+* `Install Django <https://docs.djangoproject.com/en/1.6/intro/install/>`_
+  1.6
+* The `Django tutorials <https://docs.djangoproject.com/en/1.6/intro/tutorial01/>`_
 
 You do not need to be a Django expert to attend this workshop or to find this
 document useful. However, the goal of getting a working website with tests in

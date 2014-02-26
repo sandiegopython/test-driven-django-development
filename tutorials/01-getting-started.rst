@@ -27,11 +27,11 @@ You should also have `pip`_ installed on your machine, along with the `requireme
    start with ``$`` in this workshop. Don't type the leading ``$`` though.
 
 Running the next command will show the version of Django you have installed.
-For this workshop, a 1.5.x version is required. If instead you see a
+For this workshop, a 1.6.x version is required. If instead you see a
 "No module named django" message, please follow the Django
 `installation instructions`_.
 
-.. _installation instructions: https://docs.djangoproject.com/en/1.5/topics/install/
+.. _installation instructions: https://docs.djangoproject.com/en/1.6/topics/install/
 
 .. code-block:: bash
 
@@ -59,17 +59,6 @@ database and ``myblog/urls.py`` which maps URLs called by a web broser
 to the appropriate Python code.
 
 
-Directory variables
--------------------
-
-Add the following to the top of your ``myblog/settings.py`` file:
-
-.. code-block:: python
-
-    import os
-    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
-
 Setting up the database
 -----------------------
 
@@ -79,19 +68,7 @@ code (Python and Django in this case), markup and scripts (HTML, CSS and
 JavaScript) and actual content (database). Django and other frameworks help
 guide developers to separate these concerns.
 
-First we need to update the ``DATABASES`` variable in our settings file
-(``myblog/settings.py``).
-
-.. code-block:: python
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'myblog.sqlite3'),
-        }
-    }
-
-Now let's create the database and a super user account for accessing the
+First, let's create the database and a super user account for accessing the
 admin interface which we'll get to shortly:
 
 .. code-block:: bash
@@ -117,59 +94,14 @@ posts.
     .. _SQLite documentation: http://sqlite.org/
 
 
-Enabling the admin site
------------------------
+The admin site
+--------------
 
 One of the killer features Django provides is an admin interface. An admin
 interface is a way for an administrator of a website to interact with the
 database through a web interface which regular website visitors are not
 allowed to use. On a blog, this would be where the author writes new blog
 posts.
-
-We need to add ``'django.contrib.admin'`` to ``INSTALLED_APPS`` in our
-settings file (``myblog/settings.py``).  Afterward it should look something
-like this:
-
-.. code-block:: python
-
-    INSTALLED_APPS = (
-        'django.contrib.auth',
-        'django.contrib.contenttypes',
-        'django.contrib.sessions',
-        'django.contrib.sites',
-        'django.contrib.messages',
-        'django.contrib.staticfiles',
-        'django.contrib.admin',        # we just added this
-    )
-
-After adding the admin to our installed apps we need to have Django create
-the database tables for admin:
-
-.. code-block:: bash
-
-    $ python manage.py syncdb
-
-We also need to enable admin URLs and enable auto-discovery of
-``admin.py`` files in our apps. We will create one of these ``admin.py`` files
-later to expose our blog post model and comment model to the admin interface.
-To enable auto-discovery, we need to uncomment some lines in our project's
-urls file (``myblog/urls.py``). Afterward our urls file should look something
-like this:
-
-.. code-block:: python
-
-    from django.conf.urls import patterns, include, url
-
-    from django.contrib import admin
-    admin.autodiscover()
-
-    urlpatterns = patterns('',
-        url(r'^admin/', include(admin.site.urls)),
-    )
-
-
-Checking our progress
----------------------
 
 Let's check our progress by running the Django test server and visiting the
 admin site.
@@ -193,7 +125,7 @@ Now visit the admin site in your browser (http://localhost:8000/admin/).
 
     Quit the server by holding the control key and pressing C.
 
-    .. _official documentation: https://docs.djangoproject.com/en/1.5/intro/tutorial01/#the-development-server
+    .. _official documentation: https://docs.djangoproject.com/en/1.6/intro/tutorial01/#the-development-server
 
 .. _pip: http://www.pip-installer.org/en/latest/installing.html
 .. _requirements.txt: https://raw.github.com/pythonsd/test-driven-django-development/master/myblog/requirements.txt
