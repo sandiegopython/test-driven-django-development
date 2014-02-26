@@ -15,7 +15,7 @@ you should have a 2.6.x or 2.7.x version of Python.
 
     $ python -V
 
-You should also have `pip`_ installed on your machine.  First we need to install our dependencies and make a ``requirements.txt`` file.  First let's install Django 1.6:
+You should also have `pip`_ installed on your machine.  First let's install Django 1.6:
 
 .. code-block:: bash
 
@@ -51,61 +51,6 @@ For this workshop, a 1.6.x version is required. If instead you see a
 
     $ python -c "import django; print(django.get_version())"
     1.6.2
-
-We also want to use `WebTest`_ and `django-webtest`_ for our functional tests.  Let's install those also:
-
-.. code-block:: bash
-
-    $ pip install webtest django-webtest
-    Downloading/unpacking Django==1.6.2
-      Downloading Django-1.6.2.tar.gz (6.6MB): 6.6MB downloaded
-      Running setup.py egg_info for package Django
-
-        warning: no previously-included files matching '__pycache__' found under directory '*'
-        warning: no previously-included files matching '*.py[co]' found under directory '*'
-    Installing collected packages: Django
-      Running setup.py install for Django
-        changing mode of build/scripts-2.7/django-admin.py from 644 to 755
-
-        warning: no previously-included files matching '__pycache__' found under directory '*'
-        warning: no previously-included files matching '*.py[co]' found under directory '*'
-        changing mode of /home/trey/.virtualenvs/tdd_workshop/bin/django-admin.py to 755
-    Successfully installed Django
-    Cleaning up...
-
-We don't want to manually install our dependencies every time.  Let's create a `requirements file`_ listing our dependiences so we don't have to type them all out every time we setup our website on a new computer or anytime a version updates.
-
-First let's use `pip freeze`_ to list our dependencies and their versions:
-
-.. code-block:: bash
-
-    $ pip freeze
-    Django==1.6.2
-    WebOb==1.3.1
-    WebTest==2.0.14
-    argparse==1.2.1
-    beautifulsoup4==4.3.2
-    django-webtest==1.7.6
-    six==1.5.2
-    waitress==0.8.8
-    wsgiref==0.1.2
-
-We care about the ``Django``, ``WebTest``, and ``django-webtest`` lines.  Let's create our ``requirements.txt`` file with instructions for installing these packages with the versions we have installed now::
-
-    Django==1.6.2
-    WebTest==2.0.14
-    django-webtest==1.7.6
-
-
-This file will allow us to install all Python dependencies at once with just one command.  Whenever our dependency files are upgraded or we setup a new development environment for our Django website we'll need to run:
-
-.. code-block::
-
-    $ pip install -r requirements.txt
-
-.. NOTE::
-    Note that we do not need to type this command right now since we have already installed all dependencies.
-
 
 
 Creating the project
@@ -264,6 +209,65 @@ Now visit the admin site in your browser (http://localhost:8000/admin/).
     Quit the server by holding the control key and pressing C.
 
     .. _official documentation: https://docs.djangoproject.com/en/1.5/intro/tutorial01/#the-development-server
+
+
+Python Package Requirements File
+--------------------------------
+
+We want to use a few more Python packages besides Django.  We'll plan to use `WebTest`_ and `django-webtest`_ for our functional tests.  Let's install those also:
+
+.. code-block:: bash
+
+    $ pip install webtest django-webtest
+    Downloading/unpacking Django==1.6.2
+      Downloading Django-1.6.2.tar.gz (6.6MB): 6.6MB downloaded
+      Running setup.py egg_info for package Django
+
+        warning: no previously-included files matching '__pycache__' found under directory '*'
+        warning: no previously-included files matching '*.py[co]' found under directory '*'
+    Installing collected packages: Django
+      Running setup.py install for Django
+        changing mode of build/scripts-2.7/django-admin.py from 644 to 755
+
+        warning: no previously-included files matching '__pycache__' found under directory '*'
+        warning: no previously-included files matching '*.py[co]' found under directory '*'
+        changing mode of /home/trey/.virtualenvs/tdd_workshop/bin/django-admin.py to 755
+    Successfully installed Django
+    Cleaning up...
+
+We don't want to manually install our dependencies every time.  Let's create a `requirements file`_ listing our dependiences so we don't have to type them all out every time we setup our website on a new computer or anytime a package version updates.
+
+First let's use `pip freeze`_ to list our dependencies and their versions:
+
+.. code-block:: bash
+
+    $ pip freeze
+    Django==1.6.2
+    WebOb==1.3.1
+    WebTest==2.0.14
+    argparse==1.2.1
+    beautifulsoup4==4.3.2
+    django-webtest==1.7.6
+    six==1.5.2
+    waitress==0.8.8
+    wsgiref==0.1.2
+
+We care about the ``Django``, ``WebTest``, and ``django-webtest`` lines here.  The other packages are sub-dependencies that were automatically installed and don't need to worry about them.  Let's create our ``requirements.txt`` file with instructions for installing these packages with the versions we have installed now::
+
+    Django==1.6.2
+    WebTest==2.0.14
+    django-webtest==1.7.6
+
+
+This file will allow us to install all Python dependencies at once with just one command.  Whenever our dependency files are upgraded or if we setup a new development environment for our Django website we'll need to run:
+
+.. code-block::
+
+    $ pip install -r requirements.txt
+
+.. NOTE::
+    Note that we do not need to type this command right now since we have already installed all dependencies.
+
 
 .. _WebTest: http://webtest.readthedocs.org/en/latest/
 .. _django-webtest: https://pypi.python.org/pypi/django-webtest/
