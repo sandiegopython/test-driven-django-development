@@ -27,13 +27,12 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
 .. code-block:: python
 
     INSTALLED_APPS = (
+        'django.contrib.admin',
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
-        'django.contrib.sites',
         'django.contrib.messages',
         'django.contrib.staticfiles',
-        'django.contrib.admin',
 
         'blog',
     )
@@ -55,7 +54,7 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
         │   ├── settings.py
         │   ├── urls.py
         │   └── wsgi.py
-        └── myblog.sqlite3
+        └── db.sqlite3
 
 
 Creating a model
