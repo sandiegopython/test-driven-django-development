@@ -154,6 +154,30 @@ Now we can run coverage without any extra arguments:
     $ coverage run manage.py test blog
 
 
+Inspecting Missing Coverage
+---------------------------
+
+Now let's figure out why our branch coverage is not 100%.  First we need to regenerate the HTML coverage report and have a look at it:
+
+.. code-block::
+
+    $ coverage html
+
+.. image:: _static/06-02_branch_coverage_report.png
+
+Let's click on ``manage`` to see why our manage.py file has 88% coverage:
+
+.. image:: _static/06-03_missing_manage_coverage.png
+
+We're missing the ``False`` case for that ``if`` statement in our ``manage.py`` file.  We always run ``manage.py`` from the command line so that code is always executed.
+
+We don't intend to ever test that missing branch, so let's ignore the issue.
+
+.. TIP::
+
+    For extra credit, figure out how we can exclude that ``if __name__ == "__main__":`` line from our coverage count.  Check out the `.coveragerc`_ documentation for help.
+
+
 .. _coverage: http://nedbatchelder.com/code/coverage/
 .. _branch coverage: http://nedbatchelder.com/code/coverage/branch.html
 .. _.coveragerc: http://nedbatchelder.com/code/coverage/config.html
