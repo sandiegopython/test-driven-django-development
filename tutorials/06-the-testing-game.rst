@@ -5,18 +5,44 @@ The Testing Game
 Test Coverage
 -------------
 
-It's important to test all your code. Code coverage is frequently used as a measuring stick for quality tests. Code coverage allows you to make sure that every line of code is executed. The basic idea behind code coverage is that if your tests are comprehensive, all of your code should be executed. 
+It's important to test all your code. Code coverage is frequently used as a measuring stick for quality tests. Code coverage allows you to make sure that every line of code is executed. The basic idea behind code coverage is that if your tests are comprehensive, all of your code should be executed.
 
-Using Coverage
---------------
+To measure our code coverage we will use `Coverage`_, a tool that measures code coverage for Python code.
 
-Let's demonstrate this idea by using `Coverage`_, a tool that measures code coverage of Python programs. 
+Intalling Coverage
+------------------
 
 First let's install coverage:
 
 .. code-block:: bash
 
     $ pip install coverage
+
+Before we continue, we need to remember to add this new dependency to our ``requirements.txt`` file.  Let's use ``pip freeze`` to discover the version of ``coverage`` we installed:
+
+.. code-block:: bash
+
+    $ pip freeze
+    Django==1.6.2
+    WebOb==1.3.1
+    WebTest==2.0.14
+    argparse==1.2.1
+    beautifulsoup4==4.3.2
+    coverage==3.7.1
+    django-webtest==1.7.6
+    six==1.5.2
+    waitress==0.8.8
+    wsgiref==0.1.2
+
+Now let's add ``coverage`` to our ``requirements.txt`` file::
+
+    coverage==3.7.1
+    Django==1.5.5
+    django-webtest==1.7.5
+    WebTest==2.0.9
+
+Using Coverage
+--------------
 
 Now let's run our tests. As we run our tests, coverage records and creates a coverage report:
 
@@ -60,44 +86,30 @@ TODO: explain what this means.
 HTML Coverage Report
 --------------------
 
-You can prettify the coverage report above into html format by running the following command:
+Our current command-line coverage reports are useful, but they aren't very detailed.  Fortunately coverage includes a feature for generating HTML coverage reports that visually demonstrate coverage by coloring our code based on the results.
+
+Let's can prettify the coverage report above into HTML format by running the following command:
 
 .. code-block:: bash
 
     $ coverage html
 
-This command will create a directory/file called ``htmlcov/index.html`` and save it in your current directory. You can then view this file in your web browser as below. Or if you prefer, take a `look at our report`_ on Github.
+This command will create a ``htmlcov`` directory containing our test coverage.  The ``index.html`` is the overview file which links to the other files.  Let's open up our ``htmlcov/index.html`` in our web browser.
+
+Our HTML coverage report should look something like this:
 
 .. image:: _static/06-01_coverage_report.png
 
 Branch Coverage
 ---------------
 
-So far we've been testing "line coverage" to ensure we execute every line of code during our tests.  We can do better by ensuring every code branch is taken.
-
-For example let's say we have a file called ``example.py``::
-
-    a = 0
-    if not a:
-        a = 1
-
-Let's execute this file with code coverage including branch coverage and then view the coverage report:
-
-.. code-block:: bash
-
-    $ coverage run --branch example.py
-    $ coverage report
-    Name    Stmts   Miss Branch BrMiss  Cover
-    -----------------------------------------
-    test        3      0      2      1    80%
-
-The two new columns in our coverage report count the total number of branches and the number of missed branches.  In this case our code always executes the "if" branch and never skips it so we miss the negative branch in our if condition.
+So far we've been testing statement coverage to ensure we execute every line of code during our tests.  We can do better by ensuring every code branch is taken.  The coverage documentation contains a good description of `branch coverage`_.
 
 From now on we will add the ``--branch`` argument when we record code coverage.  Let's try it on our tests:
 
 .. code-block:: bash
 
-    $ coverage run --include='./*' manage.py test blog
+    $ coverage run --include='./*' --branch manage.py test blog
     $ coverage report
     Name              Stmts   Miss Branch BrMiss  Cover
     ---------------------------------------------------
@@ -116,19 +128,24 @@ From now on we will add the ``--branch`` argument when we record code coverage. 
     ---------------------------------------------------
     TOTAL               196      0      2      1    99%
 
+Notice the new ``Branch`` and ``BrMiss`` columns and note that we are missing a branch in our ``manage.py`` file.  We'll take a look at that later.
+
 Coverage Configuration
 ----------------------
 
-TODO: Add a ``.coveragerc`` file with our defaults::
+Coverage allows us to specify a configuration file (``.coveragerc`` files) to specify default coverage attributes.  The documentation explains how `.coveragerc`_ work.
+
+Let's add a ``.coveragerc`` file to our project that looks like this::
 
     [run]
     include = ./*
     branch = 1
 
-HTML Coverage Report
---------------------
+Now we can run coverage without any extra arguments:
 
-TODO: show how an HTML coverage report can be generated
+.. code-block::
+
+    $ coverage run manage.py test blog
 
 Full coverage isn't enough
 --------------------------
@@ -172,7 +189,8 @@ Instead of adding a ``gravatar_url`` method to the ``Entry`` and ``Comment`` mod
 TODO: Add tests for gravatar image URLs for comments
 
 .. _coverage: http://nedbatchelder.com/code/coverage/
-.. _look at our report: https://raw.github.com/pythonsd/test-driven-django-development/master/myblog/htmlcov/index.html
 .. _gravatar: http://gravatar.com/
 .. _gravatar documentation: http://en.gravatar.com/site/implement/images/
 .. _hashlib: http://docs.python.org/2/library/hashlib.html
+.. _branch coverage: http://nedbatchelder.com/code/coverage/branch.html
+.. _.coveragerc: http://nedbatchelder.com/code/coverage/config.html
