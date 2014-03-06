@@ -104,6 +104,7 @@ Our HTML coverage report should look something like this:
 
 .. image:: _static/06-01_coverage_report.png
 
+
 Branch Coverage
 ---------------
 
@@ -133,6 +134,7 @@ From now on we will add the ``--branch`` argument when we record code coverage. 
     TOTAL               196      0      2      1    99%
 
 Notice the new ``Branch`` and ``BrMiss`` columns and note that we are missing a branch in our ``manage.py`` file.  We'll take a look at that later.
+
 
 Coverage Configuration
 ----------------------
