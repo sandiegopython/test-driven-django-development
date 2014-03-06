@@ -1,3 +1,4 @@
+from django.template import Template, Context
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django_webtest import WebTest
@@ -128,3 +129,21 @@ class CommentFormTest(TestCase):
             'email': ['This field is required.'],
             'body': ['This field is required.'],
         })
+
+class PreviousPostTagTest(TestCase):
+    TEMPLATE = Template("{% load blog_tags %} {% entry_history %}")
+
+    def setUp(self):
+        user = get_user_model().objects.create(username='zoidberg')
+        self.post = Post.objects.create(author=user, title="My post title")
+
+    def test_no_posts(self):
+        context = Context({})
+        rendered = self.TEMPLATE.render(context)
+        assert self.post.title in rendered
+
+    def test_post_shows_up(self):
+        context = Context({})
+        rendered = self.TEMPLATE.render(context)
+        assert self.post.title in rendered
+
