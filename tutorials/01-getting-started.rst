@@ -15,7 +15,9 @@ you should have a 2.6.x or 2.7.x version of Python.
 
     $ python -V
 
-You should also have `pip`_ installed on your machine.  First let's install Django 1.6:
+You should also have `pip`_ installed on your machine.  Pip is a dependency
+management tool for installing and managing Python dependencies.  First let's
+install Django 1.6:
 
 .. code-block:: bash
 
