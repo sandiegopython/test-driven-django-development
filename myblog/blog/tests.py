@@ -134,13 +134,20 @@ class PreviousPostTagTest(TestCase):
     TEMPLATE = Template("{% load blog_tags %} {% entry_history %}")
 
     def setUp(self):
-        user = get_user_model().objects.create(username='zoidberg')
-        self.post = Post.objects.create(author=user, title="My post title")
+        self.user = get_user_model().objects.create(username='zoidberg')
+        self.post = Post.objects.create(author=self.user, title="My post title")
 
     def test_no_posts(self):
         context = Context({})
         rendered = self.TEMPLATE.render(context)
-        assert self.post.title in rendered
+        assert "No posts" in rendered
+
+    def test_many_posts(self):
+        for idx in range(12):
+            last_post = Post.objects.create(author=user, title="My post title {}".format(idx))
+        context = Context({})
+        rendered = self.TEMPLATE.render(context)
+        assert last_post.title not in rendered
 
     def test_post_shows_up(self):
         context = Context({})

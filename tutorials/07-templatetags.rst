@@ -18,7 +18,7 @@ it.
 Where
 -----
 
-Create a ``templatetags`` directory in ``blog`` so we have somthing like this.
+Create a ``templatetags`` directory in ``blog`` so we have something like this.
 
 ::
 
@@ -172,9 +172,36 @@ Rerun the tests, and they should all pass.
 Making it a bit more robust
 ---------------------------
 
-So we can render some blog posts, but there's no real feedback for emtpy posts, and we're not really testing what
+So we can render some blog posts, but there's no real feedback for empty posts, and we're not really testing what
 happens when we've got a LOT (or >10) of posts in the DB. A `{% for %}` loop allows us to define a `{% empty %}` tag,
 which you can see in the docs on `for loops`_. Let's add that to the `entry_history.html` and write a quick test for it.
-Our test should look something like
+Our new tests should look something like.
+
+.. code-block:: python
+
+    def test_no_posts(self):
+        context = Context({})
+        rendered = self.TEMPLATE.render(context)
+        assert "No posts" in rendered
+
+
+    def test_many_posts(self):
+        for idx in range(12):
+            last_post = Post.objects.create(author=self.user, title="My post title {}".format(idx))
+        context = Context({})
+        rendered = self.TEMPLATE.render(context)
+        assert last_post.title not in rendered
+
+The tests themselves have a small problem, `self.user` does not exist! A quick change to our `setUp()` method should fix
+that
+
+.. code-block:: python
+
+
+    def setUp(self):
+        self.user = get_user_model().objects.create(username='zoidberg')
+        self.post = Post.objects.create(author=self.user, title="My post title")
+
+With that we once again have our failing tests. Try to fix them without looking at our solution code first!
 
 .. _for loops:: https://docs.djangoproject.com/en/dev/ref/templates/builtins/#for-empty
