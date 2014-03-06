@@ -82,6 +82,10 @@ Let's take a look at our code coverage report:
 
 TODO: explain what this means.
 
+.. IMPORTANT::
+
+    Note that code coverage can only indicate that you've forgotten tests; it will not tell you whether your tests are good.  Don't use good code coverage as an excuse to write less tests.
+
 
 HTML Coverage Report
 --------------------
@@ -146,11 +150,6 @@ Now we can run coverage without any extra arguments:
 .. code-block::
 
     $ coverage run manage.py test blog
-
-Full coverage isn't enough
---------------------------
-
-TODO: coverage can only indicate that you've forgotten tests; it doesn't tell you whether your tests are good
 
 Adding Gravatars
 ----------------
