@@ -25,9 +25,17 @@ display recent blog posts in the sidebar on every page.
 Where
 -----
 
-Create a ``templatetags`` directory in ``blog`` so we have something like this.
+Let's create a template library called ``blog_tags``.  Why ``blog_tags``?
+Because naming our tag library after our app will make our template imports
+more understandable. We can use this template library in our templates by
+writing ``{% load blog_tags %}`` near the top of our template file.
 
-::
+Create a ``templatetags`` directory in our ``blog`` app and create two empty
+Python files within this directory: ``blog_tags.py`` (which will hold our
+template library code) and ``__init__.py`` (to make this directory into a Python
+package).
+
+We should now have something like this::
 
     ├── blog
     │   ├── __init__.py
