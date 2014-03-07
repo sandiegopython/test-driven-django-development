@@ -184,6 +184,30 @@ This file will allow us to install all Python dependencies at once with just one
 .. NOTE::
     Note that we do not need to type this command right now since we have already installed all dependencies.
 
+.. HINT::
+
+    If you are using virtualenvwrapper (or just virtualenv), you can create a new virtualenv, and test your requirements.txt file.  With virtualenvwrapper:
+
+    .. code-block:: bash
+
+        $ mkvirtualenv tddd-env2
+        $ workon tddd-env2
+        $ pip install -r requirements.txt
+        $ pip freeze
+        $ deactivate
+        $ workon YOUR_ORIGINAL_VENV
+
+    Or with virtualenv:
+
+    .. code-block:: bash
+
+        $ virtualenv venv2
+        $ source venv2/bin/activate
+        $ pip install -r requirements.txt
+        $ pip freeze
+        $ deactivate
+        $ source venv/bin/activate  # or whatever your original virtualenv was
+
 
 .. _WebTest: http://webtest.readthedocs.org/en/latest/
 .. _django-webtest: https://pypi.python.org/pypi/django-webtest/
