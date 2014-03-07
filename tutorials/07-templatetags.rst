@@ -1,19 +1,26 @@
-TemplateTags
-============
+Custom template tags
+====================
 
-Blogs tend to have a list of blog posts on a sidebar as a nice set of quick
-links to previous entries. We could make another template and then ``{% include
-"my_template.html" %}``, but then we have to worry about including the list of
-posts in the context for every page that uses it. Ugh. `Custom template tags`_
-allow us to just to just put one tag in the templates we care about, and that's
-it.
+Let's make our blog list recent entries in the sidebar.
 
-.. _Custom template tags: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-tags
+How are we going to do this?  We could loop through blog entries in our
+``base.html`` template, but that means we would need to include a list of our
+recent blog posts in the template context for all of our views.  That could
+result in duplicate code and we don't like duplicate code.
+
+.. TIP::
+
+    If you didn't fully understand the last paragraph, that's okay.  You might
+    want to read through the Django `template documentation`_ again later.
+
+To avoid duplicate code, let's create a `custom template tag`_ to help us
+display recent blog posts in the sidebar on every page.
 
 .. NOTE::
   A custom template tag that itself fires a SQL query means that our HTML
   templates can add more SQL queries to our view. That hides some behavor It's too early at this point,
   but that query should be cached if we expect to use this often.
+
 
 Where
 -----
@@ -40,6 +47,7 @@ Why ``blog_tags.py``? Because in each template we want to use it we include it
 by saying ``{% load blog_tags %}`` Naming the tag library with the name of the
 app it comes from as the prefix makes it clearer where things are coming from
 in your templates later.
+
 
 Creating an inclusion tag
 -------------------------
@@ -204,4 +212,7 @@ that
 
 With that we once again have our failing tests. Try to fix them without looking at our solution code first!
 
-.. _for loops:: https://docs.djangoproject.com/en/dev/ref/templates/builtins/#for-empty
+
+.. _custom template tag: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-tags
+.. _for loops: https://docs.djangoproject.com/en/dev/ref/templates/builtins/#for-empty
+.. _template documentation: https://docs.djangoproject.com/en/1.6/ref/templates/api/
