@@ -80,7 +80,7 @@ Let's take a look at our code coverage report:
     TOTAL               196      0   100%
 
 
-Let's take a look at the coverage report. On the left, the report shows the name of Django application directory and file being tested. Stmts, or code statements, indicate the number of lines of code that could be tested. Miss, or Missed lines, indicates the number of lines that are not executed by the unit tests. Cover, or Coverage, is the percentage of code covered by the current tests ((Stmts - Miss)/Stmts). For example, ``myblog/views`` has 6 code statements that can be tested. We see that our tests did not miss testing any statements for a Code Coverage of 100%.
+Let's take a look at the coverage report. On the left, the report shows the name of the file being tested. ``Stmts``, or code statements, indicate the number of lines of code that could be tested. ``Miss``, or Missed lines, indicates the number of lines that are not executed by the unit tests. ``Cover``, or Coverage, is the percentage of code covered by the current tests (equivalent to ``(Stmts - Miss)/Stmts``). For example, ``myblog/views`` has 6 code statements that can be tested. We see that our tests did not miss testing any statements for a Code Coverage of 100%.
 
 .. IMPORTANT::
 
