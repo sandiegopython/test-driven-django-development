@@ -177,7 +177,7 @@ We care about the ``Django``, ``WebTest``, and ``django-webtest`` lines here.  T
 
 This file will allow us to install all Python dependencies at once with just one command.  Whenever our dependency files are upgraded or if we setup a new development environment for our Django website we'll need to run:
 
-.. code-block::
+.. code-block:: bash
 
     $ pip install -r requirements.txt
 
