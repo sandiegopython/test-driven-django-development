@@ -25,16 +25,7 @@ install Django 1.6:
     Downloading/unpacking Django==1.6.2
       Downloading Django-1.6.2.tar.gz (6.6MB): 6.6MB downloaded
       Running setup.py egg_info for package Django
-
-        warning: no previously-included files matching '__pycache__' found under directory '*'
-        warning: no previously-included files matching '*.py[co]' found under directory '*'
-    Installing collected packages: Django
-      Running setup.py install for Django
-        changing mode of build/scripts-2.7/django-admin.py from 644 to 755
-
-        warning: no previously-included files matching '__pycache__' found under directory '*'
-        warning: no previously-included files matching '*.py[co]' found under directory '*'
-        changing mode of /home/trey/.virtualenvs/tdd_workshop/bin/django-admin.py to 755
+    ...
     Successfully installed Django
     Cleaning up...
 
@@ -156,16 +147,7 @@ We want to use a few more Python packages besides Django.  We'll plan to use `We
     Downloading/unpacking Django==1.6.2
       Downloading Django-1.6.2.tar.gz (6.6MB): 6.6MB downloaded
       Running setup.py egg_info for package Django
-
-        warning: no previously-included files matching '__pycache__' found under directory '*'
-        warning: no previously-included files matching '*.py[co]' found under directory '*'
-    Installing collected packages: Django
-      Running setup.py install for Django
-        changing mode of build/scripts-2.7/django-admin.py from 644 to 755
-
-        warning: no previously-included files matching '__pycache__' found under directory '*'
-        warning: no previously-included files matching '*.py[co]' found under directory '*'
-        changing mode of /home/trey/.virtualenvs/tdd_workshop/bin/django-admin.py to 755
+    ...
     Successfully installed Django
     Cleaning up...
 
