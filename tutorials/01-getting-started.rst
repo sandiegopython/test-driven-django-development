@@ -27,11 +27,7 @@ You should also have `pip`_ installed on your machine, along with the `requireme
    start with ``$`` in this workshop. Don't type the leading ``$`` though.
 
 Running the next command will show the version of Django you have installed.
-For this workshop, a 1.6.x version is required. If instead you see a
-"No module named django" message, please follow the Django
-`installation instructions`_.
-
-.. _installation instructions: https://docs.djangoproject.com/en/1.6/topics/install/
+You should have Django 1.6.X installed.
 
 .. code-block:: bash
 
