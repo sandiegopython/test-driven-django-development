@@ -92,7 +92,7 @@ HTML Coverage Report
 
 Our current command-line coverage reports are useful, but they aren't very detailed.  Fortunately coverage includes a feature for generating HTML coverage reports that visually demonstrate coverage by coloring our code based on the results.
 
-Let's can prettify the coverage report above into HTML format by running the following command:
+Let's prettify the coverage report above into HTML format by running the following command:
 
 .. code-block:: bash
 
