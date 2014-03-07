@@ -5,9 +5,9 @@ The Testing Game
 Test Coverage
 -------------
 
-It's important to test all your code. Code coverage is frequently used as a measuring stick for quality tests. Code coverage allows you to make sure that every line of code is executed. The basic idea behind code coverage is that if your tests are comprehensive, all of your code should be executed.
+It's important to test all your code. Code coverage is frequently used as a measuring stick for a developer's success in creating quality tests. The basic rule of thumb is comprehensive tests should execute every line of code.
 
-To measure our code coverage we will use `Coverage`_, a tool that measures code coverage for Python code.
+`Coverage`_, a tool that measures code coverage for Python code, will be used to check what percentage of the tutorial code is being tested.
 
 Intalling Coverage
 ------------------
@@ -44,7 +44,7 @@ Now let's add ``coverage`` to our ``requirements.txt`` file::
 Using Coverage
 --------------
 
-Now let's run our tests. As we run our tests, coverage records and creates a coverage report:
+Now let's run our tests. As we run our tests from the command line, ``coverage`` records and creates a coverage report:
 
 .. code-block:: bash
 
@@ -80,11 +80,11 @@ Let's take a look at our code coverage report:
     TOTAL               196      0   100%
 
 
-TODO: explain what this means.
+Let's take a look at the coverage report. On the left, the report shows the name of Django application directory and file being tested. Stmts, or code statements, indicate the number of lines of code that could be tested. Miss, or Missed lines, indicates the number of lines that are not executed by the unit tests. Cover, or Coverage, is the percentage of code covered by the current tests ((Stmts - Miss)/Stmts). For example, ``myblog/views`` has 6 code statements that can be tested. We see that our tests did not miss testing any statements for a Code Coverage of 100%.
 
 .. IMPORTANT::
 
-    Note that code coverage can only indicate that you've forgotten tests; it will not tell you whether your tests are good.  Don't use good code coverage as an excuse to write less tests.
+    Note that code coverage can only indicate that you've forgotten tests; it will not tell you whether your tests are good.  Don't use good code coverage as an excuse to write lower quality tests.
 
 
 HTML Coverage Report
