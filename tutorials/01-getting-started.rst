@@ -7,7 +7,7 @@ Verifying setup
 Before we get started, let's just make sure that Python and Django are
 installed correctly and are the appropriate versions.
 
-Running the following command in the MacOS or Linux terminal or in the
+Running the following command in the Mac OS or Linux terminal or in the
 Windows command prompt should show the version of Python. For this workshop
 you should have a 2.6.x or 2.7.x version of Python.
 
@@ -72,7 +72,7 @@ file used to manage a number of aspects of your Django application such as
 creating the database and running the development web server. Two other key
 files we just created are ``myblog/settings.py`` which contains
 configuration information for the application such as how to connect to the
-database and ``myblog/urls.py`` which maps URLs called by a web broser
+database and ``myblog/urls.py`` which maps URLs called by a web browser
 to the appropriate Python code.
 
 
@@ -169,7 +169,7 @@ We want to use a few more Python packages besides Django.  We'll plan to use `We
     Successfully installed Django
     Cleaning up...
 
-We don't want to manually install our dependencies every time.  Let's create a `requirements file`_ listing our dependiences so we don't have to type them all out every time we setup our website on a new computer or anytime a package version updates.
+We don't want to manually install our dependencies every time.  Let's create a `requirements file`_ listing our dependencies so we don't have to type them all out every time we setup our website on a new computer or anytime a package version updates.
 
 First let's use `pip freeze`_ to list our dependencies and their versions:
 
