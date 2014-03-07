@@ -149,7 +149,7 @@ Let's add a ``.coveragerc`` file to our project that looks like this::
 
 Now we can run coverage without any extra arguments:
 
-.. code-block::
+.. code-block:: bash
 
     $ coverage run manage.py test blog
 
@@ -159,7 +159,7 @@ Inspecting Missing Coverage
 
 Now let's figure out why our branch coverage is not 100%.  First we need to regenerate the HTML coverage report and have a look at it:
 
-.. code-block::
+.. code-block:: bash
 
     $ coverage html
 
