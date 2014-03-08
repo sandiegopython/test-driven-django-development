@@ -59,6 +59,7 @@ Contents
    03-views
    04-more-views
    05-forms
+   07-gravatars
 
 Getting Help & Contributing
 ---------------------------
