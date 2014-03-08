@@ -59,10 +59,7 @@ Contents
    03-views
    04-more-views
    05-forms
-<<<<<<< HEAD
    06-the-testing-game
-   07-gravatars
-=======
 
 Getting Help & Contributing
 ---------------------------
@@ -73,4 +70,3 @@ If you found a bug or have a suggestion to improve or extend the tutorials,
 please open an issue or a pull request.
 
 These tutorials are provided under a Creative Commons license (CC BY-SA 3.0).
->>>>>>> aefbee8... Link to Github from ReadTheDocs
