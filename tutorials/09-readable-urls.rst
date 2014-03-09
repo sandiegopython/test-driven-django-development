@@ -39,7 +39,7 @@ URL Pattern
 
 Next we are going to change our ``myblog/blog/urls.py`` file as we had defined previously. Replace your code with this:
 
-.. code-block::python
+.. code-block:: python
 
     from django.conf.urls import patterns, url
     urlpatterns = patterns('blog.views',
@@ -71,7 +71,7 @@ The first step is to create a ``datetime.date`` object from the year, month, and
 Then we will create a new entry from the date and the slug, and search for the blog post. If the blog post exists, then
 we will return the post. Otherwise, we will return an HTTP 404 error. Here's the code:
 
-.. code-block::python
+.. code-block:: python
 
     def get_entry(self):
         entry_date = datetime.date(int(self.kwargs['year']),int(self.kwargs['month']),int(self.kwargs['day']))
@@ -93,13 +93,13 @@ Model
 In the file ``myblog/blog/models.py``, we will need to automatically create or update the slug of the post after saving the post.
 So the first thing is to update the save function. We import the slugify method at the top of the file:
 
-.. code-block::python
+.. code-block:: python
 
     from django.template.defaultfilters import slugify
 
 Next, create a save method that slugifies the title upon saving:
 
-.. code-block::python
+.. code-block:: python
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
