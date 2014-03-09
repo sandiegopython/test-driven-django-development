@@ -58,6 +58,49 @@ look for alphanumeric characters or a dash/hyphen (-).
 As you can see from the last part of the pattern, we are opening the method ``entry_detail``, which we will also have to 
 update.
 
+
+
+Next, let's update our Model to handle the new slug field.
+
+Model
+======
+
+In the file ``myblog/blog/models.py``, we will need to automatically create or update the slug of the post after saving the post.
+So the first thing is to add the slug field to our Entry model. Add this after the ``modified_at`` declaration:
+
+.. code-block:: python
+    slug = models.SlugField()
+
+
+Next, we update the save function. We import the slugify method at the top of the file:
+
+.. code-block:: python
+
+    from django.template.defaultfilters import slugify
+
+Create a save method in our Entry model that slugifies the title upon saving:
+
+.. code-block:: python
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Entry, self).save(*args, **kwargs)
+
+
+After this, we will update our ``get_absolute_url()`` method to do a reverse of the new URL using our new year, month, day,
+and slug parameters:
+
+.. code-block:: python
+
+    def get_absolute_url(self):
+        kwargs = {'year': self.created_at.year,
+                'month': self.created_at.month,
+                'day': self.created_at.day,
+                'slug': self.slug}
+        return reverse('blog.views.entry_detail', kwargs=kwargs)
+        
+    
+
 Save the file, and open up your ``myblog/blog/views.py``
 
 Update View
@@ -84,36 +127,10 @@ we will return the post. Otherwise, we will return an HTTP 404 error. Here's the
             raise Http404
 
 
-
-After updating this, the last part is to update the model get_absolute_url() to be able to find the new URL.
-
-Model
-======
-
-In the file ``myblog/blog/models.py``, we will need to automatically create or update the slug of the post after saving the post.
-So the first thing is to update the save function. We import the slugify method at the top of the file:
-
-.. code-block:: python
-
-    from django.template.defaultfilters import slugify
-
-Next, create a save method that slugifies the title upon saving:
-
-.. code-block:: python
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        super(Entry, self).save(*args, **kwargs)
+Now save the file.
 
 
-After this, we will update our ``get_absolute_url()`` method to do a reverse of the new URL using our new year, month, day,
-and slug parameters:
+Before we run the tests again, we have to run South to migrate the database, since we have changed the model. Run the 
+command to migrate your database: ``python manage.py migrate``
 
-.. code-block::python
-
-    def get_absolute_url(self):
-        kwargs = {'year': self.created_at.year,
-                'month': self.created_at.month,
-                'day': self.created_at.day,
-                'slug': self.slug}
-        return reverse('blog.views.entry_detail', kwargs=kwargs)
+Try running the tests again. You should see all of the tests passing.
