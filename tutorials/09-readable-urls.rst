@@ -64,6 +64,56 @@ Update View
 ===========
 
 In the views.py, we have to update our code to be able to handle the new parameters we are capturing in the URL pattern.
-We will be using these captured parameters to find the right blog post model.
+We will be using these captured parameters to find the right blog post model. We will be replacing the code for the method ``get_entry``.
+Instead of using the Entry ID, we will be using the date (year, month, and day) and slug to identify the post. 
+
+The first step is to create a ``datetime.date`` object from the year, month, and day values captured from the URL. 
+Then we will create a new entry from the date and the slug, and search for the blog post. If the blog post exists, then
+we will return the post. Otherwise, we will return an HTTP 404 error. Here's the code:
+
+.. code-block::python
+
+    def get_entry(self):
+        entry_date = datetime.date(int(self.kwargs['year']),int(self.kwargs['month']),int(self.kwargs['day']))
+        try:
+            current_entry = Entry.objects.filter(
+                created_at__contains=entry_date,
+                slug=self.kwargs['slug'])
+            return current_entry[0]
+        except Poll.DoesNotExist:
+            raise Http404
 
 
+
+After updating this, the last part is to update the model get_absolute_url() to be able to find the new URL.
+
+Model
+======
+
+In the file ``myblog/blog/models.py``, we will need to automatically create or update the slug of the post after saving the post.
+So the first thing is to update the save function. We import the slugify method at the top of the file:
+
+.. code-block::python
+
+    from django.template.defaultfilters import slugify
+
+Next, create a save method that slugifies the title upon saving:
+
+.. code-block::python
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Entry, self).save(*args, **kwargs)
+
+
+After this, we will update our ``get_absolute_url()`` method to do a reverse of the new URL using our new year, month, day,
+and slug parameters:
+
+.. code-block::python
+
+    def get_absolute_url(self):
+        kwargs = {'year': self.created_at.year,
+                'month': self.created_at.month,
+                'day': self.created_at.day,
+                'slug': self.slug}
+        return reverse('blog.views.entry_detail', kwargs=kwargs)
