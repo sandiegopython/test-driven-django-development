@@ -107,7 +107,7 @@ Now let's add a basic test to our ``blog/tests.py`` file:
 
         def setUp(self):
             user = get_user_model().objects.create(username='zoidberg')
-            self.entry = Entry.objects.create(author=user, title="My entry title")
+            Entry.objects.create(self.author=user, title="My entry title")
 
         def test_entry_shows_up(self):
             rendered = self.TEMPLATE.render(Context({}))
@@ -147,12 +147,12 @@ Let's make our template tag actually display entry history.  First we will impor
 
 TODO: Add aside explaining ``..`` syntax
 
-Now let's send the last 10 entries in our sidebar:
+Now let's send the last 5 entries in our sidebar:
 
 .. code-block:: python
 
     def entry_history():
-        entries = Entry.objects.all()[:10]
+        entries = Entry.objects.all()[:5]
         return {'entries': entries}
 
 Now we need to update our ``_entry_history.html`` file to display the titles of these blog entries:
@@ -170,37 +170,41 @@ Let's run our tests again and make sure they all pass.
 Making it a bit more robust
 ---------------------------
 
-So we can render some blog posts, but there's no real feedback for empty posts, and we're not really testing what
-happens when we've got a LOT (or >10) of posts in the DB. A ``{% for %}`` loop allows us to define a ``{% empty %}`` tag,
-which you can see in the docs on `for loops`_. Let's add that to the ``entry_history.html`` and write a quick test for it.
-Our new tests should look something like.
+What happens if we don't have any blog entries yet?  The sidebar might look a little strange without some text indicating that there aren't any blog entries yet.
+
+Let's add a test for when there are no blog posts:
 
 .. code-block:: python
 
     def test_no_posts(self):
-        context = Context({})
-        rendered = self.TEMPLATE.render(context)
-        assert "No posts" in rendered
+        rendered = self.TEMPLATE.render(Context({}))
+        self.assertContains(rendered, "No recent entries")
 
+The above test is for an edge case.  Let's add a test for another edge case: when there are more than 5 recent blog entries.  When there are 6 posts, only the last 5 should be displayed.  Let's add a test for this case also:
+
+.. code-block:: python
 
     def test_many_posts(self):
-        for idx in range(12):
-            last_post = Post.objects.create(author=self.user, title="My post title {}".format(idx))
-        context = Context({})
-        rendered = self.TEMPLATE.render(context)
-        assert last_post.title not in rendered
+        for n in range(6):
+            Entry.objects.create(author=self.user, title="Post #{0}".format(n))
+        rendered = self.TEMPLATE.render(Context({}))
+        self.assertContains(rendered, "Post #5")
+        self.assertNotContains(rendered, "Post #6")
 
-The tests themselves have a small problem, ``self.user`` does not exist! A quick change to our ``setUp()`` method should fix
-that
+TODO: Run tests and show that 1 fails
+
+The ``{% for %}`` template tag allows us to define an ``{% empty %}`` tag which we will be displayed when there are no blog entries (see `for loops`_ documentation).
+
+Update the ``_entry_history.html`` template to utilize the ``{% empty %}`` tag and make sure the tests pass.
 
 .. code-block:: python
 
 
     def setUp(self):
         self.user = get_user_model().objects.create(username='zoidberg')
-        self.post = Post.objects.create(author=self.user, title="My post title")
+        self.entry = Entry.objects.create(author=self.user, title="My entry title")
 
-With that we once again have our failing tests. Try to fix them without looking at our solution code first!
+It looks like we still have a problem because our tests still fail now.  Try to fix the bug on your own and don't be afraid to ask for help.
 
 
 .. _custom template tag: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-tags
