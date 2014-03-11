@@ -103,54 +103,6 @@ database through a web interface which regular website visitors are not
 allowed to use. On a blog, this would be where the author writes new blog
 entries.
 
-<<<<<<< HEAD
-=======
-We need to add ``'django.contrib.admin'`` to ``INSTALLED_APPS`` in our
-settings file (``myblog/settings.py``).  Afterward it should look something
-like this:
-
-.. code-block:: python
-
-    INSTALLED_APPS = (
-        'django.contrib.auth',
-        'django.contrib.contenttypes',
-        'django.contrib.sessions',
-        'django.contrib.sites',
-        'django.contrib.messages',
-        'django.contrib.staticfiles',
-        'django.contrib.admin',        # we just added this
-    )
-
-After adding the admin to our installed apps we need to have Django create
-the database tables for admin:
-
-.. code-block:: bash
-
-    $ python manage.py syncdb
-
-We also need to enable admin URLs and enable auto-discovery of
-``admin.py`` files in our apps. We will create one of these ``admin.py`` files
-later to expose our blog entry model and comment model to the admin interface.
-To enable auto-discovery, we need to uncomment some lines in our project's
-urls file (``myblog/urls.py``). Afterward our urls file should look something
-like this:
-
-.. code-block:: python
-
-    from django.conf.urls import patterns, include, url
-
-    from django.contrib import admin
-    admin.autodiscover()
-
-    urlpatterns = patterns('',
-        url(r'^admin/', include(admin.site.urls)),
-    )
-
-
-Checking our progress
----------------------
-
->>>>>>> 0647e8c... Rename Post model to Entry
 Let's check our progress by running the Django test server and visiting the
 admin site.
 
