@@ -49,80 +49,53 @@ We should now have something like this::
     │   ├── urls.py
     │   └── views.py
 
-#TODO: Need to also create the templates/blog/templatetags/entry_history.html, and probably move this section down
-
-Why ``blog_tags.py``? Because in each template we want to use it we include it
-by saying ``{% load blog_tags %}`` Naming the tag library with the name of the
-app it comes from as the prefix makes it clearer where things are coming from
-in your templates later.
-
 
 Creating an inclusion tag
 -------------------------
 
-Also `documented`_ in Django's docs, this allow us to just write a simple function that returns a context for the
-included template. To start let's just have an empty context and a template that puts some dummy text on the page
+Let's create an `inclusion tag`_ to query for recent blog entries and render a list
+of them.  We'll name our template tag ``entry_history``.  To start we'll render a ``blog/_entry_history.html`` template.
 
+Let's start by rendering an empty template with an empty template context dictionary.  First let's create a ``templates/blog/_entry_history.html`` file with some dummy text:
+
+.. code-block:: html
+
+    <p>Dummy text.</p>
+
+Now we'll create our ``blog/templatetags/blog_tags.py`` module with our ``entry_history`` template tag:
 
 .. code-block:: python
 
-    # in blog/templatetags/blog_tags.py
     from django import template
 
     register = template.Library()
 
-    @register.inclusion_tag('blog/templatetags/entry_history.html')
+    @register.inclusion_tag('blog/_entry_history.html')
     def entry_history():
         return {}
 
-That entry_history.html file, and directory we'll need to create that too. Our directory tree should look something like
-this (note only the templates directory is expanded)
+Let's use our tag in our base template file. In our ``base.html`` file, import our new template library by adding the line
+``{% load blog_tags %}`` near the top of the file.
 
-::
-
-    ├── blog
-    ├── manage.py
-    ├── myblog
-    ├── requirements.txt
-    ├── static
-    └── templates
-        ├── _post.html
-        ├── base.html
-        ├── blog
-        │   ├── post_detail.html
-        │   └── templatetags
-        │       └── entry_history.html
-        └── index.html
-
-So our entry_history.html file can have some dummy text in there, because we just want to make sure it works visually
-first. Let's edit the base.html file and put our tag in there. After the `{% load staticfiles %}` tag, put another `{%
-load blog_tags %}` and then add the following after About Me
+Then modify our second column to use our ``entry_history`` template tag:
 
 .. code-block:: html
 
-    {% load staticfiles %}
-    {% load blog_tags %}
+    <div class="large-4 columns">
+        <h3>About Me</h3>
+        <p>I am a Python developer and I like Django.</p>
+        <h3>Previous Posts</h3>
+        {% entry_history %}
+    </div>
 
+Reload the homepage and make sure our dummy text appears.
 
-            <div class="large-4 columns">
-                <h3>About Me</h3>
-                <p>I am a Python developer and I like Django.</p>
-
-                <h3>Previous Posts</h3>
-                {% entry_history %}
-            </div>
-
-        </section>
-
-Reloading the home page should have the dummy text we put in entry_history.html show up.
-
-.. _documented:: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#inclusion-tags
 
 Make it work
 ------------
 
-So our inclusion tag skeleton code is there, but we have no test for this. At the top of `blog/test.py` we need to add
-`from django.template import Template, Context` and then at the bottom of the file we'll have
+So our inclusion tag skeleton code is there, but we have no test for this. At the top of ``blog/test.py`` we need to add
+``from django.template import Template, Context`` and then at the bottom of the file we'll have
 
 .. code-block:: python
 
@@ -139,8 +112,8 @@ So our inclusion tag skeleton code is there, but we have no test for this. At th
             assert self.post.title in rendered
 
 
-The tricky bits here are `TEMPLATE`, `Context({})` and that `render()` call. These should all look somewhat familiar
-from the `django tutuorial part 3`_. `Context({})` in this case just passes no data to a `Template` that we're
+The tricky bits here are ``TEMPLATE``, ``Context({})`` and that ``render()`` call. These should all look somewhat familiar
+from the `django tutorial part 3`_. ``Context({})`` in this case just passes no data to a ``Template`` that we're
 rendering directly in memory. That last assert just checks that the title of the post is in the text.
 
 Run the tests and we get
@@ -163,7 +136,7 @@ Run the tests and we get
     Destroying test database for alias 'default'...
 
 The next step then is to send a list of posts to that template tag for rendering.
-In `blog_tags.py` we need to `from ..models import Post` with our other imports and then we'll modify `entry_history`
+In ``blog_tags.py`` we need to ``from ..models import Post`` with our other imports and then we'll modify ``entry_history``
 
 .. code-block:: python
 
@@ -171,7 +144,7 @@ In `blog_tags.py` we need to `from ..models import Post` with our other imports 
         posts = Post.objects.all()[:10]  # Don't flood that sidebar
         return {'posts': posts}
 
-Then it's a matter of updating the `entry_history.html` file to display the post titles of those posts. Something like
+Then it's a matter of updating the ``entry_history.html`` file to display the post titles of those posts. Something like
 this should work
 
 .. code-block:: html
@@ -189,8 +162,8 @@ Making it a bit more robust
 ---------------------------
 
 So we can render some blog posts, but there's no real feedback for empty posts, and we're not really testing what
-happens when we've got a LOT (or >10) of posts in the DB. A `{% for %}` loop allows us to define a `{% empty %}` tag,
-which you can see in the docs on `for loops`_. Let's add that to the `entry_history.html` and write a quick test for it.
+happens when we've got a LOT (or >10) of posts in the DB. A ``{% for %}`` loop allows us to define a ``{% empty %}`` tag,
+which you can see in the docs on `for loops`_. Let's add that to the ``entry_history.html`` and write a quick test for it.
 Our new tests should look something like.
 
 .. code-block:: python
@@ -208,7 +181,7 @@ Our new tests should look something like.
         rendered = self.TEMPLATE.render(context)
         assert last_post.title not in rendered
 
-The tests themselves have a small problem, `self.user` does not exist! A quick change to our `setUp()` method should fix
+The tests themselves have a small problem, ``self.user`` does not exist! A quick change to our ``setUp()`` method should fix
 that
 
 .. code-block:: python
@@ -224,3 +197,4 @@ With that we once again have our failing tests. Try to fix them without looking 
 .. _custom template tag: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-tags
 .. _for loops: https://docs.djangoproject.com/en/dev/ref/templates/builtins/#for-empty
 .. _template documentation: https://docs.djangoproject.com/en/1.6/ref/templates/api/
+.. _inclusion tag: https://docs.djangoproject.com/en/1.6/howto/custom-template-tags/#howto-custom-template-tags-inclusion-tags
