@@ -204,7 +204,7 @@ This file will allow us to install all Python dependencies at once with just one
         $ deactivate
         $ source venv/bin/activate  # or whatever your original virtualenv was
 
-
+.. _official documentation: https://docs.djangoproject.com/en/1.6/intro/tutorial01/#the-development-server
 .. _WebTest: http://webtest.readthedocs.org/en/latest/
 .. _django-webtest: https://pypi.python.org/pypi/django-webtest/
 .. _pip: http://www.pip-installer.org/en/latest/installing.html

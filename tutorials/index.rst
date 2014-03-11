@@ -59,6 +59,7 @@ Contents
    03-views
    04-more-views
    05-forms
+   06-the-testing-game
 
 Getting Help & Contributing
 ---------------------------
