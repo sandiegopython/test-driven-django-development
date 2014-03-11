@@ -171,7 +171,7 @@ Let's click on ``manage`` to see why our manage.py file has 88% coverage:
 
 We're missing the ``False`` case for that ``if`` statement in our ``manage.py`` file.  We always run ``manage.py`` from the command line so that code is always executed.
 
-We don't intend to ever test that missing branch, so let's ignore the issue.
+We don't intend to ever test that missing branch, so let's ignore the issue and accept our imperfect coverage statistics.
 
 .. TIP::
 
