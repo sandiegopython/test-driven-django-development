@@ -87,8 +87,8 @@ admin interface which we'll get to shortly:
 
     You just installed Django s auth system, which means you don t have any superusers defined.
     Would you like to create one now? (yes/no): yes
-    Username (leave blank to use 'alain'): 
-    Email address: alaindomissy@gmail.com
+    Username (leave blank to use 'zoidberg'):
+    Email address: zoidberg@example.com
     Password: ***
     Password (again): ***
     Superuser created successfully.
