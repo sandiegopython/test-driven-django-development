@@ -3,93 +3,117 @@ Custom template tags
 
 Let's make our blog list recent entries in the sidebar.
 
-How are we going to do this?  We could loop through blog entries in our
+How are we going to do this?  We can loop through blog entries in our
 ``base.html`` template, but that means we would need to include a list of our
-recent blog entries in the template context for all of our views.  That could
-result in duplicate code and we don't like duplicate code.
+recent blog entries in the template context for all of our views.  If
+we were to update the context in each view, that would result in
+duplicate code, and we don't like duplicate code.
 
 .. TIP::
 
     If you didn't fully understand the last paragraph, that's okay.  You might
     want to read through the Django `template documentation`_ again later.
 
-To avoid duplicate code, let's create a `custom template tag`_ to help us
-display recent blog entries in the sidebar on every page.
+To avoid duplicate code, let's create a `context processor`_ to help us
+add recent blog posts to the context of each view.
 
 .. NOTE::
-  A custom template tag that itself fires a SQL query means that our HTML
-  templates can add more SQL queries to our view. That hides some behavor It's too early at this point,
-  but that query should be cached if we expect to use this often.
+  Context processors add context to *every* view. Usually they are not
+  the right answer, but we are building a blog and will usually need
+  these posts available. The extra context may also introduce extra
+  database queries on each page.
 
 
 Where
 -----
 
-Let's create a template library called ``blog_tags``.  Why ``blog_tags``?
-Because naming our tag library after our app will make our template imports
-more understandable. We can use this template library in our templates by
-writing ``{% load blog_tags %}`` near the top of our template file.
+Template context processors can live anywhere in your code. They are
+simple functions that accept a request object as their only parameter,
+and return dictionary-like objects that are added to the context. We
+will put ours in a shiny new ``context_processors`` module.
 
-Create a ``templatetags`` directory in our ``blog`` app and create two empty
-Python files within this directory: ``blog_tags.py`` (which will hold our
-template library code) and ``__init__.py`` (to make this directory into a Python
-package).
+Create a ``context_processors.py`` python file in our ``blog`` app.
 
 We should now have something like this::
 
     ├── blog
     │   ├── __init__.py
     │   ├── admin.py
+    │   ├── context_processors.py
     │   ├── forms.py
     │   ├── models.py
-    │   ├── templatetags
-    │   │   ├── __init__.py
-    │   │   └── blog_tags.py
     │   ├── tests.py
     │   ├── urls.py
     │   └── views.py
 
 
-Creating an inclusion tag
--------------------------
+Creating a context processor
+----------------------------
 
-Let's create an `inclusion tag`_ to query for recent blog entries and render a list
-of them.  We'll name our template tag ``entry_history``.  To start we'll render a ``blog/_entry_history.html`` template.
-
-Let's start by rendering an empty template with an empty template context dictionary.  First let's create a ``templates/blog/_entry_history.html`` file with some dummy text:
-
-.. code-block:: html
-
-    <p>Dummy text.</p>
-
-Now we'll create our ``blog/templatetags/blog_tags.py`` module with our ``entry_history`` template tag:
+Now we'll write our ``blog/templatetags/context_processors.py`` module
+with our ``prev_posts`` context processor:
 
 .. code-block:: python
 
-    from django import template
+    from . import models
 
-    register = template.Library()
 
-    @register.inclusion_tag('blog/_entry_history.html')
-    def entry_history():
-        return {}
+    def prev_posts(request):
+        return {'prev_posts': models.Post.objects.all()[:20]}
 
-Let's use our tag in our base template file. In our ``base.html`` file, import our new template library by adding the line
-``{% load blog_tags %}`` near the top of the file.
 
-Then modify our second column to use our ``entry_history`` template tag:
+.. NOTE::
+  It is always good to have sane limits, especially when dealing with
+  querysets. You will see later it is easy enough to limit the number
+  of posts in the template, but adding ``[:20]`` gives us the insurance
+  that this feature at maximum will only slow us down enough to grab 20
+  previous blog posts.
+
+
+Updating the site settings
+--------------------------
+
+Just writing the context processor isn't enough, we need to add it to
+the list of context processors our site uses to populate the context of
+each template render.
+
+By default Django is already using a defined tuple of context
+preprocessors defined as ``TEMPLATE_CONTEXT_PROCESSORS`` in the site
+settings. All we need to do is add our context preprocessor to that
+list. Add the following lines to your ``myblog/settings.py settings``
+file.
+
+.. code-block:: python
+
+    from django.conf import global_settings
+
+
+    TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+        "blog.context_processors.prev_posts",
+    )
+
+Let's use our new context variable in our base template file. In our
+``base.html`` file, add the following template markup to add a list of
+post titles in the sidebar.
 
 .. code-block:: html
 
     <div class="large-4 columns">
         <h3>About Me</h3>
         <p>I am a Python developer and I like Django.</p>
-        <h3>Previous Entries</h3>
-        {% entry_history %}
+        <h3>Previous Posts</h3>
+        <ul>
+        {% for entry in prev_posts|slice:":5" %}
+            <li>{{ entry.title }}</li>
+        {% endfor %}
+        </ul>
     </div>
 
 Reload the homepage and make sure our dummy text appears.
 
+.. NOTE::
+  ``slice`` is a builtin `template filter`_ included with Django that
+  allows us to slice iterable variables in the template markup.
 
 Make it work
 ------------
@@ -207,7 +231,8 @@ Update the ``_entry_history.html`` template to utilize the ``{% empty %}`` tag a
 It looks like we still have a problem because our tests still fail now.  Try to fix the bug on your own and don't be afraid to ask for help.
 
 
-.. _custom template tag: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-tags
+.. _context processor: https://docs.djangoproject.com/en/1.6/ref/templates/api/#writing-your-own-context-processors
+.. _template filter: https://docs.djangoproject.com/en/1.6/ref/templates/builtins/#built-in-filter-reference
 .. _for loops: https://docs.djangoproject.com/en/dev/ref/templates/builtins/#for-empty
 .. _template documentation: https://docs.djangoproject.com/en/1.6/ref/templates/api/
 .. _inclusion tag: https://docs.djangoproject.com/en/1.6/howto/custom-template-tags/#howto-custom-template-tags-inclusion-tags
