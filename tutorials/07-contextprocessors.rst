@@ -1,5 +1,5 @@
-Custom template tags
-====================
+Custom template context processors
+==================================
 
 Let's make our blog list recent entries in the sidebar.
 
