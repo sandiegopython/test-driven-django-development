@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% load blog_tags %}
 
 <!DOCTYPE html>
 <html>
@@ -25,7 +24,11 @@
             <h3>About Me</h3>
             <p>I am a Python developer and I like Django.</p>
             <h3>Previous Posts</h3>
-            {% entry_history %}
+            <ul>
+            {% for entry in prev_posts|slice:":5" %}
+                <li>{{ entry.title }}</li>
+            {% endfor %}
+            </ul>
         </div>
 
     </section>

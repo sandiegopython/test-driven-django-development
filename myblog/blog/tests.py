@@ -1,9 +1,10 @@
-from django.template import Template, Context
+from django import http
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django_webtest import WebTest
 from .models import Post, Comment
 from .forms import CommentForm
+from . import context_processors
 
 
 class PostModelTest(TestCase):
@@ -130,27 +131,24 @@ class CommentFormTest(TestCase):
             'body': ['This field is required.'],
         })
 
-class PreviousPostTagTest(TestCase):
-    TEMPLATE = Template("{% load blog_tags %} {% entry_history %}")
+class PreviousPostContextTest(TestCase):
 
     def setUp(self):
         self.user = get_user_model().objects.create(username='zoidberg')
-        self.post = Post.objects.create(author=self.user, title="My post title")
+        self.request = http.HttpRequest()
 
     def test_no_posts(self):
-        context = Context({})
-        rendered = self.TEMPLATE.render(context)
-        assert "No posts" in rendered
-
-    def test_many_posts(self):
-        for idx in range(12):
-            last_post = Post.objects.create(author=user, title="My post title {}".format(idx))
-        context = Context({})
-        rendered = self.TEMPLATE.render(context)
-        assert last_post.title not in rendered
+        posts = context_processors.prev_posts(self.request)['prev_posts']
+        assert len(posts) == 0, len(posts)
 
     def test_post_shows_up(self):
-        context = Context({})
-        rendered = self.TEMPLATE.render(context)
-        assert self.post.title in rendered
+        post = Post.objects.create(author=self.user, title="My post title")
+        posts = context_processors.prev_posts(self.request)['prev_posts']
+        assert post in posts
+
+    def test_many_posts(self):
+        for idx in range(21):
+            last_post = Post.objects.create(author=self.user, title="My post title {}".format(idx))
+        posts = context_processors.prev_posts(self.request)['prev_posts']
+        assert last_post not in posts
 

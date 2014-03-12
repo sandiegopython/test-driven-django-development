@@ -1,5 +1,6 @@
 # Django settings for myblog project.
 import os
+from django.conf import global_settings
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 DEBUG = True
@@ -119,6 +120,10 @@ INSTALLED_APPS = (
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+
+TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+    "blog.context_processors.prev_posts",
+)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
