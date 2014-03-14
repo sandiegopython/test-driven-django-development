@@ -148,7 +148,9 @@ Let's make our template tag actually display entry history.  First we will impor
 
     from ..models import Entry
 
-TODO: Add aside explaining ``..`` syntax
+.. NOTE::
+
+    For more information on the ``..`` syntax for imports see the Python documentation on `relative imports`_.
 
 Now let's send the last 5 entries in our sidebar:
 
@@ -216,3 +218,4 @@ It looks like we still have a problem because our tests still fail now.  Try to 
 .. _template documentation: https://docs.djangoproject.com/en/1.6/ref/templates/api/
 .. _inclusion tag: https://docs.djangoproject.com/en/1.6/howto/custom-template-tags/#howto-custom-template-tags-inclusion-tags
 .. _django tutorial part 3: https://docs.djangoproject.com/en/1.6/intro/tutorial03/#write-views-that-actually-do-something
+.. _relative imports: http://docs.python.org/2/tutorial/modules.html#intra-package-references
