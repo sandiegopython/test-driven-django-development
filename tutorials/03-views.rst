@@ -636,7 +636,7 @@ Now our tests should pass again:
 .. _test client: https://docs.djangoproject.com/en/1.6/topics/testing/tools/#module-django.test.client
 .. _zurb foundation files: http://foundation.zurb.com/
 .. _grid documentation: http://foundation.zurb.com/docs/components/grid.html
-.. _direct link: http://foundation.zurb.com/files/foundation-4.3.2.zip
+.. _direct link: http://foundation.zurb.com/cdn/releases/foundation-5.2.1.zip
 .. _static files: https://docs.djangoproject.com/en/1.6/ref/contrib/staticfiles/
 .. _hypertext transfer protocol: http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
 .. _status codes: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
