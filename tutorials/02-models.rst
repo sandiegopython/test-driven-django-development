@@ -104,7 +104,7 @@ Creating entries from the admin site
 
 We don't want to manually add entries to the database every time we want to update our blog.  It would be nice if we could use a login-secured webpage to create blog entries.  Fortunately Django's admin interface can do just that.
 
-In order to create blog entries from the `admin interface`_ we need to register our ``Entry`` model with the admin site.  We can do this by creating a new ``blog/admin.py`` file with the following code:
+In order to create blog entries from the `admin interface`_ we need to register our ``Entry`` model with the admin site.  We can do this by modifying our ``blog/admin.py`` file to register the ``Entry`` model with the admin interface:
 
 .. _admin interface: https://docs.djangoproject.com/en/1.6/ref/contrib/admin/
 
