@@ -10,8 +10,10 @@ result in duplicate code and we don't like duplicate code.
 
 .. TIP::
 
-    If you didn't fully understand the last paragraph, that's okay.  You might
-    want to read through the Django `template documentation`_ again later.
+    If you didn't fully understand the last paragraph, that's okay. `DRY`_ or
+    "Don't Repeat Yourself" is a rule of thumb for good programming practice.
+    You might want to read through the Django `template documentation`_ again
+    later.
 
 To avoid duplicate code, let's create a `custom template tag`_ to help us
 display recent blog entries in the sidebar on every page.
@@ -208,6 +210,7 @@ It looks like we still have a problem because our tests still fail now.  Try to 
 
 
 .. _custom template tag: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-tags
+.. _dry: http://programmer.97things.oreilly.com/wiki/index.php/Don%27t_Repeat_Yourself
 .. _for loops: https://docs.djangoproject.com/en/dev/ref/templates/builtins/#for-empty
 .. _template documentation: https://docs.djangoproject.com/en/1.6/ref/templates/api/
 .. _inclusion tag: https://docs.djangoproject.com/en/1.6/howto/custom-template-tags/#howto-custom-template-tags-inclusion-tags
