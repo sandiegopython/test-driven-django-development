@@ -415,7 +415,7 @@ We should add a test for that
 
     def test_no_entries(self):
         response = self.client.get('/')
-        self.assertContains(response, 'No blog entry entries yet.')
+        self.assertContains(response, 'No blog entries yet.')
 
 And that gives us the expected failure
 
@@ -428,7 +428,7 @@ And that gives us the expected failure
     ----------------------------------------------------------------------
     Traceback (most recent call last):
       ...
-    AssertionError: Couldn't find 'No blog entry entries yet' in response
+    AssertionError: Couldn't find 'No blog entries yet' in response
 
     ----------------------------------------------------------------------
     Ran 5 tests in 0.044s
@@ -479,7 +479,7 @@ Now let's change our homepage template (``templates/index.html``) to include the
         {% for entry in entry_list %}
             {% include "_entry.html" with entry=entry only %}
         {% empty %}
-            <p>No blog entry entries yet.</p>
+            <p>No blog entries yet.</p>
         {% endfor %}
     {% endblock content %}
 
