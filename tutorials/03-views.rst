@@ -559,11 +559,11 @@ Let's make the blog entry detail page actually display a blog entry.  First we'l
 
 .. code-block:: python
 
-    def test_blog_title_in_entry(self):
+    def test_title_in_entry(self):
         response = self.client.get(self.entry.get_absolute_url())
         self.assertContains(response, self.entry.title)
 
-    def test_blog_body_in_entry(self):
+    def test_body_in_entry(self):
         response = self.client.get(self.entry.get_absolute_url())
         self.assertContains(response, self.entry.body)
 
@@ -591,13 +591,13 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
     Creating test database for alias 'default'...
     EEE......
     ======================================================================
-    ERROR: test_blog_body_in_entry (blog.tests.EntryViewTest)
+    ERROR: test_body_in_entry (blog.tests.EntryViewTest)
     ----------------------------------------------------------------------
     ...
     TemplateDoesNotExist: blog/entry_detail.html
 
     ======================================================================
-    ERROR: test_blog_title_in_entry (blog.tests.EntryViewTest)
+    ERROR: test_title_in_entry (blog.tests.EntryViewTest)
     ----------------------------------------------------------------------
     ...
     TemplateDoesNotExist: blog/entry_detail.html
