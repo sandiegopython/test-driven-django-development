@@ -1,10 +1,11 @@
 from django import template
 
-from ..models import Post
+from ..models import Entry
 
 register = template.Library()
 
-@register.inclusion_tag('blog/templatetags/entry_history.html')
+
+@register.inclusion_tag('blog/_entry_history.html')
 def entry_history():
-    posts = Post.objects.all()[:10]
-    return {'posts': posts}
+    entries = Entry.objects.all()[:5]
+    return {'entries': entries}
