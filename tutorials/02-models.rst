@@ -15,6 +15,7 @@ Let's create an app for blog entries and related models.  We'll call the app ``b
 
 This command should have created a ``blog`` directory with the following files::
 
+    admin.py
     __init__.py
     models.py
     tests.py
@@ -44,17 +45,19 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
     ::
 
         ├── blog
-        │   ├── __init__.py
-        │   ├── models.py
-        │   ├── tests.py
-        │   └── views.py
+        │   ├── admin.py
+        │   ├── __init__.py
+        │   ├── models.py
+        │   ├── tests.py
+        │   └── views.py
+        ├── db.sqlite3
         ├── manage.py
         ├── myblog
-        │   ├── __init__.py
-        │   ├── settings.py
-        │   ├── urls.py
-        │   └── wsgi.py
-        └── db.sqlite3
+        │   ├── __init__.py
+        │   ├── settings.py
+        │   ├── urls.py
+        │   ├── wsgi.py
+        └── requirements.txt
 
 
 Creating a model
