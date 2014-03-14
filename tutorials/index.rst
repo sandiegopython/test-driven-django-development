@@ -60,6 +60,7 @@ Contents
    04-more-views
    05-forms
    06-the-testing-game
+   07-templatetags
 
 Getting Help & Contributing
 ---------------------------
