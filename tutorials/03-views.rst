@@ -48,7 +48,7 @@ Static files
 
 Create a ``static`` directory in our top-level directory (the one with the ``manage.py`` file).  Copy the ``css`` directory from the foundation archive to this new ``static`` directory.
 
-Now let's add this new ``static`` directory to our ``myblog/settings.py`` file:
+Now let's add this new ``static`` directory definition to the bottom of our ``myblog/settings.py`` file:
 
 .. code-block:: python
 
@@ -84,19 +84,19 @@ Create a ``templates`` directory in our top-level directory. Our directory struc
 .. code-block:: bash
 
         ├── blog
-        │   ├── __init__.py
         │   ├── admin.py
+        │   ├── __init__.py
         │   ├── models.py
         │   ├── tests.py
         │   └── views.py
+        ├── db.sqlite3
         ├── manage.py
         ├── myblog
         │   ├── __init__.py
         │   ├── settings.py
         │   ├── urls.py
-        │   ├── views.py
-        │   └── wsgi.py
-        ├── db.sqlite3
+        │   ├── wsgi.py
+        ├── requirements.txt
         ├── static
         │   └── css
         │       ├── foundation.css
@@ -125,10 +125,13 @@ Create a basic HTML file like this and name it ``templates/index.html``:
     </body>
     </html>
 
-Now let's add this new ``templates`` directory to our ``myblog/settings.py`` file:
+Now inform Django of this new ``templates`` directory by adding this at the bottom of our ``myblog/settings.py`` file:
 
 .. code-block:: python
 
+    # Template files
+    # https://docs.djangoproject.com/en/1.6/topics/templates/
+    
     TEMPLATE_DIRS = (
         os.path.join(BASE_DIR, 'templates'),
     )
