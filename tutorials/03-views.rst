@@ -112,7 +112,7 @@ Create a basic HTML file like this and name it ``templates/index.html``:
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Foundation 4</title>
+        <title>My Blog</title>
         <link rel="stylesheet" href="{% static "css/foundation.css" %}">
     </head>
     <body>
@@ -232,7 +232,7 @@ We'll start with putting our header and a sidebar in ``templates/base.html``:
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Foundation 4</title>
+        <title>My Blog</title>
         <link rel="stylesheet" href="{% static "css/foundation.css" %}">
     </head>
     <body>
