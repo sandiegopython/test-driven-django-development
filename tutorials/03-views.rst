@@ -521,7 +521,7 @@ The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
 
     url(r'^', include('blog.urls')),
 
-Now we need to define a ``entry_detail`` view in our ``blog/views.py`` file:
+Now we need to define an ``entry_detail`` view in our ``blog/views.py`` file:
 
 .. code-block:: python
 
@@ -533,7 +533,7 @@ Now we need to define a ``entry_detail`` view in our ``blog/views.py`` file:
 
 We'll be updating this view later to return something useful.
 
-Finally we need to create the ``get_absolute_url()`` function which should return the entry detail URL for each entries. We should create a test first.  Let's add the following test to our ``EntryModelTest`` class:
+Finally we need to create the ``get_absolute_url()`` function which should return the entry detail URL for each entry. We should create a test first.  Let's add the following test to our ``EntryModelTest`` class:
 
 .. code-block:: python
 
