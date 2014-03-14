@@ -111,6 +111,7 @@ In order to create blog entries from the `admin interface`_ we need to register 
 .. code-block:: python
 
     from django.contrib import admin
+
     from .models import Entry
 
 
@@ -198,6 +199,7 @@ Let's write our test to ensure that a blog entry's unicode representation is equ
 .. code-block:: python
 
     from django.test import TestCase
+
     from .models import Entry
 
 
