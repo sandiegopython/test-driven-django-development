@@ -8,6 +8,55 @@ For this purpose, we're going to use the URL scheme:
 
 Slug is a term coined by the newspaper industry for a unique identifier for a newspaper article. In our case, we'll be using the Django ``django.template.defaultfilters.slugify()`` method to convert our text title into a slugified version. For example, "This Is A Test Title" would be converted to lowercase, and spaces replaced by dashes into "this-is-a-test-title."
 
+
+First, let's update our Model to handle the new slug field.
+
+Model
+======
+
+In the file ``myblog/blog/models.py``, we will need to automatically create or update the slug of the post after saving the post.
+So the first thing is to add the slug field to our Entry model. Add this after the ``modified_at`` declaration:
+
+.. code-block:: python
+    slug = models.SlugField()
+
+
+Next, we update the save function. We import the slugify method at the top of the file:
+
+.. code-block:: python
+
+    from django.template.defaultfilters import slugify
+
+Create a save method in our Entry model that slugifies the title upon saving:
+
+.. code-block:: python
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Entry, self).save(*args, **kwargs)
+
+
+After this, we will update our ``get_absolute_url()`` method to do a reverse of the new URL using our new year, month, day,
+and slug parameters:
+
+.. code-block:: python
+
+    def get_absolute_url(self):
+        kwargs = {'year': self.created_at.year,
+                'month': self.created_at.month,
+                'day': self.created_at.day,
+                'slug': self.slug}
+        return reverse('blog.views.entry_detail', kwargs=kwargs)
+        
+    
+We now have to run South to migrate the database, since we have changed the model. Run the 
+command to migrate your database. First, we create the new migration (assuming you have finished the previous
+tutorial where you created your initial migration):
+``./manage.py schemamigration blog --auto``
+
+Next, we run the new migration that we just created:
+``./manage.py migrate blog``
+
 Write the Test
 ==============
 
@@ -60,46 +109,6 @@ update.
 
 
 
-Next, let's update our Model to handle the new slug field.
-
-Model
-======
-
-In the file ``myblog/blog/models.py``, we will need to automatically create or update the slug of the post after saving the post.
-So the first thing is to add the slug field to our Entry model. Add this after the ``modified_at`` declaration:
-
-.. code-block:: python
-    slug = models.SlugField()
-
-
-Next, we update the save function. We import the slugify method at the top of the file:
-
-.. code-block:: python
-
-    from django.template.defaultfilters import slugify
-
-Create a save method in our Entry model that slugifies the title upon saving:
-
-.. code-block:: python
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        super(Entry, self).save(*args, **kwargs)
-
-
-After this, we will update our ``get_absolute_url()`` method to do a reverse of the new URL using our new year, month, day,
-and slug parameters:
-
-.. code-block:: python
-
-    def get_absolute_url(self):
-        kwargs = {'year': self.created_at.year,
-                'month': self.created_at.month,
-                'day': self.created_at.day,
-                'slug': self.slug}
-        return reverse('blog.views.entry_detail', kwargs=kwargs)
-        
-    
 
 Save the file, and open up your ``myblog/blog/views.py``
 
@@ -130,7 +139,5 @@ we will return the post. Otherwise, we will return an HTTP 404 error. Here's the
 Now save the file.
 
 
-Before we run the tests again, we have to run South to migrate the database, since we have changed the model. Run the 
-command to migrate your database: ``python manage.py migrate``
 
 Try running the tests again. You should see all of the tests passing.
