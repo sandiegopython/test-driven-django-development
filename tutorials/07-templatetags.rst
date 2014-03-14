@@ -19,9 +19,10 @@ To avoid duplicate code, let's create a `custom template tag`_ to help us
 display recent blog entries in the sidebar on every page.
 
 .. NOTE::
-  A custom template tag that itself fires a SQL query means that our HTML
-  templates can add more SQL queries to our view. That hides some behavor It's too early at this point,
-  but that query should be cached if we expect to use this often.
+  A custom template tag that itself fires a SQL query enables our HTML
+  templates to add more SQL queries to our view. That hides some behavor. It's
+  too early at this point, but that query should be cached if we expect to use
+  this often.
 
 
 Where
