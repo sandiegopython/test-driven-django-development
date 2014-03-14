@@ -394,6 +394,10 @@ The last change needed then is just to update our homepage template to add the b
         {% endfor %}
     {% endblock content %}
 
+.. NOTE::
+
+    The ``entry.get_absolute_url`` reference doesn't do anything yet.  Later we will add a ``get_absolute_url`` method to the entry model which will make these links work.
+
 .. TIP::
 
     Notice that we didn't specify the name ``entry_list`` in our code.  Django's class-based generic views often add automatically-named variables to your template context based on your model names.   In this particular case the context object name was automatically defined by the `get_context_object_name`_ method in the ``ListView``.  Instead of referencing ``entry_list`` in our template we could have also referenced the template context variable ``object_list`` instead.
@@ -461,10 +465,6 @@ Let's make a file called ``templates/_entry.html`` and put the following in it:
 
     </article>
 
-.. NOTE::
-
-    The ``entry.get_absolute_url`` reference doesn't do anything yet.  Later we will add a ``get_absolute_url`` method to the entry model which will make these links work.
-
 .. TIP::
 
     The filename of our includable template starts with ``_`` by convention.  This naming convention is recommended by Harris Lapiroff in `An Architecture for Django Templates`_.
@@ -487,24 +487,22 @@ Now let's change our homepage template (``templates/index.html``) to include the
 
     We use the ``with entry=entry only`` convention in our ``include`` tag for better encapsulation (as mentioned in `An Architecture for Django Templates`_).  Check the Django documentation more information on the `include tag`_.
 
-Let's write a test for that:
+Let's write a test our new blog entry pages:
 
 .. code-block:: python
-
-    from django.contrib.auth import get_user_model
 
     class EntryViewTest(TestCase):
 
         def setUp(self):
             self.user = get_user_model().objects.create(username='some_user')
             self.entry = Entry.objects.create(title='1-title', body='1-body',
-                                            author=self.user)
+                                              author=self.user)
 
         def test_basic_view(self):
             response = self.client.get(self.entry.get_absolute_url())
             self.assertEqual(response.status_code, 200)
 
-This test fails beacuse we didn't define get_absolute_url (`Django Model Instance Documentation`_). We need to create a URL and a view for blog entry pages now. We'll need to create a ``blog/urls.py`` file and reference it in the ``myblog/urls.py`` file.
+This test fails because we didn't define the ``get_absolute_url`` method for our model (`Django Model Instance Documentation`_). We need to create a URL and a view for blog entry pages now. We'll need to create a ``blog/urls.py`` file and reference it in the ``myblog/urls.py`` file.
 
 Our ``blog/urls.py`` file is the very short
 
