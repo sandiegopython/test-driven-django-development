@@ -276,3 +276,11 @@ We've just written our first test and fixed our code to make our test pass.
 Test Driven Development (TDD) is all about writing a failing test and then making it pass. If you were to write your code first, then write tests, it's harder to know that the test you wrote really does test what you want it to.
 
 While this may seem like a trivial example, good tests are a way to document the expected behavior of a program. A great test suite is a sign of a mature application since bits and pieces can be changed easily and the tests will ensure that the program still works as intended. The Django framework itself has a massive unit test suite with thousands of tests.
+
+
+Another Test: Entrys
+--------------------
+
+Did you notice that the pluralization of entry is mispelled in the admin interface?  "Entrys" should instead read "Entries".  Let's write a test to verify that when Django correctly pluralizes "entry" to "entries".
+
+TODO: Insert test for ``unicode(Entry._meta.verbose_name_plural)`` and then fix pluralization
