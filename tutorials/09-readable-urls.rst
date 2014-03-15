@@ -164,3 +164,63 @@ we will return the entry. Otherwise, we will return an HTTP 404 error. Here's th
 
 
 Now save the file and try running the tests again. You should see all of the tests passing.
+
+
+An Overlooked Bug
+-----------------
+
+What would happen if we gave an invalid date?  For example 30 days in February or a month of "30".
+
+Let's write a test for this case to make sure an exception isn't raised when we construct a ``datetime``.  We want to receive a ``404`` for an invalid date and not a ``500``.  Our test should look like this:
+
+.. code-block:: python
+
+    def test_invalid_url(self):
+        response = self.client.get("/0000/00/00/invalid/")
+        self.assertEqual(response.status_code, 404)
+
+Let's run our test and see what happens:
+
+.. code-block:: bash
+
+    $ python manage.py test blog
+    Creating test database for alias 'default'...
+    ...E...............
+    ======================================================================
+    ERROR: test_invalid_url (blog.tests.CommentFormTest)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+        ...
+    ValueError: year is out of range
+
+    ----------------------------------------------------------------------
+    Ran 19 tests in 0.142s
+
+    FAILED (errors=1)
+    Destroying test database for alias 'default'...
+
+It looks like we need to handle a ``ValueError`` exception in our view.  Let's handle this exception by raising an ``Http404`` exception when a ``ValueError`` is raised:
+
+.. code-block:: python
+
+    def get_entry(self):
+        attrs = self.kwargs
+        try:
+            entry_date = datetime.date(
+                int(attrs['year']),
+                int(attrs['month']),
+                int(attrs['day'])
+            )
+        except ValueError:
+            raise Http404
+        return get_object_or_404(Entry, created_at__contains=entry_date,
+                                 slug=attrs['slug'])
+
+
+Don't forget to import ``Http404``:
+
+.. code-block:: python
+
+    from django.http import Http404
+
+Now let's run our tests and make sure they pass.
