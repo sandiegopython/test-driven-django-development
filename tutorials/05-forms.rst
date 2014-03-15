@@ -33,14 +33,14 @@ Let's make sure we've imported ``CommentForm`` in our tests file.  Our imports s
 
 Before we start testing our form remember that we are writing our tests before actually writing our CommentForm code. In other words, we're pretending that we've already written our code in the way that we want it to work, then we're writing tests for that not-yet-written code. Once we've seen that the tests have failed, we then write the actual code. Lastly, we run the tests again against our implemented code and, if necessary, modify the actual code so the tests run successfully.
 
-Our first test should ensure that our form's ``__init__`` accepts a ``entry`` keyword argument:
+Our first test should ensure that our form's ``__init__`` accepts an ``entry`` keyword argument:
 
 .. code-block:: python
 
     def test_init(self):
         CommentForm(entry=self.entry)
 
-We want to link our comments to entries by allowing our form to accept a ``entry`` keyword argument.  Assuming our ``CommentForm`` has been written this is how we'd like to use it (**you don't need to type this code anywhere**):
+We want to link our comments to entries by allowing our form to accept an ``entry`` keyword argument.  Assuming our ``CommentForm`` has been written this is how we'd like to use it (**you don't need to type this code anywhere**):
 
 .. code-block:: pycon
 
@@ -51,7 +51,7 @@ We want to link our comments to entries by allowing our form to accept a ``entry
     ``request.POST`` refers to HTTP POST data and not to the blog entry. This
     is the data accepted from user input.
 
-Our next test should ensure that our test raises an exception if a ``entry`` keyword argument isn't specified:
+Our next test should ensure that our form raises an exception if an ``entry`` keyword argument isn't specified:
 
 .. code-block:: python
 
@@ -171,7 +171,7 @@ This is a good start:
 
 It's usually better to test too much than to test too little.
 
-Okay now let's write finally write our form code.
+Okay now let's finally write our form code.
 
 .. code-block:: python
 
@@ -262,7 +262,7 @@ Now let's make our ``EntryViewTest`` class inherit from ``WebTest``.  Change our
 
 .. CAUTION::
 
-    **Do not** create a new ``EntryViewTest`` class.  We already have a ``EntryViewTest`` class with tests in it.  If we create a new one, our old class will be overwritten and those tests won't run anymore.  All we want to do is change the parent class for our test from ``TestCase`` to ``WebTest``.
+    **Do not** create a new ``EntryViewTest`` class.  We already have an ``EntryViewTest`` class with tests in it.  If we create a new one, our old class will be overwritten and those tests won't run anymore.  All we want to do is change the parent class for our test from ``TestCase`` to ``WebTest``.
 
 Our tests should continue to pass after this because ``WebTest`` is a subclass of the Django ``TestCase`` class that we were using before.
 
@@ -303,7 +303,7 @@ Now let's update our ``EntryDetail`` view (in ``blog/views.py``) to inherit from
     entry_detail = EntryDetail.as_view()
 
 
-Now if we run our test we'll see 4 failures.  Our blog entry detail view is failing to load the page because we aren't passing a ``entry`` keyword argument to our form:
+Now if we run our test we'll see 4 failures.  Our blog entry detail view is failing to load the page because we aren't passing an ``entry`` keyword argument to our form:
 
 .. code-block:: python
 
