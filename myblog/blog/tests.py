@@ -1,4 +1,7 @@
+import datetime
+
 from django.contrib.auth import get_user_model
+from django.template.defaultfilters import slugify
 from django.template import Template, Context
 from django.test import TestCase
 from django_webtest import WebTest
@@ -123,8 +126,8 @@ class EntryViewTest(WebTest):
 class CommentFormTest(TestCase):
 
     def setUp(self):
-        user = get_user_model().objects.create_user('zoidberg')
-        self.entry = Entry.objects.create(author=user, title="My entry title")
+        self.user = get_user_model().objects.create_user('zoidberg')
+        self.entry = Entry.objects.create(author=self.user, title="My entry title")
 
     def test_init(self):
         CommentForm(entry=self.entry)
@@ -154,6 +157,32 @@ class CommentFormTest(TestCase):
             'email': ['This field is required.'],
             'body': ['This field is required.'],
         })
+
+    def test_url(self):
+        title = "This is my test title"
+        today = datetime.date.today()
+        entry = Entry.objects.create(title=title, body="body",
+                                     author=self.user)
+        slug = slugify(title)
+        url = "/{year}/{month}/{day}/{pk}-{slug}/".format(
+            year=today.year,
+            month=today.month,
+            day=today.day,
+            slug=slug,
+            pk=entry.pk,
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+                                template_name='blog/entry_detail.html')
+
+    def test_invalid_url(self):
+        entry = Entry.objects.create(title="title", body="body",
+                                     author=self.user)
+        response = self.client.get("/0000/00/00/{0}-invalid/".format(entry.id))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+                                template_name='blog/entry_detail.html')
 
 
 class EntryHistoryTagTest(TestCase):
