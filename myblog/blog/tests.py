@@ -63,23 +63,39 @@ class EntryViewTest(WebTest):
     def setUp(self):
         self.user = get_user_model().objects.create(username='some_user')
         self.entry = Entry.objects.create(title='1-title', body='1-body',
-                                        author=self.user)
+                                          author=self.user)
 
     def test_basic_view(self):
         response = self.client.get(self.entry.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
-    def test_blog_title_in_entry(self):
+    def test_title_in_entry(self):
         response = self.client.get(self.entry.get_absolute_url())
         self.assertContains(response, self.entry.title)
 
-    def test_blog_body_in_entry(self):
+    def test_body_in_entry(self):
         response = self.client.get(self.entry.get_absolute_url())
         self.assertContains(response, self.entry.body)
 
     def test_view_page(self):
         page = self.app.get(self.entry.get_absolute_url())
         self.assertEqual(len(page.forms), 1)
+
+    def test_comment_list(self):
+        Comment.objects.create(
+            entry=self.entry,
+            name="Phillip",
+            email="phillip@example.com",
+            body="Test comment body.",
+        )
+        response = self.client.get(self.entry.get_absolute_url())
+        self.assertContains(response, "Posted by Phillip")
+        self.assertContains(response, "Test comment body.")
+        self.assertNotContains(response, "No comments yet.")
+
+    def test_empty_comment_list(self):
+        response = self.client.get(self.entry.get_absolute_url())
+        self.assertContains(response, "No comments yet.")
 
     def test_form_error(self):
         page = self.app.get(self.entry.get_absolute_url())
