@@ -47,10 +47,6 @@ We want to link our comments to entries by allowing our form to accept an ``entr
     >>> form = CommentForm(entry=entry)  # Without form data
     >>> form = CommentForm(request.POST, entry=entry)  # with form data
 
-.. IMPORTANT::
-    ``request.POST`` refers to HTTP POST data and not to the blog entry. This
-    is the data accepted from user input.
-
 Our next test should ensure that our form raises an exception if an ``entry`` keyword argument isn't specified:
 
 .. code-block:: python
