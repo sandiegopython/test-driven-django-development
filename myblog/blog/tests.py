@@ -1,8 +1,12 @@
-from django.test import TestCase
+import datetime
+
 from django.contrib.auth import get_user_model
+from django.template.defaultfilters import slugify
+from django.test import TestCase
 from django_webtest import WebTest
-from .models import Entry, Comment
+
 from .forms import CommentForm
+from .models import Entry, Comment
 
 
 class EntryModelTest(TestCase):
@@ -129,17 +133,17 @@ class CommentFormTest(TestCase):
             'body': ['This field is required.'],
         })
 
-
     def test_url(self):
-        from django.template.defaultfilters import slugify
-        import datetime
-
         title = "This is my test title"
         today = datetime.date.today()
         Entry.objects.create(title=title, body='body', author=self.user)
         slug = slugify(title)
-        url = "/{year}/{month}/{day}/{slug}/".format(year=today.year, month=today.month, day=today.day, slug=slug)
-        print url
+        url = "/{year}/{month}/{day}/{slug}/".format(
+            year=today.year,
+            month=today.month,
+            day=today.day,
+            slug=slug,
+        )
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
