@@ -350,7 +350,7 @@ Now when we run our tests we'll see the following assertion error because we hav
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-Let's add a comment form to the bottom of our ``content`` block in our blog entry detail template (``templates/entry_detail.html``):
+Let's add a comment form to the bottom of our ``content`` block in our blog entry detail template (``templates/blog/entry_detail.html``):
 
 .. code-block:: html
 
