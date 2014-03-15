@@ -163,23 +163,26 @@ Another Test
 
 What would happen if we changed the slug or an invalid date was given in the URL?  This shouldn't matter because we only check for the model ``id``.
 
-Let's write a test for this case to make sure the correct page is displayed in this case. Our test should look like this:
-
+Let's write a couple more tests for this case to make sure the correct page is displayed in this case, and for when the id does not exist. Our tests should look like this:
 .. code-block:: python
 
-    def test_invalid_url(self):
-        entry = Entry.objects.create(title="title", body="body",
-                                     author=self.user)
-        response = self.client.get("/0000/00/00/{0}-invalid/".format(entry.id))
+    def test_misdated_url(self):
+        entry = Entry.objects.create(title="title", body="body", author=self.user)
+        response = self.client.get("/0000/00/00/{0}-misdated/".format(entry.id))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
                                 template_name='blog/entry_detail.html')
+
+    def test_invalid_url(self):
+        entry = Entry.objects.create(title="title", body="body", author=self.user)
+        response = self.client.get("/0000/00/00/0-invalid/")
+        self.assertEqual(response.status_code, 404)
 
 Now let's run our tests and make sure they still pass.
 
 
 .. TIP::
 
-    If you try to add an entry in the admin, you will notice that you must write a slug (it isn't optional) but then whatever you write is overwritten in the ``Entry.save()`` method. There are a couple ways to resolve this but one way is to set the ``SlugField`` to be ``editable=False`` which will hide it in the admin or other forms. See the Django docs on editable_ for details.
+    If you try to add an entry in the admin, you will notice that you must write a slug (it isn't optional) but then whatever you write is overwritten in the ``Entry.save()`` method. There are a couple ways to resolve this but one way is to set the ``SlugField`` to be ``editable=false`` which will hide it in the admin or other forms. See the Django docs on editable_ for details.
 
     .. _editable: https://docs.djangoproject.com/en/1.6/ref/models/fields/#editable
