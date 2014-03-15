@@ -21,14 +21,15 @@ First let's write some tests.  We'll need to create a blog ``Entry`` and a ``Use
             user = get_user_model().objects.create_user('zoidberg')
             self.entry = Entry.objects.create(author=user, title="My entry title")
 
-Let's make sure we've imported ``get_user_model`` and ``CommentForm`` in our tests file.  Our imports should look like this:
+Let's make sure we've imported ``CommentForm`` in our tests file.  Our imports should look like this:
 
 .. code-block:: python
 
     from django.test import TestCase
     from django.contrib.auth import get_user_model
-    from .models import Entry, Comment
+
     from .forms import CommentForm
+    from .models import Entry, Comment
 
 Before we start testing our form remember that we are writing our tests before actually writing our CommentForm code. In other words, we're pretending that we've already written our code in the way that we want it to work, then we're writing tests for that not-yet-written code. Once we've seen that the tests have failed, we then write the actual code. Lastly, we run the tests again against our implemented code and, if necessary, modify the actual code so the tests run successfully.
 
@@ -85,6 +86,7 @@ We need to create our ``CommentForm`` model form in ``blog/forms.py``. This form
 .. code-block:: python
 
     from django import forms
+
     from .models import Comment
 
 
@@ -174,6 +176,7 @@ Okay now let's write finally write our form code.
 .. code-block:: python
 
     from django import forms
+
     from .models import Comment
 
 
@@ -275,10 +278,11 @@ Now let's update our ``EntryDetail`` view (in ``blog/views.py``) to inherit from
 
 .. code-block:: python
 
-    from django.views.generic import CreateView
     from django.shortcuts import get_object_or_404
-    from .models import Entry
+    from django.views.generic import CreateView
+
     from .forms import CommentForm
+    from .models import Entry
 
 
     class EntryDetail(CreateView):
