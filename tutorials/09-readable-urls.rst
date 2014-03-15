@@ -6,7 +6,9 @@ Our current URL structure doesn't tell us much about the blog entries, so let's 
 For this purpose, we're going to use the URL scheme:
 ``/year/month/day/pk-slug/``
 
-Slug is a term coined by the newspaper industry for a short identifier for a newspaper article. In our case, we'll be using the Django ``django.template.defaultfilters.slugify()`` method to convert our text title into a slugified version. For example, "This Is A Test Title" would be converted to lowercase, and spaces replaced by dashes into "this-is-a-test-title."
+Slug is a term coined by the newspaper industry for a short identifier for a newspaper article. In our case, we'll be using the Django's slugify_ method to convert our text title into a slugified version. For example, "This Is A Test Title" would be converted to lowercase with spaces replaced by dashes resulting in "this-is-a-test-title" and the complete URL might be "/2014/03/15/6-this-is-a-test-title/".
+
+.. _slugify: https://docs.djangoproject.com/en/1.6/ref/utils/#django.utils.text.slugify
 
 
 First, let's update our Model to handle the new slug field.
