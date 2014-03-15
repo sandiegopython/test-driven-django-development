@@ -15,6 +15,7 @@ Let's create an app for blog entries and related models.  We'll call the app ``b
 
 This command should have created a ``blog`` directory with the following files::
 
+    admin.py
     __init__.py
     models.py
     tests.py
@@ -44,17 +45,19 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
     ::
 
         ├── blog
-        │   ├── __init__.py
-        │   ├── models.py
-        │   ├── tests.py
-        │   └── views.py
+        │   ├── admin.py
+        │   ├── __init__.py
+        │   ├── models.py
+        │   ├── tests.py
+        │   └── views.py
+        ├── db.sqlite3
         ├── manage.py
         ├── myblog
-        │   ├── __init__.py
-        │   ├── settings.py
-        │   ├── urls.py
-        │   └── wsgi.py
-        └── db.sqlite3
+        │   ├── __init__.py
+        │   ├── settings.py
+        │   ├── urls.py
+        │   ├── wsgi.py
+        └── requirements.txt
 
 
 Creating a model
@@ -101,13 +104,14 @@ Creating entries from the admin site
 
 We don't want to manually add entries to the database every time we want to update our blog.  It would be nice if we could use a login-secured webpage to create blog entries.  Fortunately Django's admin interface can do just that.
 
-In order to create blog entries from the `admin interface`_ we need to register our ``Entry`` model with the admin site.  We can do this by creating a new ``blog/admin.py`` file with the following code:
+In order to create blog entries from the `admin interface`_ we need to register our ``Entry`` model with the admin site.  We can do this by modifying our ``blog/admin.py`` file to register the ``Entry`` model with the admin interface:
 
 .. _admin interface: https://docs.djangoproject.com/en/1.6/ref/contrib/admin/
 
 .. code-block:: python
 
     from django.contrib import admin
+
     from .models import Entry
 
 
@@ -195,6 +199,7 @@ Let's write our test to ensure that a blog entry's unicode representation is equ
 .. code-block:: python
 
     from django.test import TestCase
+
     from .models import Entry
 
 
@@ -276,3 +281,33 @@ We've just written our first test and fixed our code to make our test pass.
 Test Driven Development (TDD) is all about writing a failing test and then making it pass. If you were to write your code first, then write tests, it's harder to know that the test you wrote really does test what you want it to.
 
 While this may seem like a trivial example, good tests are a way to document the expected behavior of a program. A great test suite is a sign of a mature application since bits and pieces can be changed easily and the tests will ensure that the program still works as intended. The Django framework itself has a massive unit test suite with thousands of tests.
+
+
+Another Test: Entrys
+--------------------
+
+Did you notice that the pluralization of entry is mispelled in the admin interface?  "Entrys" should instead read "Entries".  Let's write a test to verify that when Django correctly pluralizes "entry" to "entries".
+
+Let's add a test to our ``EntryModelTest`` class:
+
+.. code-block:: python
+
+    def test_verbose_name_plural(self):
+        self.assertEqual(unicode(Entry._meta.verbose_name_plural), "entries")
+
+.. NOTE::
+
+    This test uses the model ``_meta`` class (created based on the ``Meta`` class we will define).  This is an example of an advanced Django feature.  The ``_meta`` class is currently undocumented.
+
+Now let's make our test pass by specifying the verbose name for our model:
+
+.. code-block:: python
+
+    class Meta:
+        verbose_name_plural = "entries"
+
+.. HINT::
+
+    See the Django documentation for information on `verbose_name_plural`_ in the Meta class.
+
+.. _verbose_name_plural: https://docs.djangoproject.com/en/1.6/ref/models/options/#verbose-name-plural

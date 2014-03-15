@@ -59,7 +59,10 @@ Contents
    03-views
    04-more-views
    05-forms
-   07-gravatars
+   06-the-testing-game
+   07-templatetags
+   08-south
+   10-gravatars
 
 Getting Help & Contributing
 ---------------------------
