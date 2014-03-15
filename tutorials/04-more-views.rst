@@ -78,7 +78,7 @@ Great.  After we implement our ``__unicode__`` method our tests should pass:
     Destroying test database for alias 'default'...
 
 Since we have added a new model, we also need to make sure that this model
-gets synched to our SQLite database.
+gets synced to our SQLite database.
 
 .. code-block:: bash
 
@@ -102,7 +102,7 @@ model. This involves editing ``blog/admin.py`` to look like this:
 
 If you start the development server again, you will see the Comment model
 in the admin and you can add comments to the blog entries. However, the point
-of a blog is to let other users and not only the admin entry comments.
+of a blog is to let other users and not only the admin post comments.
 
 
 Displaying comments on the website
