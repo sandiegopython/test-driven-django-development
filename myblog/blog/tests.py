@@ -153,12 +153,12 @@ class EntryHistoryTagTest(TestCase):
     TEMPLATE = Template("{% load blog_tags %} {% entry_history %}")
 
     def setUp(self):
-        user = get_user_model().objects.create(username='zoidberg')
-        self.entry = Entry.objects.create(author=user, title="My entry title")
+        self.user = get_user_model().objects.create(username='zoidberg')
 
     def test_entry_shows_up(self):
+        entry = Entry.objects.create(author=self.user, title="My entry title")
         rendered = self.TEMPLATE.render(Context({}))
-        self.assertIn(self.entry.title, rendered)
+        self.assertIn(entry.title, rendered)
 
     def test_no_posts(self):
         rendered = self.TEMPLATE.render(Context({}))
@@ -168,5 +168,5 @@ class EntryHistoryTagTest(TestCase):
         for n in range(6):
             Entry.objects.create(author=self.user, title="Post #{0}".format(n))
         rendered = self.TEMPLATE.render(Context({}))
-        self.assertIn("Post #5", rendered)
-        self.assertNotIn("Post #6", rendered)
+        self.assertIn("Post #4", rendered)
+        self.assertNotIn("Post #5", rendered)

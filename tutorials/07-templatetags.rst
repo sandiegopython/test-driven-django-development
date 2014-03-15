@@ -236,7 +236,11 @@ It looks like we still have some problems because our tests still fail:
     FAILED (failures=1, errors=1)
     Destroying test database for alias 'default'...
 
-Try to fix the bug on your own but don't be afraid to ask for help.
+Try to fix the bugs on your own but don't be afraid to ask for help.
+
+.. HINT::
+
+    There are multiple bugs in our test code.
 
 
 .. _custom template tag: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-tags
