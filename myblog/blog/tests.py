@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.template import Template, Context
 from django.test import TestCase
 from django_webtest import WebTest
 
@@ -146,27 +147,26 @@ class CommentFormTest(TestCase):
             'body': ['This field is required.'],
         })
 
-class PreviousPostTagTest(TestCase):
+
+class EntryHistoryTagTest(TestCase):
+
     TEMPLATE = Template("{% load blog_tags %} {% entry_history %}")
 
     def setUp(self):
-        self.user = get_user_model().objects.create(username='zoidberg')
-        self.post = Post.objects.create(author=self.user, title="My post title")
+        user = get_user_model().objects.create(username='zoidberg')
+        self.entry = Entry.objects.create(author=user, title="My entry title")
+
+    def test_entry_shows_up(self):
+        rendered = self.TEMPLATE.render(Context({}))
+        self.assertIn(self.entry.title, rendered)
 
     def test_no_posts(self):
-        context = Context({})
-        rendered = self.TEMPLATE.render(context)
-        assert "No posts" in rendered
+        rendered = self.TEMPLATE.render(Context({}))
+        self.assertIn("No recent entries", rendered)
 
     def test_many_posts(self):
-        for idx in range(12):
-            last_post = Post.objects.create(author=user, title="My post title {}".format(idx))
-        context = Context({})
-        rendered = self.TEMPLATE.render(context)
-        assert last_post.title not in rendered
-
-    def test_post_shows_up(self):
-        context = Context({})
-        rendered = self.TEMPLATE.render(context)
-        assert self.post.title in rendered
-
+        for n in range(6):
+            Entry.objects.create(author=self.user, title="Post #{0}".format(n))
+        rendered = self.TEMPLATE.render(Context({}))
+        self.assertIn("Post #5", rendered)
+        self.assertNotIn("Post #6", rendered)
