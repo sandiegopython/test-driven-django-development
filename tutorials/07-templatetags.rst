@@ -71,7 +71,9 @@ Now we'll create our ``blog/templatetags/blog_tags.py`` module with our ``entry_
 
     from django import template
 
+
     register = template.Library()
+
 
     @register.inclusion_tag('blog/_entry_history.html')
     def entry_history():
@@ -166,7 +168,7 @@ Now we need to update our ``_entry_history.html`` file to display the titles of 
 
     <ul>
     {% for entry in entries %}
-      <li>{{ entry.title }}</li>
+        <li>{{ entry.title }}</li>
     {% endfor %}
     </ul>
 
