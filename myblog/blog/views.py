@@ -1,8 +1,10 @@
+import datetime
 from django.views.generic import CreateView
 from django.shortcuts import get_object_or_404
+
 from .models import Entry
 from .forms import CommentForm
-import datetime
+
 
 class EntryDetail(CreateView):
     template_name = 'blog/entry_detail.html'
@@ -10,14 +12,7 @@ class EntryDetail(CreateView):
 
     def get_entry(self):
         entry_date = datetime.date(int(self.kwargs['year']),int(self.kwargs['month']),int(self.kwargs['day']))
-        try:
-            current_entry = Entry.objects.filter(
-                created_at__contains=entry_date,
-                slug=self.kwargs['slug'])
-            return current_entry[0]
-        except Poll.DoesNotExist:
-            raise Http404
-
+        return get_object_or_404(Entry, created_at__contains=entry_date, slug=self.kwargs['slug'])
 
     def dispatch(self, *args, **kwargs):
         self.entry = self.get_entry()

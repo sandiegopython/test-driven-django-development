@@ -43,9 +43,9 @@ and slug parameters:
 
     def get_absolute_url(self):
         kwargs = {'year': self.created_at.year,
-                'month': self.created_at.month,
-                'day': self.created_at.day,
-                'slug': self.slug}
+                  'month': self.created_at.month,
+                  'day': self.created_at.day,
+                  'slug': self.slug}
         return reverse('blog.views.entry_detail', kwargs=kwargs)
         
     
@@ -71,6 +71,7 @@ The first step is to define our test for the title. For this purpose, we'll:
     def test_url(self):
         from django.template.defaultfilters import slugify
         import datetime
+
         title = "This is my test title"
         today = datetime.date.today()
         Entry.objects.create(title=title, body='body', author=self.user)
@@ -91,6 +92,7 @@ Next we are going to change our ``myblog/blog/urls.py`` file as we had defined p
 .. code-block:: python
 
     from django.conf.urls import patterns, url
+
     urlpatterns = patterns('blog.views',
         url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<slug>[-\w]+)/$', 'entry_detail'),
     )
@@ -127,13 +129,7 @@ we will return the post. Otherwise, we will return an HTTP 404 error. Here's the
 
     def get_entry(self):
         entry_date = datetime.date(int(self.kwargs['year']),int(self.kwargs['month']),int(self.kwargs['day']))
-        try:
-            current_entry = Entry.objects.filter(
-                created_at__contains=entry_date,
-                slug=self.kwargs['slug'])
-            return current_entry[0]
-        except Poll.DoesNotExist:
-            raise Http404
+        get_object_or_404(Entry, created_at__contains=entry_date, slug=self.kwargs['slug'])
 
 
 Now save the file.

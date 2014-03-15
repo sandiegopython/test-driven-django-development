@@ -62,7 +62,7 @@ class EntryViewTest(WebTest):
     def setUp(self):
         self.user = get_user_model().objects.create(username='some_user')
         self.entry = Entry.objects.create(title='1-title', body='1-body',
-                                        author=self.user)
+                                          author=self.user)
 
     def test_basic_view(self):
         response = self.client.get(self.entry.get_absolute_url())
@@ -130,16 +130,15 @@ class CommentFormTest(TestCase):
         })
 
 
-
-
     def test_url(self):
         from django.template.defaultfilters import slugify
         import datetime
+
         title = "This is my test title"
         today = datetime.date.today()
         Entry.objects.create(title=title, body='body', author=self.user)
         slug = slugify(title)
-        url = "/{year}/{month}/{day}/{slug}/".format(year=today.year,month=today.month,day=today.day, slug=slug)
+        url = "/{year}/{month}/{day}/{slug}/".format(year=today.year, month=today.month, day=today.day, slug=slug)
         print url
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
