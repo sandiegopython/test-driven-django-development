@@ -118,7 +118,7 @@ Try running the tests again, and you should see one failure for the test we just
 URL Pattern
 -----------
 
-Next we are going to change our ``myblog/blog/urls.py`` file. Replace your code with this:
+Next we are going to change our ``blog/urls.py`` file. Replace your code with this:
 
 .. code-block:: python
 
@@ -143,7 +143,7 @@ look for alphanumeric characters or a dash/hyphen (-).
 As you can see from the last part of the pattern, we are opening the method ``entry_detail``, which we will also have to
 update.
 
-Save the file, and open up your ``myblog/blog/views.py`` file.
+Save the file, and open up your ``blog/views.py`` file.
 
 
 
