@@ -1,9 +1,9 @@
-from django.template import Template, Context
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
 from django_webtest import WebTest
-from .models import Entry, Comment
+
 from .forms import CommentForm
+from .models import Entry, Comment
 
 
 class EntryModelTest(TestCase):

@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.urlresolvers import reverse
+from django.db import models
 
 
 class Entry(models.Model):
@@ -14,7 +14,6 @@ class Entry(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog.views.entry_detail', kwargs={'pk': self.pk})
-
 
 
 class Comment(models.Model):
