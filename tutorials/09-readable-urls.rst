@@ -85,7 +85,7 @@ First we need to import the Python ``datetime`` package and the ``slugify`` func
     from django.template.defaultfilters import slugify
     import datetime
 
-Now let's write our test in the EntryViewTest class:
+Now let's write our test in the ``EntryViewTest`` class:
 
 .. code-block:: python
 
