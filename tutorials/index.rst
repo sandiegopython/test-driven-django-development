@@ -59,7 +59,11 @@ Contents
    03-views
    04-more-views
    05-forms
+   06-the-testing-game
+   07-templatetags
+   08-south
    09-readable-urls
+
 
 Getting Help & Contributing
 ---------------------------

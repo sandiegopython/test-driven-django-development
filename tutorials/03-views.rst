@@ -48,7 +48,7 @@ Static files
 
 Create a ``static`` directory in our top-level directory (the one with the ``manage.py`` file).  Copy the ``css`` directory from the foundation archive to this new ``static`` directory.
 
-Now let's add this new ``static`` directory to our ``myblog/settings.py`` file:
+Now let's add this new ``static`` directory definition to the bottom of our ``myblog/settings.py`` file:
 
 .. code-block:: python
 
@@ -84,19 +84,19 @@ Create a ``templates`` directory in our top-level directory. Our directory struc
 .. code-block:: bash
 
         ├── blog
-        │   ├── __init__.py
         │   ├── admin.py
+        │   ├── __init__.py
         │   ├── models.py
         │   ├── tests.py
         │   └── views.py
+        ├── db.sqlite3
         ├── manage.py
         ├── myblog
         │   ├── __init__.py
         │   ├── settings.py
         │   ├── urls.py
-        │   ├── views.py
-        │   └── wsgi.py
-        ├── db.sqlite3
+        │   ├── wsgi.py
+        ├── requirements.txt
         ├── static
         │   └── css
         │       ├── foundation.css
@@ -112,7 +112,7 @@ Create a basic HTML file like this and name it ``templates/index.html``:
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Foundation 4</title>
+        <title>My Blog</title>
         <link rel="stylesheet" href="{% static "css/foundation.css" %}">
     </head>
     <body>
@@ -125,10 +125,13 @@ Create a basic HTML file like this and name it ``templates/index.html``:
     </body>
     </html>
 
-Now let's add this new ``templates`` directory to our ``myblog/settings.py`` file:
+Now inform Django of this new ``templates`` directory by adding this at the bottom of our ``myblog/settings.py`` file:
 
 .. code-block:: python
 
+    # Template files
+    # https://docs.djangoproject.com/en/1.6/topics/templates/
+    
     TEMPLATE_DIRS = (
         os.path.join(BASE_DIR, 'templates'),
     )
@@ -229,7 +232,7 @@ We'll start with putting our header and a sidebar in ``templates/base.html``:
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Foundation 4</title>
+        <title>My Blog</title>
         <link rel="stylesheet" href="{% static "css/foundation.css" %}">
     </head>
     <body>
@@ -391,6 +394,10 @@ The last change needed then is just to update our homepage template to add the b
         {% endfor %}
     {% endblock content %}
 
+.. NOTE::
+
+    The ``entry.get_absolute_url`` reference doesn't do anything yet.  Later we will add a ``get_absolute_url`` method to the entry model which will make these links work.
+
 .. TIP::
 
     Notice that we didn't specify the name ``entry_list`` in our code.  Django's class-based generic views often add automatically-named variables to your template context based on your model names.   In this particular case the context object name was automatically defined by the `get_context_object_name`_ method in the ``ListView``.  Instead of referencing ``entry_list`` in our template we could have also referenced the template context variable ``object_list`` instead.
@@ -408,7 +415,7 @@ We should add a test for that
 
     def test_no_entries(self):
         response = self.client.get('/')
-        self.assertContains(response, 'No blog entry entries yet.')
+        self.assertContains(response, 'No blog entries yet.')
 
 And that gives us the expected failure
 
@@ -421,7 +428,7 @@ And that gives us the expected failure
     ----------------------------------------------------------------------
     Traceback (most recent call last):
       ...
-    AssertionError: Couldn't find 'No blog entry entries yet' in response
+    AssertionError: Couldn't find 'No blog entries yet' in response
 
     ----------------------------------------------------------------------
     Ran 5 tests in 0.044s
@@ -458,10 +465,6 @@ Let's make a file called ``templates/_entry.html`` and put the following in it:
 
     </article>
 
-.. NOTE::
-
-    The ``entry.get_absolute_url`` reference doesn't do anything yet.  Later we will add a ``get_absolute_url`` method to the entry model which will make these links work.
-
 .. TIP::
 
     The filename of our includable template starts with ``_`` by convention.  This naming convention is recommended by Harris Lapiroff in `An Architecture for Django Templates`_.
@@ -476,7 +479,7 @@ Now let's change our homepage template (``templates/index.html``) to include the
         {% for entry in entry_list %}
             {% include "_entry.html" with entry=entry only %}
         {% empty %}
-            <p>No blog entry entries yet.</p>
+            <p>No blog entries yet.</p>
         {% endfor %}
     {% endblock content %}
 
@@ -484,24 +487,22 @@ Now let's change our homepage template (``templates/index.html``) to include the
 
     We use the ``with entry=entry only`` convention in our ``include`` tag for better encapsulation (as mentioned in `An Architecture for Django Templates`_).  Check the Django documentation more information on the `include tag`_.
 
-Let's write a test for that:
+Let's write a test our new blog entry pages:
 
 .. code-block:: python
-
-    from django.contrib.auth import get_user_model
 
     class EntryViewTest(TestCase):
 
         def setUp(self):
             self.user = get_user_model().objects.create(username='some_user')
             self.entry = Entry.objects.create(title='1-title', body='1-body',
-                                            author=self.user)
+                                              author=self.user)
 
         def test_basic_view(self):
             response = self.client.get(self.entry.get_absolute_url())
             self.assertEqual(response.status_code, 200)
 
-This test fails beacuse we didn't define get_absolute_url (`Django Model Instance Documentation`_). We need to create a URL and a view for blog entry pages now. We'll need to create a ``blog/urls.py`` file and reference it in the ``myblog/urls.py`` file.
+This test fails because we didn't define the ``get_absolute_url`` method for our model (`Django Model Instance Documentation`_). We need to create a URL and a view for blog entry pages now. We'll need to create a ``blog/urls.py`` file and reference it in the ``myblog/urls.py`` file.
 
 Our ``blog/urls.py`` file is the very short
 
@@ -520,7 +521,7 @@ The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
 
     url(r'^', include('blog.urls')),
 
-Now we need to define a ``entry_detail`` view in our ``blog/views.py`` file:
+Now we need to define an ``entry_detail`` view in our ``blog/views.py`` file:
 
 .. code-block:: python
 
@@ -532,7 +533,7 @@ Now we need to define a ``entry_detail`` view in our ``blog/views.py`` file:
 
 We'll be updating this view later to return something useful.
 
-Finally we need to create the ``get_absolute_url()`` function which should return the entry detail URL for each entries. We should create a test first.  Let's add the following test to our ``EntryModelTest`` class:
+Finally we need to create the ``get_absolute_url()`` function which should return the entry detail URL for each entry. We should create a test first.  Let's add the following test to our ``EntryModelTest`` class:
 
 .. code-block:: python
 
@@ -558,11 +559,11 @@ Let's make the blog entry detail page actually display a blog entry.  First we'l
 
 .. code-block:: python
 
-    def test_blog_title_in_entry(self):
+    def test_title_in_entry(self):
         response = self.client.get(self.entry.get_absolute_url())
         self.assertContains(response, self.entry.title)
 
-    def test_blog_body_in_entry(self):
+    def test_body_in_entry(self):
         response = self.client.get(self.entry.get_absolute_url())
         self.assertContains(response, self.entry.body)
 
@@ -590,13 +591,13 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
     Creating test database for alias 'default'...
     EEE......
     ======================================================================
-    ERROR: test_blog_body_in_entry (blog.tests.EntryViewTest)
+    ERROR: test_body_in_entry (blog.tests.EntryViewTest)
     ----------------------------------------------------------------------
     ...
     TemplateDoesNotExist: blog/entry_detail.html
 
     ======================================================================
-    ERROR: test_blog_title_in_entry (blog.tests.EntryViewTest)
+    ERROR: test_title_in_entry (blog.tests.EntryViewTest)
     ----------------------------------------------------------------------
     ...
     TemplateDoesNotExist: blog/entry_detail.html
@@ -628,7 +629,7 @@ Now our tests should pass again:
     Creating test database for alias 'default'...
     .......
     ----------------------------------------------------------------------
-    Ran 8 tests in 0.071s
+    Ran 9 tests in 0.071s
 
     OK
     Destroying test database for alias 'default'...
@@ -636,7 +637,7 @@ Now our tests should pass again:
 .. _test client: https://docs.djangoproject.com/en/1.6/topics/testing/tools/#module-django.test.client
 .. _zurb foundation files: http://foundation.zurb.com/
 .. _grid documentation: http://foundation.zurb.com/docs/components/grid.html
-.. _direct link: http://foundation.zurb.com/files/foundation-4.3.2.zip
+.. _direct link: http://foundation.zurb.com/cdn/releases/foundation-5.2.1.zip
 .. _static files: https://docs.djangoproject.com/en/1.6/ref/contrib/staticfiles/
 .. _hypertext transfer protocol: http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
 .. _status codes: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes

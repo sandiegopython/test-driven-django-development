@@ -7,7 +7,7 @@ Verifying setup
 Before we get started, let's just make sure that Python and Django are
 installed correctly and are the appropriate versions.
 
-Running the following command in the MacOS or Linux terminal or in the
+Running the following command in the Mac OS or Linux terminal or in the
 Windows command prompt should show the version of Python. For this workshop
 you should have a 2.6.x or 2.7.x version of Python.
 
@@ -15,27 +15,31 @@ you should have a 2.6.x or 2.7.x version of Python.
 
     $ python -V
 
-You should also have `pip`_ installed on your machine, along with the `requirements.txt`_ file.
+You should also have `pip`_ installed on your machine.  Pip is a dependency
+management tool for installing and managing Python dependencies.  First let's
+install Django 1.6:
 
 .. code-block:: bash
 
-    # In the same directory where you downloaded requirements.txt
-    $ pip install -r requirements.txt
+    $ pip install django==1.6.2
+    Downloading/unpacking Django==1.6.2
+      Downloading Django-1.6.2.tar.gz (6.6MB): 6.6MB downloaded
+      Running setup.py egg_info for package Django
+    ...
+    Successfully installed Django
+    Cleaning up...
 
 .. HINT::
    Things you should type into your terminal or command prompt will always
    start with ``$`` in this workshop. Don't type the leading ``$`` though.
 
 Running the next command will show the version of Django you have installed.
-For this workshop, a 1.6.x version is required. If instead you see a
-"No module named django" message, please follow the Django
-`installation instructions`_.
-
-.. _installation instructions: https://docs.djangoproject.com/en/1.6/topics/install/
+You should have Django 1.6.X installed.
 
 .. code-block:: bash
 
     $ python -c "import django; print(django.get_version())"
+    1.6.2
 
 
 Creating the project
@@ -55,7 +59,7 @@ file used to manage a number of aspects of your Django application such as
 creating the database and running the development web server. Two other key
 files we just created are ``myblog/settings.py`` which contains
 configuration information for the application such as how to connect to the
-database and ``myblog/urls.py`` which maps URLs called by a web broser
+database and ``myblog/urls.py`` which maps URLs called by a web browser
 to the appropriate Python code.
 
 
@@ -74,6 +78,27 @@ admin interface which we'll get to shortly:
 .. code-block:: bash
 
     $ python manage.py syncdb
+    Creating tables ...
+    Creating table django_admin_log
+    Creating table auth_permission
+    Creating table auth_group_permissions
+    Creating table auth_group
+    Creating table auth_user_groups
+    Creating table auth_user_user_permissions
+    Creating table auth_user
+    Creating table django_content_type
+    Creating table django_session
+
+    You just installed Django s auth system, which means you don t have any superusers defined.
+    Would you like to create one now? (yes/no): yes
+    Username (leave blank to use 'zoidberg'):
+    Email address: zoidberg@example.com
+    Password: ***
+    Password (again): ***
+    Superuser created successfully.
+    Installing custom SQL ...
+    Installing indexes ...
+    Installed 0 object(s) from 0 fixture(s)
 
 After running this command, there will be a database file ``db.sqlite3``
 in the same directory as ``manage.py``. Right now, this database only has
@@ -127,5 +152,82 @@ Now visit the admin site in your browser (http://localhost:8000/admin/).
 
     .. _official documentation: https://docs.djangoproject.com/en/1.6/intro/tutorial01/#the-development-server
 
+
+Python Package Requirements File
+--------------------------------
+
+We want to use a few more Python packages besides Django.  We'll plan to use `WebTest`_ and `django-webtest`_ for our functional tests.  Let's install those also:
+
+.. code-block:: bash
+
+    $ pip install webtest django-webtest
+    Downloading/unpacking Django==1.6.2
+      Downloading Django-1.6.2.tar.gz (6.6MB): 6.6MB downloaded
+      Running setup.py egg_info for package Django
+    ...
+    Successfully installed Django
+    Cleaning up...
+
+We don't want to manually install our dependencies every time.  Let's create a `requirements file`_ listing our dependencies so we don't have to type them all out every time we setup our website on a new computer or anytime a package version updates.
+
+First let's use `pip freeze`_ to list our dependencies and their versions:
+
+.. code-block:: bash
+
+    $ pip freeze
+    Django==1.6.2
+    WebOb==1.3.1
+    WebTest==2.0.14
+    argparse==1.2.1
+    beautifulsoup4==4.3.2
+    django-webtest==1.7.6
+    six==1.5.2
+    waitress==0.8.8
+    wsgiref==0.1.2
+
+We care about the ``Django``, ``WebTest``, and ``django-webtest`` lines here.  The other packages are sub-dependencies that were automatically installed and don't need to worry about them.  Let's create our ``requirements.txt`` file with instructions for installing these packages with the versions we have installed now::
+
+    Django==1.6.2
+    WebTest==2.0.14
+    django-webtest==1.7.6
+
+
+This file will allow us to install all Python dependencies at once with just one command.  Whenever our dependency files are upgraded or if we setup a new development environment for our Django website we'll need to run:
+
+.. code-block:: bash
+
+    $ pip install -r requirements.txt
+
+.. NOTE::
+    Note that we do not need to type this command right now since we have already installed all dependencies.
+
+.. HINT::
+
+    If you are using virtualenvwrapper (or just virtualenv), you can create a new virtualenv, and test your requirements.txt file.  With virtualenvwrapper:
+
+    .. code-block:: bash
+
+        $ mkvirtualenv tddd-env2
+        $ workon tddd-env2
+        $ pip install -r requirements.txt
+        $ pip freeze
+        $ deactivate
+        $ workon YOUR_ORIGINAL_VENV
+
+    Or with virtualenv:
+
+    .. code-block:: bash
+
+        $ virtualenv venv2
+        $ source venv2/bin/activate
+        $ pip install -r requirements.txt
+        $ pip freeze
+        $ deactivate
+        $ source venv/bin/activate  # or whatever your original virtualenv was
+
+.. _official documentation: https://docs.djangoproject.com/en/1.6/intro/tutorial01/#the-development-server
+.. _WebTest: http://webtest.readthedocs.org/en/latest/
+.. _django-webtest: https://pypi.python.org/pypi/django-webtest/
 .. _pip: http://www.pip-installer.org/en/latest/installing.html
-.. _requirements.txt: https://raw.github.com/pythonsd/test-driven-django-development/master/myblog/requirements.txt
+.. _pip freeze: http://pip.readthedocs.org/en/latest/reference/pip_freeze.html
+.. _requirements file: http://pip.readthedocs.org/en/latest/user_guide.html#requirements-files

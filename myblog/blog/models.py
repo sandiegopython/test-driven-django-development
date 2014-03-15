@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.urlresolvers import reverse
+from django.db import models
 from django.template.defaultfilters import slugify
 
 
@@ -10,6 +10,9 @@ class Entry(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     modified_at = models.DateTimeField(auto_now=True, editable=False)
     slug = models.SlugField()
+
+    class Meta:
+        verbose_name_plural = "entries"
 
     def __unicode__(self):
         return self.title
@@ -25,7 +28,6 @@ class Entry(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Entry, self).save(*args, **kwargs)
-
 
 class Comment(models.Model):
     entry = models.ForeignKey(Entry)

@@ -21,36 +21,33 @@ First let's write some tests.  We'll need to create a blog ``Entry`` and a ``Use
             user = get_user_model().objects.create_user('zoidberg')
             self.entry = Entry.objects.create(author=user, title="My entry title")
 
-Let's make sure we've imported ``get_user_model`` and ``CommentForm`` in our tests file.  Our imports should look like this:
+Let's make sure we've imported ``CommentForm`` in our tests file.  Our imports should look like this:
 
 .. code-block:: python
 
     from django.test import TestCase
     from django.contrib.auth import get_user_model
-    from .models import Entry, Comment
+
     from .forms import CommentForm
+    from .models import Entry, Comment
 
 Before we start testing our form remember that we are writing our tests before actually writing our CommentForm code. In other words, we're pretending that we've already written our code in the way that we want it to work, then we're writing tests for that not-yet-written code. Once we've seen that the tests have failed, we then write the actual code. Lastly, we run the tests again against our implemented code and, if necessary, modify the actual code so the tests run successfully.
 
-Our first test should ensure that our form's ``__init__`` accepts a ``entry`` keyword argument:
+Our first test should ensure that our form's ``__init__`` accepts an ``entry`` keyword argument:
 
 .. code-block:: python
 
     def test_init(self):
         CommentForm(entry=self.entry)
 
-We want to link our comments to entries by allowing our form to accept a ``entry`` keyword argument.  Assuming our ``CommentForm`` has been written this is how we'd like to use it (**you don't need to type this code anywhere**):
+We want to link our comments to entries by allowing our form to accept an ``entry`` keyword argument.  Assuming our ``CommentForm`` has been written this is how we'd like to use it (**you don't need to type this code anywhere**):
 
 .. code-block:: pycon
 
     >>> form = CommentForm(entry=entry)  # Without form data
     >>> form = CommentForm(request.POST, entry=entry)  # with form data
 
-.. IMPORTANT::
-    ``request.POST`` refers to HTTP POST data and not to the blog entry. This
-    is the data accepted from user input.
-
-Our next test should ensure that our test raises an exception if a ``entry`` keyword argument isn't specified:
+Our next test should ensure that our form raises an exception if an ``entry`` keyword argument isn't specified:
 
 .. code-block:: python
 
@@ -85,6 +82,7 @@ We need to create our ``CommentForm`` model form in ``blog/forms.py``. This form
 .. code-block:: python
 
     from django import forms
+
     from .models import Comment
 
 
@@ -131,7 +129,7 @@ Now our tests should fail because the ``entry`` keyword argument is not accepted
     AssertionError: KeyError not raised
 
     ----------------------------------------------------------------------
-    Ran 12 tests in 0.080s
+    Ran 14 tests in 0.080s
 
     FAILED (failures=1, errors=1)
     Destroying test database for alias 'default'...
@@ -169,15 +167,20 @@ This is a good start:
 
 It's usually better to test too much than to test too little.
 
-Okay now let's write finally write our form code.
+Okay now let's finally write our form code.
 
 .. code-block:: python
 
     from django import forms
+
     from .models import Comment
 
 
     class CommentForm(forms.ModelForm):
+
+        class Meta:
+            model = Comment
+            fields = ('name', 'email', 'body')
 
         def __init__(self, *args, **kwargs):
             self.entry = kwargs.pop('entry')   # the blog entry instance
@@ -188,10 +191,6 @@ Okay now let's write finally write our form code.
             comment.entry = self.entry
             comment.save()
             return comment
-
-        class Meta:
-            model = Comment
-            fields = ('name', 'email', 'body')
 
 The ``CommentForm`` class is instantiated by passing the blog entry that the
 comment was written against as well as the HTTP POST data containing the
@@ -216,7 +215,7 @@ Let's run our tests again to see whether they pass:
     AssertionError: {'body': [u'This field is required.'], 'name': [u'This field is required.'], 'email': [u'This field is required.']} != {'body': ['required'], 'name': ['required'], 'email': ['required']}
 
     ----------------------------------------------------------------------
-    Ran 14 tests in 0.086s
+    Ran 16 tests in 0.086s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -232,7 +231,7 @@ Our test for blank form data is failing because we aren't checking for the corre
     Creating test database for alias 'default'...
     ..............
     ----------------------------------------------------------------------
-    Ran 14 tests in 0.085s
+    Ran 16 tests in 0.085s
 
  OK
  Destroying test database for alias 'default'...
@@ -259,7 +258,7 @@ Now let's make our ``EntryViewTest`` class inherit from ``WebTest``.  Change our
 
 .. CAUTION::
 
-    **Do not** create a new ``EntryViewTest`` class.  We already have a ``EntryViewTest`` class with tests in it.  If we create a new one, our old class will be overwritten and those tests won't run anymore.  All we want to do is change the parent class for our test from ``TestCase`` to ``WebTest``.
+    **Do not** create a new ``EntryViewTest`` class.  We already have an ``EntryViewTest`` class with tests in it.  If we create a new one, our old class will be overwritten and those tests won't run anymore.  All we want to do is change the parent class for our test from ``TestCase`` to ``WebTest``.
 
 Our tests should continue to pass after this because ``WebTest`` is a subclass of the Django ``TestCase`` class that we were using before.
 
@@ -275,10 +274,11 @@ Now let's update our ``EntryDetail`` view (in ``blog/views.py``) to inherit from
 
 .. code-block:: python
 
-    from django.views.generic import CreateView
     from django.shortcuts import get_object_or_404
-    from .models import Entry
+    from django.views.generic import CreateView
+
     from .forms import CommentForm
+    from .models import Entry
 
 
     class EntryDetail(CreateView):
@@ -299,7 +299,7 @@ Now let's update our ``EntryDetail`` view (in ``blog/views.py``) to inherit from
     entry_detail = EntryDetail.as_view()
 
 
-Now if we run our test we'll see 4 failures.  Our blog entry detail view is failing to load the page because we aren't passing a ``entry`` keyword argument to our form:
+Now if we run our test we'll see 4 failures.  Our blog entry detail view is failing to load the page because we aren't passing an ``entry`` keyword argument to our form:
 
 .. code-block:: python
 
@@ -313,33 +313,18 @@ Now if we run our test we'll see 4 failures.  Our blog entry detail view is fail
     KeyError: 'entry'
 
     ----------------------------------------------------------------------
-    Ran 15 tests in 0.079s
+    Ran 17 tests in 0.079s
 
     FAILED (errors=4)
 
-Let's get the ``Entry`` from the database and pass it to our form.  Our view should look something like this now:
+Let's get the ``Entry`` from the database and pass it to our form.  We need to add a ``get_form_kwargs`` method to our view:
 
 .. code-block:: python
 
-    class EntryDetail(CreateView):
-        template_name = 'blog/entry_detail.html'
-        form_class = CommentForm
-
-        def get_entry(self):
-            return get_object_or_404(Entry, pk=self.kwargs['pk'])
-
-        def dispatch(self, *args, **kwargs):
-            self.entry = self.get_entry()
-            return super(EntryDetail, self).dispatch(*args, **kwargs)
-
-        def get_form_kwargs(self):
-            kwargs = super(EntryDetail, self).get_form_kwargs()
-            kwargs['entry'] = self.entry
-            return kwargs
-
-        def get_context_data(self, **kwargs):
-            kwargs['entry'] = self.entry
-            return super(EntryDetail, self).get_context_data(**kwargs)
+    def get_form_kwargs(self):
+        kwargs = super(EntryDetail, self).get_form_kwargs()
+        kwargs['entry'] = self.entry
+        return kwargs
 
 Now when we run our tests we'll see the following assertion error because we have not yet added the comment form to our blog detail page:
 
@@ -360,7 +345,7 @@ Now when we run our tests we'll see the following assertion error because we hav
     AssertionError: 0 != 1
 
     ----------------------------------------------------------------------
-    Ran 15 tests in 0.099s
+    Ran 17 tests in 0.099s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -433,7 +418,7 @@ Now let's run our tests:
     ...
 
     ----------------------------------------------------------------------
-    Ran 17 tests in 0.152s
+    Ran 19 tests in 0.152s
 
     FAILED (errors=2)
 
@@ -464,7 +449,7 @@ Now only one test fails:
     ImproperlyConfigured: No URL to redirect to.  Either provide a url or define a get_absolute_url method on the Model.
 
     ----------------------------------------------------------------------
-    Ran 17 tests in 0.0.166s
+    Ran 19 tests in 0.0.166s
 
     FAILED (errors=1)
 
