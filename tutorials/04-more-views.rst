@@ -78,7 +78,7 @@ Great.  After we implement our ``__unicode__`` method our tests should pass:
     Destroying test database for alias 'default'...
 
 Since we have added a new model, we also need to make sure that this model
-gets synched to our SQLite database.
+gets synced to our SQLite database.
 
 .. code-block:: bash
 
@@ -94,6 +94,7 @@ model. This involves editing ``blog/admin.py`` to look like this:
 .. code-block:: python
 
     from django.contrib import admin
+
     from .models import Entry, Comment
 
 
@@ -102,7 +103,7 @@ model. This involves editing ``blog/admin.py`` to look like this:
 
 If you start the development server again, you will see the Comment model
 in the admin and you can add comments to the blog entries. However, the point
-of a blog is to let other users and not only the admin entry comments.
+of a blog is to let other users and not only the admin post comments.
 
 
 Displaying comments on the website
@@ -125,6 +126,8 @@ At the end of our ``content`` block in ``templates/blog/entry_detail.html`` let'
 
 .. IMPORTANT::
 
-    We forgot to add a test for this!  Why don't you add a test to make sure comments appear on the blog entry page.
+    We forgot to add tests for this!  Why don't you add a test to make sure
+    comments appear on the blog entry page and a test to make sure the "No
+    comments yet" message shows up appropriately.
 
 Now we can see our comments on the website.

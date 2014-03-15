@@ -15,6 +15,7 @@ Let's create an app for blog entries and related models.  We'll call the app ``b
 
 This command should have created a ``blog`` directory with the following files::
 
+    admin.py
     __init__.py
     models.py
     tests.py
@@ -44,17 +45,19 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
     ::
 
         ├── blog
-        │   ├── __init__.py
-        │   ├── models.py
-        │   ├── tests.py
-        │   └── views.py
+        │   ├── admin.py
+        │   ├── __init__.py
+        │   ├── models.py
+        │   ├── tests.py
+        │   └── views.py
+        ├── db.sqlite3
         ├── manage.py
         ├── myblog
-        │   ├── __init__.py
-        │   ├── settings.py
-        │   ├── urls.py
-        │   └── wsgi.py
-        └── db.sqlite3
+        │   ├── __init__.py
+        │   ├── settings.py
+        │   ├── urls.py
+        │   ├── wsgi.py
+        └── requirements.txt
 
 
 Creating a model
@@ -101,13 +104,14 @@ Creating entries from the admin site
 
 We don't want to manually add entries to the database every time we want to update our blog.  It would be nice if we could use a login-secured webpage to create blog entries.  Fortunately Django's admin interface can do just that.
 
-In order to create blog entries from the `admin interface`_ we need to register our ``Entry`` model with the admin site.  We can do this by creating a new ``blog/admin.py`` file with the following code:
+In order to create blog entries from the `admin interface`_ we need to register our ``Entry`` model with the admin site.  We can do this by modifying our ``blog/admin.py`` file to register the ``Entry`` model with the admin interface:
 
 .. _admin interface: https://docs.djangoproject.com/en/1.6/ref/contrib/admin/
 
 .. code-block:: python
 
     from django.contrib import admin
+
     from .models import Entry
 
 
@@ -195,6 +199,7 @@ Let's write our test to ensure that a blog entry's unicode representation is equ
 .. code-block:: python
 
     from django.test import TestCase
+
     from .models import Entry
 
 

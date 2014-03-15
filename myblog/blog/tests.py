@@ -1,9 +1,10 @@
+from django.contrib.auth import get_user_model
 from django.template import Template, Context
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 from django_webtest import WebTest
-from .models import Entry, Comment
+
 from .forms import CommentForm
+from .models import Entry, Comment
 
 
 class EntryModelTest(TestCase):
@@ -63,23 +64,39 @@ class EntryViewTest(WebTest):
     def setUp(self):
         self.user = get_user_model().objects.create(username='some_user')
         self.entry = Entry.objects.create(title='1-title', body='1-body',
-                                        author=self.user)
+                                          author=self.user)
 
     def test_basic_view(self):
         response = self.client.get(self.entry.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
-    def test_blog_title_in_entry(self):
+    def test_title_in_entry(self):
         response = self.client.get(self.entry.get_absolute_url())
         self.assertContains(response, self.entry.title)
 
-    def test_blog_body_in_entry(self):
+    def test_body_in_entry(self):
         response = self.client.get(self.entry.get_absolute_url())
         self.assertContains(response, self.entry.body)
 
     def test_view_page(self):
         page = self.app.get(self.entry.get_absolute_url())
         self.assertEqual(len(page.forms), 1)
+
+    def test_comment_list(self):
+        Comment.objects.create(
+            entry=self.entry,
+            name="Phillip",
+            email="phillip@example.com",
+            body="Test comment body.",
+        )
+        response = self.client.get(self.entry.get_absolute_url())
+        self.assertContains(response, "Posted by Phillip")
+        self.assertContains(response, "Test comment body.")
+        self.assertNotContains(response, "No comments yet.")
+
+    def test_empty_comment_list(self):
+        response = self.client.get(self.entry.get_absolute_url())
+        self.assertContains(response, "No comments yet.")
 
     def test_form_error(self):
         page = self.app.get(self.entry.get_absolute_url())
@@ -130,27 +147,26 @@ class CommentFormTest(TestCase):
             'body': ['This field is required.'],
         })
 
-class PreviousPostTagTest(TestCase):
+
+class EntryHistoryTagTest(TestCase):
+
     TEMPLATE = Template("{% load blog_tags %} {% entry_history %}")
 
     def setUp(self):
         self.user = get_user_model().objects.create(username='zoidberg')
-        self.post = Post.objects.create(author=self.user, title="My post title")
+
+    def test_entry_shows_up(self):
+        entry = Entry.objects.create(author=self.user, title="My entry title")
+        rendered = self.TEMPLATE.render(Context({}))
+        self.assertIn(entry.title, rendered)
 
     def test_no_posts(self):
-        context = Context({})
-        rendered = self.TEMPLATE.render(context)
-        assert "No posts" in rendered
+        rendered = self.TEMPLATE.render(Context({}))
+        self.assertIn("No recent entries", rendered)
 
     def test_many_posts(self):
-        for idx in range(12):
-            last_post = Post.objects.create(author=user, title="My post title {}".format(idx))
-        context = Context({})
-        rendered = self.TEMPLATE.render(context)
-        assert last_post.title not in rendered
-
-    def test_post_shows_up(self):
-        context = Context({})
-        rendered = self.TEMPLATE.render(context)
-        assert self.post.title in rendered
-
+        for n in range(6):
+            Entry.objects.create(author=self.user, title="Post #{0}".format(n))
+        rendered = self.TEMPLATE.render(Context({}))
+        self.assertIn("Post #4", rendered)
+        self.assertNotIn("Post #5", rendered)
