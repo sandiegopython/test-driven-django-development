@@ -50,7 +50,7 @@ When running our tests now, we'll see an error since we have not yet written a `
 Adding comment gravatars
 ------------------------
 
-Let's add ``gravatar_url()`` method to ``Comment`` so that our tests can pass. This involves editing ``models.py``:
+Let's add a ``gravatar_url()`` method to ``Comment`` so our tests pass. This involves editing ``models.py``:
 
 .. code-block:: python
 
