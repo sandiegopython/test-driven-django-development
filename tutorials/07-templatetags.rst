@@ -195,8 +195,8 @@ The above test is for an edge case.  Let's add a test for another edge case: whe
         for n in range(6):
             Entry.objects.create(author=self.user, title="Post #{0}".format(n))
         rendered = self.TEMPLATE.render(Context({}))
-        self.assertContains(rendered, "Post #5")
-        self.assertNotContains(rendered, "Post #6")
+        self.assertIn("Post #5", rendered)
+        self.assertNotIn("Post #6", rendered)
 
 The ``{% for %}`` template tag allows us to define an ``{% empty %}`` tag which we will be displayed when there are no blog entries (see `for loops`_ documentation).
 
