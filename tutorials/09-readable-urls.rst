@@ -4,9 +4,9 @@ Readable URLs
 Our current URL structure doesn't tell us much about the blog entries, so let's add date and title information to help users and also search engines better identify the entry.
 
 For this purpose, we're going to use the URL scheme:
-``/year/month/day/slug/``
+``/year/month/day/pk-slug/``
 
-Slug is a term coined by the newspaper industry for a unique identifier for a newspaper article. In our case, we'll be using the Django ``django.template.defaultfilters.slugify()`` method to convert our text title into a slugified version. For example, "This Is A Test Title" would be converted to lowercase, and spaces replaced by dashes into "this-is-a-test-title."
+Slug is a term coined by the newspaper industry for a short identifier for a newspaper article. In our case, we'll be using the Django ``django.template.defaultfilters.slugify()`` method to convert our text title into a slugified version. For example, "This Is A Test Title" would be converted to lowercase, and spaces replaced by dashes into "this-is-a-test-title."
 
 
 First, let's update our Model to handle the new slug field.
@@ -46,7 +46,8 @@ and slug parameters:
         kwargs = {'year': self.created_at.year,
                   'month': self.created_at.month,
                   'day': self.created_at.day,
-                  'slug': self.slug}
+                  'slug': self.slug,
+                  'pk': self.pk}
         return reverse('blog.views.entry_detail', kwargs=kwargs)
 
 
@@ -72,7 +73,7 @@ The first step is to define our test for the title. For this purpose, we'll:
 
 #) Create a new blog entry
 #) Find the slug for the blog entry
-#) Perform an HTTP GET request for the new descriptive URL ``/year/month/day/slug/`` for the blog entry
+#) Perform an HTTP GET request for the new descriptive URL ``/year/month/day/pk-slug/`` for the blog entry
 #) Check that the request succeeded with a code 200
 
 First we need to import the Python ``datetime`` package and the ``slugify`` function into our tests file:
@@ -89,16 +90,20 @@ Now let's write our test:
     def test_url(self):
         title = "This is my test title"
         today = datetime.date.today()
-        Entry.objects.create(title=title, body='body', author=self.user)
+        entry = Entry.objects.create(title=title, body="body",
+                                     author=self.user)
         slug = slugify(title)
-        url = "/{year}/{month}/{day}/{slug}/".format(
+        url = "/{year}/{month}/{day}/{pk}-{slug}/".format(
             year=today.year,
             month=today.month,
             day=today.day,
             slug=slug,
+            pk=entry.pk,
         )
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+                                template_name='blog/entry_detail.html')
 
 
 Try running the tests again, and you should see one failure for the test we just added:
@@ -119,7 +124,7 @@ Next we are going to change our ``myblog/blog/urls.py`` file. Replace your code 
 
 
     urlpatterns = patterns('blog.views',
-        url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<slug>[-\w]+)/$', 'entry_detail'),
+        url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<pk>\d+)-(?P<slug>[-\w]+)/$', 'entry_detail'),
     )
 
 Let's break this down. For this URL pattern ``(?P<year>\d{4})``, the outer parentheses are for "capturing" the input.
@@ -143,84 +148,27 @@ Update View
 
 In the views file, we have to update our code to be able to handle the new parameters we are capturing in the URL pattern.
 We will be using these captured parameters to find the right blog entry. We will be replacing the code for the method ``get_entry``.
-Instead of using the Entry ID, we will be using the date (year, month, and day) and slug to identify the entry.
-
-The first step is to create a ``datetime.date`` object from the year, month, and day values captured from the URL.
-Then we will create a new entry from the date and the slug, and search for the blog entry. If the blog entry exists, then
-we will return the entry. Otherwise, we will return an HTTP 404 error. Here's the code:
-
-.. code-block:: python
-
-    def get_entry(self):
-        attrs = self.kwargs
-        entry_date = datetime.date(
-            int(attrs['year']),
-            int(attrs['month']),
-            int(attrs['day'])
-        )
-        return get_object_or_404(Entry, created_at__contains=entry_date,
-                                 slug=attrs['slug'])
-
+We are still using the entry ``pk`` because it should always be unique.  The slug and date are only used to make the URL pretty.
 
 
 Now save the file and try running the tests again. You should see all of the tests passing.
 
 
-An Overlooked Bug
------------------
+Another Test
+------------
 
-What would happen if we gave an invalid date?  For example 30 days in February or a month of "30".
+What would happen if we changed the slug or an invalid date was given in the URL?  This shouldn't matter because we only check for the model ``id``.
 
-Let's write a test for this case to make sure an exception isn't raised when we construct a ``datetime``.  We want to receive a ``404`` for an invalid date and not a ``500``.  Our test should look like this:
+Let's write a test for this case to make sure the correct page is displayed in this case. Our test should look like this:
 
 .. code-block:: python
 
     def test_invalid_url(self):
-        response = self.client.get("/0000/00/00/invalid/")
-        self.assertEqual(response.status_code, 404)
+        entry = Entry.objects.create(title="title", body="body",
+                                     author=self.user)
+        response = self.client.get("/0000/00/00/{0}-invalid/".format(entry.id))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+                                template_name='blog/entry_detail.html')
 
-Let's run our test and see what happens:
-
-.. code-block:: bash
-
-    $ python manage.py test blog
-    Creating test database for alias 'default'...
-    ...E...............
-    ======================================================================
-    ERROR: test_invalid_url (blog.tests.CommentFormTest)
-    ----------------------------------------------------------------------
-    Traceback (most recent call last):
-        ...
-    ValueError: year is out of range
-
-    ----------------------------------------------------------------------
-    Ran 19 tests in 0.142s
-
-    FAILED (errors=1)
-    Destroying test database for alias 'default'...
-
-It looks like we need to handle a ``ValueError`` exception in our view.  Let's handle this exception by raising an ``Http404`` exception when a ``ValueError`` is raised:
-
-.. code-block:: python
-
-    def get_entry(self):
-        attrs = self.kwargs
-        try:
-            entry_date = datetime.date(
-                int(attrs['year']),
-                int(attrs['month']),
-                int(attrs['day'])
-            )
-        except ValueError:
-            raise Http404
-        return get_object_or_404(Entry, created_at__contains=entry_date,
-                                 slug=attrs['slug'])
-
-
-Don't forget to import ``Http404``:
-
-.. code-block:: python
-
-    from django.http import Http404
-
-Now let's run our tests and make sure they pass.
+Now let's run our tests and make sure they still pass.

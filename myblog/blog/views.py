@@ -1,9 +1,8 @@
-import datetime
-from django.views.generic import CreateView
 from django.shortcuts import get_object_or_404
+from django.views.generic import CreateView
 
-from .models import Entry
 from .forms import CommentForm
+from .models import Entry
 
 
 class EntryDetail(CreateView):
@@ -11,14 +10,7 @@ class EntryDetail(CreateView):
     form_class = CommentForm
 
     def get_entry(self):
-        attrs = self.kwargs
-        entry_date = datetime.date(
-            int(attrs['year']),
-            int(attrs['month']),
-            int(attrs['day'])
-        )
-        return get_object_or_404(Entry, created_at__contains=entry_date,
-                                 slug=attrs['slug'])
+        return get_object_or_404(Entry, pk=self.kwargs['pk'])
 
     def dispatch(self, *args, **kwargs):
         self.entry = self.get_entry()

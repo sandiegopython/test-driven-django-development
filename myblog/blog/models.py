@@ -18,7 +18,8 @@ class Entry(models.Model):
         kwargs = {'year': self.created_at.year,
                   'month': self.created_at.month,
                   'day': self.created_at.day,
-                  'slug': self.slug}
+                  'slug': self.slug,
+                  'pk': self.pk}
         return reverse('blog.views.entry_detail', kwargs=kwargs)
 
     def save(self, *args, **kwargs):
