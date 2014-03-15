@@ -132,6 +132,30 @@ Our blog entry was created
 .. image:: _static/02-03_entry_added.png
 
 
+.. TIP::
+    If you notice, the plural for Entry appears incorrectly as Entrys. This can be fixed using a 
+    
+.. code-block:: bash
+    
+    class Entry(models.Model):
+    title = models.CharField(max_length=500)
+    author = models.ForeignKey('auth.User')
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    modified_at = models.DateTimeField(auto_now=True, editable=False)
+    
+    def __unicode__(self):
+        return self.title
+        
+    class Meta
+        verbose_name_plural = "entries"
+
+    For more about Meta Options
+    .. _Plural Name Meta Option : https://docs.djangoproject.com/en/1.6/ref/models/options/#verbose-name-plural
+
+
+
+
 Our first test: __unicode__ method
 ----------------------------------
 
