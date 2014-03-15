@@ -61,6 +61,7 @@ Contents
    05-forms
    06-the-testing-game
    07-templatetags
+   08-south
 
 Getting Help & Contributing
 ---------------------------
