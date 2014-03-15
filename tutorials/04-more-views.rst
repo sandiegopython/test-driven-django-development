@@ -94,6 +94,7 @@ model. This involves editing ``blog/admin.py`` to look like this:
 .. code-block:: python
 
     from django.contrib import admin
+
     from .models import Entry, Comment
 
 
