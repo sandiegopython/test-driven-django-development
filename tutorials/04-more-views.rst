@@ -61,7 +61,8 @@ Now let's run our tests to make sure our new test fails:
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-Great.  After we implement our ``__unicode__`` method our tests should pass:
+Great. So it looks like our test fails. Now we should implement the ``__unicode__`` method for the comment body,
+an exercise we leave to the reader. After implementing the method, run the test again to see it pass:
 
 .. code-block:: bash
 
