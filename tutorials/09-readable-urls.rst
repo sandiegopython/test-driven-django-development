@@ -133,6 +133,8 @@ we are capturing should be four digits. The next part is the month, where we cap
 one or two digits for the month (January would be 1, December would be 12, so 1 or 2 digits will represent the month).
 And for the day, we also capture one or two digits.
 
+We capture the pk (i.e. the "primary key" for accessing a Django model) with ``(?P<pk>\d+)``.
+
 The next part is capturing the slug in ``(?P<slug>[-\w]+)``. For this part, we name the captured variable "slug" and
 look for alphanumeric characters or a dash/hyphen (-).
 
