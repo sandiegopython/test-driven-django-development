@@ -129,7 +129,7 @@ Now our tests should fail because the ``entry`` keyword argument is not accepted
     AssertionError: KeyError not raised
 
     ----------------------------------------------------------------------
-    Ran 12 tests in 0.080s
+    Ran 14 tests in 0.080s
 
     FAILED (failures=1, errors=1)
     Destroying test database for alias 'default'...
@@ -215,7 +215,7 @@ Let's run our tests again to see whether they pass:
     AssertionError: {'body': [u'This field is required.'], 'name': [u'This field is required.'], 'email': [u'This field is required.']} != {'body': ['required'], 'name': ['required'], 'email': ['required']}
 
     ----------------------------------------------------------------------
-    Ran 14 tests in 0.086s
+    Ran 16 tests in 0.086s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -231,7 +231,7 @@ Our test for blank form data is failing because we aren't checking for the corre
     Creating test database for alias 'default'...
     ..............
     ----------------------------------------------------------------------
-    Ran 14 tests in 0.085s
+    Ran 16 tests in 0.085s
 
  OK
  Destroying test database for alias 'default'...
@@ -360,7 +360,7 @@ Now when we run our tests we'll see the following assertion error because we hav
     AssertionError: 0 != 1
 
     ----------------------------------------------------------------------
-    Ran 15 tests in 0.099s
+    Ran 17 tests in 0.099s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -433,7 +433,7 @@ Now let's run our tests:
     ...
 
     ----------------------------------------------------------------------
-    Ran 17 tests in 0.152s
+    Ran 19 tests in 0.152s
 
     FAILED (errors=2)
 
@@ -464,7 +464,7 @@ Now only one test fails:
     ImproperlyConfigured: No URL to redirect to.  Either provide a url or define a get_absolute_url method on the Model.
 
     ----------------------------------------------------------------------
-    Ran 17 tests in 0.0.166s
+    Ran 19 tests in 0.0.166s
 
     FAILED (errors=1)
 
