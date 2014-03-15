@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
+import hashlib
 
 
 class Entry(models.Model):
@@ -39,3 +40,12 @@ class Comment(models.Model):
 
     def __unicode__(self):
         return self.body
+
+    def gravatar_url(self):
+        # Get the md5 hash of the email address
+        md5 = hashlib.new('md5')
+        md5.update(unicode(self.email))
+        digest = md5.hexdigest()
+
+        url = 'https://www.gravatar.com/avatar/{}'.format(digest)
+        return url

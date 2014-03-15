@@ -101,7 +101,7 @@ Make it work
 
 We just wrote code without writing any tests.  Let's write some tests now.
 
-At the top of ``blog/test.py`` we need to add ``from django.template import Template, Context``.  We need those imports because we will be manually rendering template strings to test our template tag.
+At the top of ``blog/tests.py`` we need to add ``from django.template import Template, Context``.  We need those imports because we will be manually rendering template strings to test our template tag.
 
 Now let's add a basic test to our ``blog/tests.py`` file:
 

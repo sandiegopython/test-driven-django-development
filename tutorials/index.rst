@@ -63,6 +63,7 @@ Contents
    07-templatetags
    08-south
    09-readable-urls
+   10-gravatars
 
 
 Getting Help & Contributing

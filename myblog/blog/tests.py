@@ -31,6 +31,11 @@ class CommentModelTest(TestCase):
         comment = Comment(body="My comment body")
         self.assertEqual(unicode(comment), "My comment body")
 
+    def test_gravatar_url(self):
+        comment = Comment(body="My comment body", email="email@example.com")
+        expected = "https://www.gravatar.com/avatar/5658ffccee7f0ebfda2b226238b1eb6e"
+        self.assertEqual(comment.gravatar_url(), expected)
+
 
 class ProjectTests(TestCase):
 

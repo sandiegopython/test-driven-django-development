@@ -299,12 +299,18 @@ Let's add a test to our ``EntryModelTest`` class:
 
     This test uses the model ``_meta`` class (created based on the ``Meta`` class we will define).  This is an example of an advanced Django feature.  The ``_meta`` class is currently undocumented.
 
-Now let's make our test pass by specifying the verbose name for our model:
+Now let's make our test pass by specifying the verbose name for our model.
+
+Add a ``Meta`` inner class inside our ``Entry`` model, like this:
 
 .. code-block:: python
 
-    class Meta:
-        verbose_name_plural = "entries"
+    class Entry(models.Model):
+
+        # The rest of our model code
+
+        class Meta:
+            verbose_name_plural = "entries"
 
 .. HINT::
 
