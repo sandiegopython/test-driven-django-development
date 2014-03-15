@@ -59,6 +59,7 @@ Contents
    03-views
    04-more-views
    05-forms
+   08-south
 
 Getting Help & Contributing
 ---------------------------
