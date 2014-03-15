@@ -178,6 +178,10 @@ Okay now let's finally write our form code.
 
     class CommentForm(forms.ModelForm):
 
+        class Meta:
+            model = Comment
+            fields = ('name', 'email', 'body')
+
         def __init__(self, *args, **kwargs):
             self.entry = kwargs.pop('entry')   # the blog entry instance
             super(CommentForm, self).__init__(*args, **kwargs)
@@ -187,10 +191,6 @@ Okay now let's finally write our form code.
             comment.entry = self.entry
             comment.save()
             return comment
-
-        class Meta:
-            model = Comment
-            fields = ('name', 'email', 'body')
 
 The ``CommentForm`` class is instantiated by passing the blog entry that the
 comment was written against as well as the HTTP POST data containing the
