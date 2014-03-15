@@ -18,6 +18,9 @@ class EntryModelTest(TestCase):
         entry = Entry.objects.create(title="My entry title", author=user)
         self.assertIsNotNone(entry.get_absolute_url())
 
+    def test_verbose_name_plural(self):
+        self.assertEqual(unicode(Entry._meta.verbose_name_plural), "entries")
+
 
 class CommentModelTest(TestCase):
 
