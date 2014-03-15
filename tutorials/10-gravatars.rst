@@ -63,6 +63,10 @@ Let's add a ``gravatar_url()`` method to ``Comment`` so our tests pass. This inv
         url = 'https://www.gravatar.com/avatar/{}'.format(digest)
         return url
 
+.. NOTE::
+
+    Remember to import the ``hashlib`` library at the top of our ``models.py`` file.
+
 .. TIP::
 
     If you've never used ``hashlib`` before, this may look a little daunting. Md5_ is a cryptographic hash function that takes a string of any size and creates a 128 bit binary string. When rendered as hexidecimal, it is a 32 character string.
