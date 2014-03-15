@@ -22,6 +22,10 @@ First, let's write a test for Gravatars. This test will be added to our already 
         expected = "https://www.gravatar.com/avatar/5658ffccee7f0ebfda2b226238b1eb6e"
         self.assertEqual(comment.gravatar_url(), expected)
 
+.. NOTE::
+
+    We didn't calculate that MD5 hashes in our head.  You can use Python's `hashlib`_ library to calculate the hash or just type `md5 email@example.com`_ into Duck Duck Go.
+
 When running our tests now, we'll see an error since we have not yet written a ``gravatar_url()`` method to the ``Comment`` model:
 
 .. code-block:: bash
