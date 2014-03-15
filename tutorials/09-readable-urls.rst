@@ -176,3 +176,10 @@ Let's write a test for this case to make sure the correct page is displayed in t
                                 template_name='blog/entry_detail.html')
 
 Now let's run our tests and make sure they still pass.
+
+
+.. TIP::
+
+    If you try to add an entry in the admin, you will notice that you must write a slug (it isn't optional) but then whatever you write is overwritten in the ``Entry.save()`` method. There are a couple ways to resolve this but one way is to set the ``SlugField`` to be ``editable=false`` which will hide it in the admin or other forms. See the Django docs on editable_ for details.
+
+    .. _editable: https://docs.djangoproject.com/en/1.6/ref/models/fields/#editable

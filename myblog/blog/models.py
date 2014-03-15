@@ -10,7 +10,7 @@ class Entry(models.Model):
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     modified_at = models.DateTimeField(auto_now=True, editable=False)
-    slug = models.SlugField()
+    slug = models.SlugField(editable=False)
 
     class Meta:
         verbose_name_plural = "entries"
