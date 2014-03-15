@@ -132,30 +132,6 @@ Our blog entry was created
 .. image:: _static/02-03_entry_added.png
 
 
-.. TIP::
-    If you notice, the plural for Entry appears incorrectly as Entrys. This can be fixed using a 
-    
-.. code-block:: bash
-    
-    class Entry(models.Model):
-    title = models.CharField(max_length=500)
-    author = models.ForeignKey('auth.User')
-    body = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True, editable=False)
-    modified_at = models.DateTimeField(auto_now=True, editable=False)
-    
-    def __unicode__(self):
-        return self.title
-        
-    class Meta
-        verbose_name_plural = "entries"
-
-    For more about Meta Options
-    .. _Plural Name Meta Option : https://docs.djangoproject.com/en/1.6/ref/models/options/#verbose-name-plural
-
-
-
-
 Our first test: __unicode__ method
 ----------------------------------
 
@@ -307,4 +283,26 @@ Another Test: Entrys
 
 Did you notice that the pluralization of entry is mispelled in the admin interface?  "Entrys" should instead read "Entries".  Let's write a test to verify that when Django correctly pluralizes "entry" to "entries".
 
-TODO: Insert test for ``unicode(Entry._meta.verbose_name_plural)`` and then fix pluralization
+Let's add a test to our ``EntryModelTest`` class:
+
+.. code-block:: python
+
+    def test_verbose_name_plural(self):
+        self.assertEqual(unicode(Entry._meta.verbose_name_plural), "entries")
+
+.. NOTE::
+
+    This test uses the model ``_meta`` class (created based on the ``Meta`` class we will define).  This is an example of an advanced Django feature.  The ``_meta`` class is currently undocumented.
+
+Now let's make our test pass by specifying the verbose name for our model:
+
+.. code-block:: python
+
+    class Meta
+        verbose_name_plural = "entries"
+
+.. HINT::
+
+    See the Django documentation for information on `verbose_name_plural`_ in the Meta class.
+
+.. _verbose_name_plural: https://docs.djangoproject.com/en/1.6/ref/models/options/#verbose-name-plural
