@@ -69,7 +69,7 @@ Let's add a ``gravatar_url()`` method to ``Comment`` so our tests pass. This inv
 
 .. TIP::
 
-    If you've never used ``hashlib`` before, this may look a little daunting. Md5_ is a cryptographic hash function that takes a string of any size and creates a 128 bit binary string. When rendered as hexidecimal, it is a 32 character string.
+    If you've never used ``hashlib`` before, this may look a little daunting. MD5_ is a cryptographic hash function that takes a string of any size and creates a 128-bit binary string. When rendered as hexidecimal, it is a 32 character string.
 
     .. Technically we will get a UnicodeDecodeError if the email contains non-ascii characters but Django's EmailValidator doesn't support that anyway.
 
@@ -103,4 +103,5 @@ If you fire up the development web server and look at a specific blog entry, you
 .. _gravatar: http://gravatar.com/
 .. _gravatar documentation: http://en.gravatar.com/site/implement/images/
 .. _hashlib: http://docs.python.org/2/library/hashlib.html
-.. _md5: http://en.wikipedia.org/wiki/Md5
+.. _md5: http://en.wikipedia.org/wiki/MD5
+.. _md5 email@example.com: https://duckduckgo.com/?q=md5+email%40example.com
