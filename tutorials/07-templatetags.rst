@@ -107,42 +107,42 @@ Now let's add a basic test to our ``blog/tests.py`` file:
 
 .. code-block:: python
 
-    class PreviousEntryTagTest(TestCase):
+    class EntryHistoryTagTest(TestCase):
+
         TEMPLATE = Template("{% load blog_tags %} {% entry_history %}")
 
         def setUp(self):
             user = get_user_model().objects.create(username='zoidberg')
-            Entry.objects.create(self.author=user, title="My entry title")
+            self.entry = Entry.objects.create(author=user, title="My entry title")
 
         def test_entry_shows_up(self):
             rendered = self.TEMPLATE.render(Context({}))
-            self.assertContains(rendered, self.entry.title)
+            self.assertIn(self.entry.title, rendered)
 
 
 The tricky bits here are ``TEMPLATE``, ``Context({})`` and that ``render()`` call. These should all look somewhat familiar
 from the `django tutorial part 3`_. ``Context({})`` in this case just passes no data to a ``Template`` that we're
 rendering directly in memory. That last assert just checks that the title of the entry is in the text.
 
-Run the tests and we get
+As expected, our test fails because we are not actually displaying any entries with our ``entry_history`` template tag:
 
-::
+.. code-block:: bash
 
+    $ python manage.py test blog
     Creating test database for alias 'default'...
-    ................F.
+    .....F..............
     ======================================================================
-    FAIL: test_entry_shows_up (blog.tests.PreviousEntryTagTest)
+    FAIL: test_entry_shows_up (blog.tests.EntryHistoryTagTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-      ...
-    AssertionError
+        ...
+    AssertionError: 'My entry title' not found in u' <p>Dummy text.</p>\n'
 
     ----------------------------------------------------------------------
-    Ran 18 tests in 0.109s
+    Ran 20 tests in 0.222s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
-
-As expected, our test fails because we are not actually displaying any entries with our ``entry_history`` template tag.
 
 Let's make our template tag actually display entry history.  First we will import our ``Entry`` model at the top of our template tag library module:
 
@@ -185,7 +185,7 @@ Let's add a test for when there are no blog posts:
 
     def test_no_posts(self):
         rendered = self.TEMPLATE.render(Context({}))
-        self.assertContains(rendered, "No recent entries")
+        self.assertIn("No recent entries", rendered)
 
 The above test is for an edge case.  Let's add a test for another edge case: when there are more than 5 recent blog entries.  When there are 6 posts, only the last 5 should be displayed.  Let's add a test for this case also:
 
