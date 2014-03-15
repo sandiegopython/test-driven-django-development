@@ -89,7 +89,7 @@ Then modify our second column to use our ``entry_history`` template tag:
     <div class="large-4 columns">
         <h3>About Me</h3>
         <p>I am a Python developer and I like Django.</p>
-        <h3>Previous Entries</h3>
+        <h3>Recent Entries</h3>
         {% entry_history %}
     </div>
 
@@ -198,8 +198,6 @@ The above test is for an edge case.  Let's add a test for another edge case: whe
         self.assertContains(rendered, "Post #5")
         self.assertNotContains(rendered, "Post #6")
 
-TODO: Run tests and show that 1 fails
-
 The ``{% for %}`` template tag allows us to define an ``{% empty %}`` tag which we will be displayed when there are no blog entries (see `for loops`_ documentation).
 
 Update the ``_entry_history.html`` template to utilize the ``{% empty %}`` tag and make sure the tests pass.
@@ -211,7 +209,34 @@ Update the ``_entry_history.html`` template to utilize the ``{% empty %}`` tag a
         self.user = get_user_model().objects.create(username='zoidberg')
         self.entry = Entry.objects.create(author=self.user, title="My entry title")
 
-It looks like we still have a problem because our tests still fail now.  Try to fix the bug on your own and don't be afraid to ask for help.
+It looks like we still have some problems because our tests still fail:
+
+.. code-block:: bash
+
+    $ python manage.py test blog
+    Creating test database for alias 'default'...
+    ......EF..............
+    ======================================================================
+    ERROR: test_many_posts (blog.tests.EntryHistoryTagTest)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+        ...
+    AttributeError: 'EntryHistoryTagTest' object has no attribute 'user'
+
+    ======================================================================
+    FAIL: test_no_posts (blog.tests.EntryHistoryTagTest)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+        ...
+    AssertionError: 'No recent entries' not found in u' <ul>\n\n    <li>My entry title</li>\n\n</ul>\n'
+
+    ----------------------------------------------------------------------
+    Ran 22 tests in 0.240s
+
+    FAILED (failures=1, errors=1)
+    Destroying test database for alias 'default'...
+
+Try to fix the bug on your own but don't be afraid to ask for help.
 
 
 .. _custom template tag: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-tags
