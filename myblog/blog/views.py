@@ -11,8 +11,14 @@ class EntryDetail(CreateView):
     form_class = CommentForm
 
     def get_entry(self):
-        entry_date = datetime.date(int(self.kwargs['year']),int(self.kwargs['month']),int(self.kwargs['day']))
-        return get_object_or_404(Entry, created_at__contains=entry_date, slug=self.kwargs['slug'])
+        attrs = self.kwargs
+        entry_date = datetime.date(
+            int(attrs['year']),
+            int(attrs['month']),
+            int(attrs['day'])
+        )
+        return get_object_or_404(Entry, created_at__contains=entry_date,
+                                 slug=attrs['slug'])
 
     def dispatch(self, *args, **kwargs):
         self.entry = self.get_entry()
