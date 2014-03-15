@@ -71,7 +71,9 @@ Now we'll create our ``blog/templatetags/blog_tags.py`` module with our ``entry_
 
     from django import template
 
+
     register = template.Library()
+
 
     @register.inclusion_tag('blog/_entry_history.html')
     def entry_history():
@@ -87,7 +89,7 @@ Then modify our second column to use our ``entry_history`` template tag:
     <div class="large-4 columns">
         <h3>About Me</h3>
         <p>I am a Python developer and I like Django.</p>
-        <h3>Previous Entries</h3>
+        <h3>Recent Entries</h3>
         {% entry_history %}
     </div>
 
@@ -105,42 +107,42 @@ Now let's add a basic test to our ``blog/tests.py`` file:
 
 .. code-block:: python
 
-    class PreviousEntryTagTest(TestCase):
+    class EntryHistoryTagTest(TestCase):
+
         TEMPLATE = Template("{% load blog_tags %} {% entry_history %}")
 
         def setUp(self):
             user = get_user_model().objects.create(username='zoidberg')
-            Entry.objects.create(self.author=user, title="My entry title")
+            self.entry = Entry.objects.create(author=user, title="My entry title")
 
         def test_entry_shows_up(self):
             rendered = self.TEMPLATE.render(Context({}))
-            self.assertContains(rendered, self.entry.title)
+            self.assertIn(self.entry.title, rendered)
 
 
 The tricky bits here are ``TEMPLATE``, ``Context({})`` and that ``render()`` call. These should all look somewhat familiar
 from the `django tutorial part 3`_. ``Context({})`` in this case just passes no data to a ``Template`` that we're
 rendering directly in memory. That last assert just checks that the title of the entry is in the text.
 
-Run the tests and we get
+As expected, our test fails because we are not actually displaying any entries with our ``entry_history`` template tag:
 
-::
+.. code-block:: bash
 
+    $ python manage.py test blog
     Creating test database for alias 'default'...
-    ................F.
+    .....F..............
     ======================================================================
-    FAIL: test_entry_shows_up (blog.tests.PreviousEntryTagTest)
+    FAIL: test_entry_shows_up (blog.tests.EntryHistoryTagTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-      ...
-    AssertionError
+        ...
+    AssertionError: 'My entry title' not found in u' <p>Dummy text.</p>\n'
 
     ----------------------------------------------------------------------
-    Ran 18 tests in 0.109s
+    Ran 20 tests in 0.222s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
-
-As expected, our test fails because we are not actually displaying any entries with our ``entry_history`` template tag.
 
 Let's make our template tag actually display entry history.  First we will import our ``Entry`` model at the top of our template tag library module:
 
@@ -166,7 +168,7 @@ Now we need to update our ``_entry_history.html`` file to display the titles of 
 
     <ul>
     {% for entry in entries %}
-      <li>{{ entry.title }}</li>
+        <li>{{ entry.title }}</li>
     {% endfor %}
     </ul>
 
@@ -183,7 +185,7 @@ Let's add a test for when there are no blog posts:
 
     def test_no_posts(self):
         rendered = self.TEMPLATE.render(Context({}))
-        self.assertContains(rendered, "No recent entries")
+        self.assertIn("No recent entries", rendered)
 
 The above test is for an edge case.  Let's add a test for another edge case: when there are more than 5 recent blog entries.  When there are 6 posts, only the last 5 should be displayed.  Let's add a test for this case also:
 
@@ -196,8 +198,6 @@ The above test is for an edge case.  Let's add a test for another edge case: whe
         self.assertContains(rendered, "Post #5")
         self.assertNotContains(rendered, "Post #6")
 
-TODO: Run tests and show that 1 fails
-
 The ``{% for %}`` template tag allows us to define an ``{% empty %}`` tag which we will be displayed when there are no blog entries (see `for loops`_ documentation).
 
 Update the ``_entry_history.html`` template to utilize the ``{% empty %}`` tag and make sure the tests pass.
@@ -209,7 +209,38 @@ Update the ``_entry_history.html`` template to utilize the ``{% empty %}`` tag a
         self.user = get_user_model().objects.create(username='zoidberg')
         self.entry = Entry.objects.create(author=self.user, title="My entry title")
 
-It looks like we still have a problem because our tests still fail now.  Try to fix the bug on your own and don't be afraid to ask for help.
+It looks like we still have some problems because our tests still fail:
+
+.. code-block:: bash
+
+    $ python manage.py test blog
+    Creating test database for alias 'default'...
+    ......EF..............
+    ======================================================================
+    ERROR: test_many_posts (blog.tests.EntryHistoryTagTest)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+        ...
+    AttributeError: 'EntryHistoryTagTest' object has no attribute 'user'
+
+    ======================================================================
+    FAIL: test_no_posts (blog.tests.EntryHistoryTagTest)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+        ...
+    AssertionError: 'No recent entries' not found in u' <ul>\n\n    <li>My entry title</li>\n\n</ul>\n'
+
+    ----------------------------------------------------------------------
+    Ran 22 tests in 0.240s
+
+    FAILED (failures=1, errors=1)
+    Destroying test database for alias 'default'...
+
+Try to fix the bugs on your own but don't be afraid to ask for help.
+
+.. HINT::
+
+    There are multiple bugs in our test code.
 
 
 .. _custom template tag: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-tags

@@ -78,6 +78,27 @@ admin interface which we'll get to shortly:
 .. code-block:: bash
 
     $ python manage.py syncdb
+    Creating tables ...
+    Creating table django_admin_log
+    Creating table auth_permission
+    Creating table auth_group_permissions
+    Creating table auth_group
+    Creating table auth_user_groups
+    Creating table auth_user_user_permissions
+    Creating table auth_user
+    Creating table django_content_type
+    Creating table django_session
+
+    You just installed Django s auth system, which means you don t have any superusers defined.
+    Would you like to create one now? (yes/no): yes
+    Username (leave blank to use 'zoidberg'):
+    Email address: zoidberg@example.com
+    Password: ***
+    Password (again): ***
+    Superuser created successfully.
+    Installing custom SQL ...
+    Installing indexes ...
+    Installed 0 object(s) from 0 fixture(s)
 
 After running this command, there will be a database file ``db.sqlite3``
 in the same directory as ``manage.py``. Right now, this database only has
