@@ -298,7 +298,7 @@ Now let's make our test pass by specifying the verbose name for our model:
 
 .. code-block:: python
 
-    class Meta
+    class Meta:
         verbose_name_plural = "entries"
 
 .. HINT::
