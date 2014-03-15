@@ -313,33 +313,18 @@ Now if we run our test we'll see 4 failures.  Our blog entry detail view is fail
     KeyError: 'entry'
 
     ----------------------------------------------------------------------
-    Ran 15 tests in 0.079s
+    Ran 17 tests in 0.079s
 
     FAILED (errors=4)
 
-Let's get the ``Entry`` from the database and pass it to our form.  Our view should look something like this now:
+Let's get the ``Entry`` from the database and pass it to our form.  We need to add a ``get_form_kwargs`` method to our view:
 
 .. code-block:: python
 
-    class EntryDetail(CreateView):
-        template_name = 'blog/entry_detail.html'
-        form_class = CommentForm
-
-        def get_entry(self):
-            return get_object_or_404(Entry, pk=self.kwargs['pk'])
-
-        def dispatch(self, *args, **kwargs):
-            self.entry = self.get_entry()
-            return super(EntryDetail, self).dispatch(*args, **kwargs)
-
-        def get_form_kwargs(self):
-            kwargs = super(EntryDetail, self).get_form_kwargs()
-            kwargs['entry'] = self.entry
-            return kwargs
-
-        def get_context_data(self, **kwargs):
-            kwargs['entry'] = self.entry
-            return super(EntryDetail, self).get_context_data(**kwargs)
+    def get_form_kwargs(self):
+        kwargs = super(EntryDetail, self).get_form_kwargs()
+        kwargs['entry'] = self.entry
+        return kwargs
 
 Now when we run our tests we'll see the following assertion error because we have not yet added the comment form to our blog detail page:
 
