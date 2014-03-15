@@ -17,14 +17,10 @@ First, let's write a test for Gravatars. This test will be added to our already 
 
 .. code-block:: python
 
-    class CommentModelTest(TestCase):
-
-        # ...
-
-        def test_gravatar_url(self):
-            comment = Comment(body="My comment body", email="email@example.com")
-            expected = "https://www.gravatar.com/avatar/5658ffccee7f0ebfda2b226238b1eb6e"
-            self.assertEqual(comment.gravatar_url(), expected)
+    def test_gravatar_url(self):
+        comment = Comment(body="My comment body", email="email@example.com")
+        expected = "https://www.gravatar.com/avatar/5658ffccee7f0ebfda2b226238b1eb6e"
+        self.assertEqual(comment.gravatar_url(), expected)
 
 When running our tests now, we'll see an error since we have not yet written a ``gravatar_url()`` method to the ``Comment`` model:
 
@@ -54,18 +50,14 @@ Let's add ``gravatar_url()`` method to ``Comment`` so that our tests can pass. T
 
 .. code-block:: python
 
-    class Comment(models.Model):
+    def gravatar_url(self):
+        # Get the md5 hash of the email address
+        md5 = hashlib.new('md5')
+        md5.update(unicode(self.email))
+        digest = md5.hexdigest()
 
-        #...
-
-        def gravatar_url(self):
-            # Get the md5 hash of the email address
-            md5 = hashlib.new('md5')
-            md5.update(unicode(self.email))
-            digest = md5.hexdigest()
-
-            url = 'https://www.gravatar.com/avatar/{}'.format(digest)
-            return url
+        url = 'https://www.gravatar.com/avatar/{}'.format(digest)
+        return url
 
 .. TIP::
 
