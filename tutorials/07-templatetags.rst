@@ -139,7 +139,7 @@ As expected, our test fails because we are not actually displaying any entries w
     AssertionError: 'My entry title' not found in u' <p>Dummy text.</p>\n'
 
     ----------------------------------------------------------------------
-    Ran 20 tests in 0.222s
+    Ran 21 tests in 0.222s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -231,7 +231,7 @@ It looks like we still have some problems because our tests still fail:
     AssertionError: 'No recent entries' not found in u' <ul>\n\n    <li>My entry title</li>\n\n</ul>\n'
 
     ----------------------------------------------------------------------
-    Ran 22 tests in 0.240s
+    Ran 23 tests in 0.240s
 
     FAILED (failures=1, errors=1)
     Destroying test database for alias 'default'...
