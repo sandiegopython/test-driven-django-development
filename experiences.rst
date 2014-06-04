@@ -5,7 +5,7 @@ November 2, 2013 San Diego Workshop
 -----------------------------------
 
 We did a Django TDD workshop on November 2, 2013 in San Diego based on these
-tutorials (`version 1.0`_)
+tutorials (`version 0.0.1`_)
 
 Teaching Method
 ~~~~~~~~~~~~~~~
@@ -23,8 +23,8 @@ issue to refresh the page and see whether the new copy clarified their issue.
 
 Everyone finished the tutorials in about 5 hours.
 
-Feedback
-~~~~~~~~
+Participant Feedback
+~~~~~~~~~~~~~~~~~~~~
 
 The feedback was very positive.  The primary negative feedback I remember was
 that some occasionally felt like they were just copy-pasting.  I think this
@@ -34,4 +34,4 @@ Way).  One user also noted that he often forgot to go look at the site after
 adding a feature.  We should probably ask users to go inspect the relevant
 part of the site whenever their tests pass.
 
-.. _version 1.0: https://github.com/pythonsd/test-driven-django-development/releases/tag/v1.0
+.. _version 0.0.1: https://github.com/pythonsd/test-driven-django-development/releases/tag/v0.0.1
