@@ -129,6 +129,7 @@ At the end of our ``content`` block in ``templates/blog/entry_detail.html`` let'
 
     We forgot to add tests for this!  Why don't you add a test to make sure
     comments appear on the blog entry page and a test to make sure the "No
-    comments yet" message shows up appropriately.
+    comments yet" message shows up appropriately.  This test should probably be
+    added to our ``EntryViewTest`` class.
 
 Now we can see our comments on the website.
