@@ -10,9 +10,12 @@ but rather intended to provide additional insight and knowledge.
 It is best if users go through the tutorials and understand the absolute basics
 of Django before the workshop.
 
+We have included some `experiences`_ of past workshops using these materials.
+
 .. _Django: https://djangoproject.com
 .. _San Diego Python: http://pythonsd.org
 .. _Django tutorials: https://docs.djangoproject.com/en/1.5/intro/tutorial01/
+.. _experiences: experiences.rst
 
 
 Tutorials
