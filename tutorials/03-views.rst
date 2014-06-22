@@ -196,9 +196,9 @@ Great!  Now let's make sure our new test passes:
 ::
 
     Creating test database for alias 'default'...
-    ..
+    ...
     ----------------------------------------------------------------------
-    Ran 2 tests in 0.021s
+    Ran 3 tests in 0.021s
 
     OK
     Destroying test database for alias 'default'...
@@ -340,7 +340,7 @@ which should fail like this
     AssertionError: Couldn't find '1-title' in response
 
     ----------------------------------------------------------------------
-    Ran 4 tests in 0.201s
+    Ran 5 tests in 0.201s
 
     FAILED (failures=2)
     Destroying test database for alias 'default'...
@@ -431,7 +431,7 @@ And that gives us the expected failure
     AssertionError: Couldn't find 'No blog entries yet' in response
 
     ----------------------------------------------------------------------
-    Ran 5 tests in 0.044s
+    Ran 6 tests in 0.044s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -603,7 +603,7 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
     TemplateDoesNotExist: blog/entry_detail.html
 
     ----------------------------------------------------------------------
-    Ran 9 tests in 0.071s
+    Ran 10 tests in 0.071s
 
     FAILED (errors=3)
     Destroying test database for alias 'default'...
@@ -627,9 +627,9 @@ Now our tests should pass again:
 ::
 
     Creating test database for alias 'default'...
-    .......
+    ........
     ----------------------------------------------------------------------
-    Ran 9 tests in 0.071s
+    Ran 10 tests in 0.071s
 
     OK
     Destroying test database for alias 'default'...

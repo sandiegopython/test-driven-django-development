@@ -56,7 +56,7 @@ Now let's run our tests to make sure our new test fails:
     AssertionError: u'Comment object' != 'My comment body'
 
     ----------------------------------------------------------------------
-    Ran 10 tests in 0.077s
+    Ran 11 tests in 0.077s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
@@ -71,9 +71,9 @@ an exercise we leave to the reader. After implementing the method, run the test 
 ::
 
     Creating test database for alias 'default'...
-    ..........
+    ...........
     ----------------------------------------------------------------------
-    Ran 10 tests in 0.072s
+    Ran 11 tests in 0.072s
 
     OK
     Destroying test database for alias 'default'...
