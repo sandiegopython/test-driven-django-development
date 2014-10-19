@@ -77,32 +77,35 @@ get replaced when a blog entry is rendered. This reuse that Django helps with
 and the concept of keeping things in a single place is called the DRY
 principle for Don't Repeat Yourself.
 
-.. _Templates: https://docs.djangoproject.com/en/1.6/ref/templates/
+.. _Templates: https://docs.djangoproject.com/en/1.7/ref/templates/
 
 Create a ``templates`` directory in our top-level directory. Our directory structure should look like
 
 .. code-block:: bash
 
-        ├── blog
-        │   ├── admin.py
-        │   ├── __init__.py
-        │   ├── models.py
-        │   ├── tests.py
-        │   └── views.py
-        ├── db.sqlite3
-        ├── manage.py
-        ├── myblog
-        │   ├── __init__.py
-        │   ├── settings.py
-        │   ├── urls.py
-        │   ├── wsgi.py
-        ├── requirements.txt
-        ├── static
-        │   └── css
-        │       ├── foundation.css
-        │       ├── foundation.min.css
-        │       └── normalize.css
-        └── templates
+    ├── blog
+    │   ├── admin.py
+    │   ├── __init__.py
+    │   ├── migrations
+    │   │   ├── 0001_initial.py
+    │   │   └── __init__.py
+    │   ├── models.py
+    │   ├── tests.py
+    │   └── views.py
+    ├── db.sqlite3
+    ├── manage.py
+    ├── myblog
+    │   ├── __init__.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   └── wsgi.py
+    ├── requirements.txt
+    ├── static
+    │   └── css
+    │       ├── foundation.css
+    │       ├── foundation.min.css
+    │       └── normalize.css
+    └── templates
 
 Create a basic HTML file like this and name it ``templates/index.html``:
 
@@ -130,7 +133,7 @@ Now inform Django of this new ``templates`` directory by adding this at the bott
 .. code-block:: python
 
     # Template files
-    # https://docs.djangoproject.com/en/1.6/topics/templates/
+    # https://docs.djangoproject.com/en/1.7/topics/templates/
     
     TEMPLATE_DIRS = (
         os.path.join(BASE_DIR, 'templates'),
@@ -161,8 +164,6 @@ Let's start by creating a views file: ``myblog/views.py`` referencing the ``inde
 
         template_name = 'index.html'
 
-    home = HomeView.as_view()
-
 .. IMPORTANT::
 
     We are making this views file in the ``myblog`` project directory (next to the ``myblog/urls.py`` file we are about to change).  We are **not** changing the ``blog/views.py`` file yet.  We will use that file later.
@@ -172,16 +173,16 @@ Now we need to route the homepage URL to the home view.  Our URL file ``myblog/u
 
 .. code-block:: python
 
-    from django.conf.urls import patterns, include, url
-    from myblog import views
-
+    from django.conf.urls import include, url
     from django.contrib import admin
-    admin.autodiscover()
 
-    urlpatterns = patterns('',
-        url(r'^$', views.home),
+    from . import views
+
+    urlpatterns = [
+        url(r'^$', views.HomeView.as_view(), name='home'),
         url(r'^admin/', include(admin.site.urls)),
-    )
+    ]
+
 
 Now let's visit http://localhost:8000/ in a web browser to check our work.  You should see a webpage that looks like this:
 
@@ -198,7 +199,7 @@ Great!  Now let's make sure our new test passes:
     Creating test database for alias 'default'...
     ...
     ----------------------------------------------------------------------
-    Ran 3 tests in 0.021s
+    Ran 3 tests in 0.032s
 
     OK
     Destroying test database for alias 'default'...
@@ -222,7 +223,7 @@ Using a base template
 
 Templates in Django are generally built up from smaller pieces. This lets you include things like a consistent header and footer on all your pages. Convention is to call one of your templates ``base.html`` and have everything inherit from that. Here is more information on `template inheritance with blocks`_.
 
-.. _template inheritance with blocks: https://docs.djangoproject.com/en/1.6/topics/templates/#template-inheritance
+.. _template inheritance with blocks: https://docs.djangoproject.com/en/1.7/topics/templates/#template-inheritance
 
 We'll start with putting our header and a sidebar in ``templates/base.html``:
 
@@ -284,7 +285,7 @@ Now our ``templates/index.html`` just overrides the ``content`` block in
 ``templates/base.html``. For more details on this powerful Django feature,
 you can read the documentation on `template inheritance`_.
 
-.. _template inheritance: https://docs.djangoproject.com/en/1.6/topics/templates/#template-inheritance
+.. _template inheritance: https://docs.djangoproject.com/en/1.7/topics/templates/#template-inheritance
 
 
 ListViews
@@ -324,23 +325,23 @@ which should fail like this
 .. code-block:: bash
 
     Creating test database for alias 'default'...
-    FF..
+    ..FF.
     ======================================================================
     FAIL: test_one_entry (blog.tests.HomePageTests)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
       ...
-    AssertionError: Couldn't find '1-title' in response
+    AssertionError: False is not true : Couldn't find '1-title' in response
 
     ======================================================================
     FAIL: test_two_entries (blog.tests.HomePageTests)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
       ...
-    AssertionError: Couldn't find '1-title' in response
+    AssertionError: False is not true : Couldn't find '1-title' in response
 
     ----------------------------------------------------------------------
-    Ran 5 tests in 0.201s
+    Ran 5 tests in 0.052s
 
     FAILED (failures=2)
     Destroying test database for alias 'default'...
@@ -362,7 +363,6 @@ One easy way to get all our entries objects to list is to just use a ``ListView`
         template_name = 'index.html'
         queryset = Entry.objects.order_by('-created_at')
 
-    home = HomeView.as_view()
 
 .. IMPORTANT::
 
@@ -422,13 +422,13 @@ And that gives us the expected failure
 .. code-block:: bash
 
     Creating test database for alias 'default'...
-    F....
+    ..F...
     ======================================================================
     FAIL: test_no_entries (blog.tests.HomePageTests)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
       ...
-    AssertionError: Couldn't find 'No blog entries yet' in response
+    AssertionError: False is not true : Couldn't find 'No blog entries yet.' in response
 
     ----------------------------------------------------------------------
     Ran 6 tests in 0.044s
@@ -508,30 +508,47 @@ Our ``blog/urls.py`` file is the very short
 
 .. code-block:: python
 
-    from django.conf.urls import patterns, url
+    from django.conf.urls import url
 
+    from . import views
 
-    urlpatterns = patterns('blog.views',
-        url(r'^(?P<pk>\d+)/$', 'entry_detail'),
-    )
+    urlpatterns = [
+        url(r'^(?P<pk>\d+)/$', views.EntryDetail.as_view(), name='entry_detail'),
+    ]
+
 
 The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
 
 .. code-block:: python
 
-    url(r'^', include('blog.urls')),
+    from django.conf.urls import include, url
+    from django.contrib import admin
 
-Now we need to define an ``entry_detail`` view in our ``blog/views.py`` file:
+    import blog.urls
+    from . import views
+
+    urlpatterns = [
+        url(r'^$', views.HomeView.as_view(), name='home'),
+        url(r'^', include(blog.urls)),
+        url(r'^admin/', include(admin.site.urls)),
+    ]
+
+
+Now we need to define an ``EntryDetail`` view in our ``blog/views.py``
+file. To implement our blog entry page we'll use another class-based
+generic view: the `DetailView`_. The ``DetailView`` is a view for
+displaying the details of an instance of a model and rendering it to a
+template. Let's replace our ``blog/views.py`` file with the following:
 
 .. code-block:: python
 
-    from django.http import HttpResponse
+    from django.views.generic import DetailView
+    from .models import Entry
 
 
-    def entry_detail(request, pk):
-        return HttpResponse('empty')
+    class EntryDetail(DetailView):
+        model = Entry
 
-We'll be updating this view later to return something useful.
 
 Finally we need to create the ``get_absolute_url()`` function which should return the entry detail URL for each entry. We should create a test first.  Let's add the following test to our ``EntryModelTest`` class:
 
@@ -551,7 +568,7 @@ Now we need to implement our ``get_absolute_url`` method in our ``Entry`` class 
     # And in our Entry model class...
 
     def get_absolute_url(self):
-        return reverse('blog.views.entry_detail', kwargs={'pk': self.pk})
+        return reverse('entry_detail', kwargs={'pk': self.pk})
 
 We should now have passing tests again.
 
@@ -567,18 +584,6 @@ Let's make the blog entry detail page actually display a blog entry.  First we'l
         response = self.client.get(self.entry.get_absolute_url())
         self.assertContains(response, self.entry.body)
 
-To implement our blog entry page we'll use another class-based generic view: the `DetailView`_. The ``DetailView`` is a view for displaying the details of an instance of a model and rendering it to a template. Let's replace our ``blog/views.py`` file with the following:
-
-.. code-block:: python
-
-    from django.views.generic import DetailView
-    from .models import Entry
-
-
-    class EntryDetail(DetailView):
-        model = Entry
-
-    entry_detail = EntryDetail.as_view()
 
 Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
 
@@ -589,21 +594,30 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
 ::
 
     Creating test database for alias 'default'...
-    EEE......
+    ...EEE....
+    ======================================================================
+    ERROR: test_basic_view (blog.tests.EntryViewTest)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      ...
+    django.template.base.TemplateDoesNotExist: blog/entry_detail.html
+
     ======================================================================
     ERROR: test_body_in_entry (blog.tests.EntryViewTest)
     ----------------------------------------------------------------------
-    ...
-    TemplateDoesNotExist: blog/entry_detail.html
+    Traceback (most recent call last):
+      ...
+    django.template.base.TemplateDoesNotExist: blog/entry_detail.html
 
     ======================================================================
     ERROR: test_title_in_entry (blog.tests.EntryViewTest)
     ----------------------------------------------------------------------
-    ...
-    TemplateDoesNotExist: blog/entry_detail.html
+    Traceback (most recent call last):
+      ...
+    django.template.base.TemplateDoesNotExist: blog/entry_detail.html
 
     ----------------------------------------------------------------------
-    Ran 10 tests in 0.071s
+    Ran 10 tests in 0.136s
 
     FAILED (errors=3)
     Destroying test database for alias 'default'...
@@ -627,28 +641,28 @@ Now our tests should pass again:
 ::
 
     Creating test database for alias 'default'...
-    ........
+    ..........
     ----------------------------------------------------------------------
-    Ran 10 tests in 0.071s
+    Ran 10 tests in 0.139s
 
     OK
     Destroying test database for alias 'default'...
 
-.. _test client: https://docs.djangoproject.com/en/1.6/topics/testing/tools/#module-django.test.client
+.. _test client: https://docs.djangoproject.com/en/1.7/topics/testing/tools/#module-django.test.client
 .. _zurb foundation files: http://foundation.zurb.com/
 .. _grid documentation: http://foundation.zurb.com/docs/components/grid.html
-.. _direct link: http://foundation.zurb.com/cdn/releases/foundation-5.2.1.zip
-.. _static files: https://docs.djangoproject.com/en/1.6/ref/contrib/staticfiles/
+.. _direct link: http://foundation.zurb.com/cdn/releases/foundation-5.4.6.zip
+.. _static files: https://docs.djangoproject.com/en/1.7/ref/contrib/staticfiles/
 .. _hypertext transfer protocol: http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
 .. _status codes: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-.. _template documentation: https://docs.djangoproject.com/en/1.6/topics/templates/
-.. _built-in template tags and filters: https://docs.djangoproject.com/en/1.6/ref/templates/builtins/
-.. _get_context_object_name: https://docs.djangoproject.com/en/1.6/ref/class-based-views/mixins-multiple-object/#django.views.generic.list.MultipleObjectMixin.get_context_object_name
-.. _date: https://docs.djangoproject.com/en/1.6/ref/templates/builtins/#date
-.. _linebreaks: https://docs.djangoproject.com/en/1.6/ref/templates/builtins/#linebreaks
+.. _template documentation: https://docs.djangoproject.com/en/1.7/topics/templates/
+.. _built-in template tags and filters: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/
+.. _get_context_object_name: https://docs.djangoproject.com/en/1.7/ref/class-based-views/mixins-multiple-object/#django.views.generic.list.MultipleObjectMixin.get_context_object_name
+.. _date: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#date
+.. _linebreaks: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#linebreaks
 .. _Classy Class Based Views: http://ccbv.co.uk
-.. _Django Model Instance Documentation: https://docs.djangoproject.com/en/1.6/ref/models/instances/#get-absolute-url
-.. _DetailView: http://ccbv.co.uk/projects/Django/1.6/django.views.generic.detail/DetailView/
+.. _Django Model Instance Documentation: https://docs.djangoproject.com/en/1.7/ref/models/instances/#get-absolute-url
+.. _DetailView: http://ccbv.co.uk/projects/Django/1.7/django.views.generic.detail/DetailView/
 .. _an architecture for django templates: https://oncampus.oberlin.edu/webteam/2012/09/architecture-django-templates
-.. _include tag: https://docs.djangoproject.com/en/1.6/ref/templates/builtins/#include
-.. _empty: https://docs.djangoproject.com/en/1.6/ref/templates/builtins/#for-empty
+.. _include tag: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#include
+.. _empty: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#for-empty
