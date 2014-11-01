@@ -61,7 +61,7 @@ Contents
    05-forms
    06-the-testing-game
    07-templatetags
-   08-south
+   08-migrations
    09-readable-urls
    10-gravatars
 
