@@ -121,12 +121,12 @@ Now let's add a basic test to our ``blog/tests.py`` file:
         TEMPLATE = Template("{% load blog_tags %} {% entry_history %}")
 
         def setUp(self):
-            user = get_user_model().objects.create(username='zoidberg')
-            self.entry = Entry.objects.create(author=user, title="My entry title")
+            self.user = get_user_model().objects.create(username='zoidberg')
 
         def test_entry_shows_up(self):
+            entry = Entry.objects.create(author=user, title="My entry title")
             rendered = self.TEMPLATE.render(Context({}))
-            self.assertIn(self.entry.title, rendered)
+            self.assertIn(entry.title, rendered)
 
 
 The tricky bits here are ``TEMPLATE``, ``Context({})`` and that ``render()`` call. These should all look somewhat familiar
@@ -209,7 +209,7 @@ case also:
 .. code-block:: python
 
     def test_many_posts(self):
-        for n in range(6):
+        for n in range(1, 6):
             Entry.objects.create(author=self.user, title="Post #{0}".format(n))
         rendered = self.TEMPLATE.render(Context({}))
         self.assertIn("Post #5", rendered)
