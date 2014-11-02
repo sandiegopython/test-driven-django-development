@@ -12,9 +12,9 @@ from .models import Entry, Comment
 
 class EntryModelTest(TestCase):
 
-    def test_unicode_representation(self):
+    def test_string_representation(self):
         entry = Entry(title="My entry title")
-        self.assertEqual(unicode(entry), entry.title)
+        self.assertEqual(str(entry), entry.title)
 
     def test_get_absolute_url(self):
         user = get_user_model().objects.create(username='some_user')
@@ -22,18 +22,18 @@ class EntryModelTest(TestCase):
         self.assertIsNotNone(entry.get_absolute_url())
 
     def test_verbose_name_plural(self):
-        self.assertEqual(unicode(Entry._meta.verbose_name_plural), "entries")
+        self.assertEqual(str(Entry._meta.verbose_name_plural), "entries")
 
 
 class CommentModelTest(TestCase):
 
-    def test_unicode_representation(self):
+    def test_string_representation(self):
         comment = Comment(body="My comment body")
-        self.assertEqual(unicode(comment), "My comment body")
+        self.assertEqual(str(comment), "My comment body")
 
     def test_gravatar_url(self):
         comment = Comment(body="My comment body", email="email@example.com")
-        expected = "https://www.gravatar.com/avatar/5658ffccee7f0ebfda2b226238b1eb6e"
+        expected = "http://www.gravatar.com/avatar/5658ffccee7f0ebfda2b226238b1eb6e"
         self.assertEqual(comment.gravatar_url(), expected)
 
 
@@ -202,8 +202,8 @@ class EntryHistoryTagTest(TestCase):
         self.assertIn("No recent entries", rendered)
 
     def test_many_posts(self):
-        for n in range(6):
+        for n in range(1, 6):
             Entry.objects.create(author=self.user, title="Post #{0}".format(n))
         rendered = self.TEMPLATE.render(Context({}))
-        self.assertIn("Post #4", rendered)
-        self.assertNotIn("Post #5", rendered)
+        self.assertIn("Post #5", rendered)
+        self.assertNotIn("Post #6", rendered)

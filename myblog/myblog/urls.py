@@ -1,11 +1,11 @@
-from django.conf.urls import patterns, include, url
-from myblog import views
-
+from django.conf.urls import include, url
 from django.contrib import admin
-admin.autodiscover()
 
-urlpatterns = patterns('',
-    url(r'^$', views.home),
-    url(r'^', include('blog.urls')),
+import blog.urls
+from . import views
+
+urlpatterns = [
+    url(r'^$', views.HomeView.as_view(), name='home'),
+    url(r'^', include(blog.urls)),
     url(r'^admin/', include(admin.site.urls)),
-)
+]
