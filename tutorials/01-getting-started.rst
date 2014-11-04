@@ -141,8 +141,6 @@ Now visit the admin site in your browser (http://localhost:8000/admin/).
 
     Quit the server by holding the control key and pressing C.
 
-    .. _official documentation: https://docs.djangoproject.com/en/1.7/intro/tutorial01/#the-development-server
-
 
 Python Package Requirements File
 --------------------------------
@@ -218,7 +216,7 @@ This file will allow us to install all Python dependencies at once with just one
         $ deactivate
         $ source venv/bin/activate  # or whatever your original virtualenv was
 
-.. _official documentation: https://docs.djangoproject.com/en/1.6/intro/tutorial01/#the-development-server
+.. _official documentation: https://docs.djangoproject.com/en/1.7/intro/tutorial01/#the-development-server
 .. _WebTest: http://webtest.readthedocs.org/en/latest/
 .. _django-webtest: https://pypi.python.org/pypi/django-webtest/
 .. _pip: http://www.pip-installer.org/en/latest/installing.html
