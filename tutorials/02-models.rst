@@ -13,14 +13,14 @@ Let's create an app for blog entries and related models.  We'll call the app ``b
 
     $ python manage.py startapp blog
 
-This command should have created a ``blog`` directory with the following files::
+This command should have created a ``blog`` directory with the following files and a subdirectory, migrations::
 
-    admin.py
     __init__.py
+    admin.py
+    migrations
     models.py
     tests.py
     views.py
-    migrations/__init__.py
 
 We'll be focusing on the ``models.py`` file below.
 
