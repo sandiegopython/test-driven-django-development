@@ -189,7 +189,10 @@ latex_elements = {
 #'pointsize': '10pt',
 
 # Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    'preamble': (
+        '\DeclareUnicodeCharacter{251C}{+}'  # BOX DRAWINGS LIGHT VERTICAL AND RIGHT
+        '\DeclareUnicodeCharacter{2514}{+}'  # BOX DRAWINGS LIGHT UP AND RIGHT
+    ),
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
