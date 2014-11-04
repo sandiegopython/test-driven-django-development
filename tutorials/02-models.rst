@@ -150,7 +150,7 @@ Our blog entry was created
 Our first test: __str__ method
 ----------------------------------
 
-In the admin change list our entries have the unhelpful name
+In the admin change list our entries have the unhelpful title
 *Entry object*. Add another entry just like the first one, they will
 look identical. We can customize the way models are referenced by
 creating a ``__str__`` method on our model class. Models are a good
