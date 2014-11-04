@@ -18,7 +18,7 @@ tests which creates an entry and adds it to the database. The `setup`_
 method is called before each test in the given test class so that each
 test will be able to use the ``User`` and ``Entry``.
 
-.. _setup: http://docs.python.org/2.7/library/unittest.html#unittest.TestCase.setUp
+.. _setup: https://docs.python.org/3.4/library/unittest.html#unittest.TestCase.setUp
 
 .. code-block:: python
 
