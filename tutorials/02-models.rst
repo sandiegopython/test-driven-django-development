@@ -267,6 +267,8 @@ Let's add a ``__str__`` method to our model that returns the entry title.  Our `
 
 If you start the development server and take a look at the admin interface (http://localhost:8000/admin/) again, you will see the entry titles in the list of entries.
 
+.. image:: _static/02-04_entry_w_name.png
+
 Now if we run our test again we should see that our single test passes:
 
 .. code-block:: bash
