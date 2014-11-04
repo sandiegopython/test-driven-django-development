@@ -45,13 +45,13 @@ We should now have something like this::
     ├── forms.py
     ├── __init__.py
     ├── migrations
-    │   ├── 0001_initial.py
-    │   ├── 0002_auto_20141019_0232.py
-    │   └── __init__.py
+    │   ├── 0001_initial.py
+    │   ├── 0002_auto_20141019_0232.py
+    │   └── __init__.py
     ├── models.py
     ├── templatetags
-    │   ├── blog_tags.py
-    │   └── __init__.py
+    │   ├── blog_tags.py
+    │   └── __init__.py
     ├── tests.py
     ├── urls.py
     └── views.py

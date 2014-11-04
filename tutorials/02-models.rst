@@ -46,20 +46,20 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
     ::
 
         ├── blog
-        │   ├── admin.py
-        │   ├── __init__.py
-        │   ├── migrations
-        │   │   └── __init__.py
-        │   ├── models.py
-        │   ├── tests.py
-        │   └── views.py
+        │   ├── admin.py
+        │   ├── __init__.py
+        │   ├── migrations
+        │   │   └── __init__.py
+        │   ├── models.py
+        │   ├── tests.py
+        │   └── views.py
         ├── db.sqlite3
         ├── manage.py
         ├── myblog
-        │   ├── __init__.py
-        │   ├── settings.py
-        │   ├── urls.py
-        │   └── wsgi.py
+        │   ├── __init__.py
+        │   ├── settings.py
+        │   ├── urls.py
+        │   └── wsgi.py
         └── requirements.txt
 
 

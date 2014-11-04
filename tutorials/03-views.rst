@@ -84,27 +84,27 @@ Create a ``templates`` directory in our top-level directory. Our directory struc
 .. code-block:: bash
 
     ├── blog
-    │   ├── admin.py
-    │   ├── __init__.py
-    │   ├── migrations
-    │   │   ├── 0001_initial.py
-    │   │   └── __init__.py
-    │   ├── models.py
-    │   ├── tests.py
-    │   └── views.py
+    │   ├── admin.py
+    │   ├── __init__.py
+    │   ├── migrations
+    │   │   ├── 0001_initial.py
+    │   │   └── __init__.py
+    │   ├── models.py
+    │   ├── tests.py
+    │   └── views.py
     ├── db.sqlite3
     ├── manage.py
     ├── myblog
-    │   ├── __init__.py
-    │   ├── settings.py
-    │   ├── urls.py
-    │   └── wsgi.py
+    │   ├── __init__.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   └── wsgi.py
     ├── requirements.txt
     ├── static
-    │   └── css
-    │       ├── foundation.css
-    │       ├── foundation.min.css
-    │       └── normalize.css
+    │   └── css
+    │       ├── foundation.css
+    │       ├── foundation.min.css
+    │       └── normalize.css
     └── templates
 
 Create a basic HTML file like this and name it ``templates/index.html``:
