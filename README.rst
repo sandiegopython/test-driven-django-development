@@ -12,7 +12,7 @@ of Django before the workshop.
 
 .. _Django: https://djangoproject.com
 .. _San Diego Python: http://pythonsd.org
-.. _Django tutorials: https://docs.djangoproject.com/en/1.5/intro/tutorial01/
+.. _Django tutorials: https://docs.djangoproject.com/en/1.7/intro/tutorial01/
 
 
 Tutorials

@@ -9,7 +9,7 @@ installed correctly and are the appropriate versions.
 
 Running the following command in the Mac OS or Linux terminal or in the
 Windows command prompt should show the version of Python. For this workshop
-you should have a 2.6.x or 2.7.x version of Python.
+you should have a 3.x version of Python.
 
 .. code-block:: bash
 
@@ -17,15 +17,14 @@ you should have a 2.6.x or 2.7.x version of Python.
 
 You should also have `pip`_ installed on your machine.  Pip is a dependency
 management tool for installing and managing Python dependencies.  First let's
-install Django 1.6:
+install Django 1.7:
 
 .. code-block:: bash
 
-    $ pip install django==1.6.2
-    Downloading/unpacking Django==1.6.2
-      Downloading Django-1.6.2.tar.gz (6.6MB): 6.6MB downloaded
-      Running setup.py egg_info for package Django
-    ...
+    $ pip install Django==1.7
+    Downloading/unpacking Django==1.7
+      Downloading Django-1.7-py2.py3-none-any.whl (7.4MB): 7.4MB downloaded
+    Installing collected packages: Django
     Successfully installed Django
     Cleaning up...
 
@@ -34,12 +33,12 @@ install Django 1.6:
    start with ``$`` in this workshop. Don't type the leading ``$`` though.
 
 Running the next command will show the version of Django you have installed.
-You should have Django 1.6.X installed.
+You should have Django 1.7 installed.
 
 .. code-block:: bash
 
     $ python -c "import django; print(django.get_version())"
-    1.6.2
+    1.7
 
 
 Creating the project
@@ -77,28 +76,20 @@ admin interface which we'll get to shortly:
 
 .. code-block:: bash
 
-    $ python manage.py syncdb
-    Creating tables ...
-    Creating table django_admin_log
-    Creating table auth_permission
-    Creating table auth_group_permissions
-    Creating table auth_group
-    Creating table auth_user_groups
-    Creating table auth_user_user_permissions
-    Creating table auth_user
-    Creating table django_content_type
-    Creating table django_session
-
-    You just installed Django s auth system, which means you don t have any superusers defined.
-    Would you like to create one now? (yes/no): yes
+    $ python manage.py migrate
+    Operations to perform:
+      Apply all migrations: admin, contenttypes, auth, sessions
+    Running migrations:
+      Applying contenttypes.0001_initial... OK
+      Applying auth.0001_initial... OK
+      Applying admin.0001_initial... OK
+      Applying sessions.0001_initial... OK
+    $ python manage.py createsuperuser
     Username (leave blank to use 'zoidberg'):
     Email address: zoidberg@example.com
     Password: ***
     Password (again): ***
     Superuser created successfully.
-    Installing custom SQL ...
-    Installing indexes ...
-    Installed 0 object(s) from 0 fixture(s)
 
 After running this command, there will be a database file ``db.sqlite3``
 in the same directory as ``manage.py``. Right now, this database only has
@@ -150,7 +141,7 @@ Now visit the admin site in your browser (http://localhost:8000/admin/).
 
     Quit the server by holding the control key and pressing C.
 
-    .. _official documentation: https://docs.djangoproject.com/en/1.6/intro/tutorial01/#the-development-server
+    .. _official documentation: https://docs.djangoproject.com/en/1.7/intro/tutorial01/#the-development-server
 
 
 Python Package Requirements File
@@ -161,11 +152,15 @@ We want to use a few more Python packages besides Django.  We'll plan to use `We
 .. code-block:: bash
 
     $ pip install webtest django-webtest
-    Downloading/unpacking Django==1.6.2
-      Downloading Django-1.6.2.tar.gz (6.6MB): 6.6MB downloaded
-      Running setup.py egg_info for package Django
+    Downloading/unpacking webtest
+      Downloading WebTest-2.0.16.zip (88kB): 88kB downloaded
+      Running setup.py (path:/home/micah/.virtualenvs/tddd/build/webtest/setup.py) egg_info for package webtest
     ...
-    Successfully installed Django
+    Downloading/unpacking django-webtest
+      Downloading django-webtest-1.7.7.tar.gz
+      Running setup.py (path:/home/micah/.virtualenvs/tddd/build/django-webtest/setup.py) egg_info for package django-webtest
+    ...
+    Successfully installed webtest django-webtest six WebOb waitress beautifulsoup4
     Cleaning up...
 
 We don't want to manually install our dependencies every time.  Let's create a `requirements file`_ listing our dependencies so we don't have to type them all out every time we setup our website on a new computer or anytime a package version updates.
@@ -175,21 +170,19 @@ First let's use `pip freeze`_ to list our dependencies and their versions:
 .. code-block:: bash
 
     $ pip freeze
-    Django==1.6.2
-    WebOb==1.3.1
-    WebTest==2.0.14
-    argparse==1.2.1
+    Django==1.7
+    WebOb==1.4
+    WebTest==2.0.16
     beautifulsoup4==4.3.2
-    django-webtest==1.7.6
-    six==1.5.2
-    waitress==0.8.8
-    wsgiref==0.1.2
+    django-webtest==1.7.7
+    six==1.8.0
+    waitress==0.8.9
 
 We care about the ``Django``, ``WebTest``, and ``django-webtest`` lines here.  The other packages are sub-dependencies that were automatically installed and don't need to worry about them.  Let's create our ``requirements.txt`` file with instructions for installing these packages with the versions we have installed now::
 
-    Django==1.6.2
-    WebTest==2.0.14
-    django-webtest==1.7.6
+    Django==1.7
+    WebTest==2.0.16
+    django-webtest==1.7.7
 
 
 This file will allow us to install all Python dependencies at once with just one command.  Whenever our dependency files are upgraded or if we setup a new development environment for our Django website we'll need to run:

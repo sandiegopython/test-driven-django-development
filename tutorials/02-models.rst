@@ -20,10 +20,11 @@ This command should have created a ``blog`` directory with the following files::
     models.py
     tests.py
     views.py
+    migrations/__init__.py
 
 We'll be focusing on the ``models.py`` file below.
 
-Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our settings file (``myblog/settings.py``).  This will allow Django to discover the models in our ``models.py`` file so they can be added to the database when running syncdb.
+Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our settings file (``myblog/settings.py``).  This will allow Django to discover the models in our ``models.py`` file so they can be added to the database when running migrate.
 
 .. code-block:: python
 
@@ -47,6 +48,8 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
         ├── blog
         │   ├── admin.py
         │   ├── __init__.py
+        │   ├── migrations
+        │   │   └── __init__.py
         │   ├── models.py
         │   ├── tests.py
         │   └── views.py
@@ -56,7 +59,7 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
         │   ├── __init__.py
         │   ├── settings.py
         │   ├── urls.py
-        │   ├── wsgi.py
+        │   └── wsgi.py
         └── requirements.txt
 
 
@@ -66,7 +69,7 @@ Creating a model
 First let's create a blog entry model.  Models are objects used to interface with your data, and are described in the `Django model documentation`_.
 This will correspond to a database table which will hold our blog entry.  A blog entry will be represented by an instance of our ``Entry`` model class and each ``Entry`` model instance will identify a row in our database table.
 
-.. _Django model documentation: https://docs.djangoproject.com/en/1.6/topics/db/models/
+.. _Django model documentation: https://docs.djangoproject.com/en/1.7/topics/db/models/
 
 .. code-block:: python
 
@@ -82,11 +85,14 @@ This will correspond to a database table which will hold our blog entry.  A blog
 
 If you aren't already familiar with databases, this code may be somewhat daunting. A good way to think about a model (or a database table) is as a sheet in a spreadsheet. Each field like the ``title`` or ``author`` is a column in the spreadsheet and each different instance of the model -- each individual blog entry in our project -- is a row in the spreadsheet.
 
-To create the database table for our ``Entry`` model we need to run syncdb again:
+To create the database table for our ``Entry`` model we need to make a migration and run migrate again:
 
 .. code-block:: bash
 
-    $ python manage.py syncdb
+    $ python manage.py makemigrations
+    $ python manage.py migrate
+
+Don't worry about migrations just yet, we'll get to them later.
 
 .. TIP::
     If you notice, this code is written in a very particular way. There are
@@ -96,7 +102,7 @@ To create the database table for our ``Entry`` model we need to run syncdb again
     than it is written. Consistent code style helps developers read and
     understand a new project more quickly.
 
-    .. _PEP8: http://www.python.org/dev/peps/pep-0008/
+    .. _PEP8: http://legacy.python.org/dev/peps/pep-0008/
 
 
 Creating entries from the admin site
@@ -106,7 +112,7 @@ We don't want to manually add entries to the database every time we want to upda
 
 In order to create blog entries from the `admin interface`_ we need to register our ``Entry`` model with the admin site.  We can do this by modifying our ``blog/admin.py`` file to register the ``Entry`` model with the admin interface:
 
-.. _admin interface: https://docs.djangoproject.com/en/1.6/ref/contrib/admin/
+.. _admin interface: https://docs.djangoproject.com/en/1.7/ref/contrib/admin/
 
 .. code-block:: python
 
@@ -136,10 +142,10 @@ Our blog entry was created
 .. image:: _static/02-03_entry_added.png
 
 
-Our first test: __unicode__ method
+Our first test: __str__ method
 ----------------------------------
 
-In the admin change list our entries all have the unhelpful name *Entry object*.  We can customize the way models are referenced by creating a ``__unicode__`` method on our model class. Models are a good place to put this kind of reusable code that is specific to a model.
+In the admin change list our entries all have the unhelpful name *Entry object*.  We can customize the way models are referenced by creating a ``__str__`` method on our model class. Models are a good place to put this kind of reusable code that is specific to a model.
 
 Let's first create a test demonstrating the behavior we'd like to see.
 
@@ -152,7 +158,7 @@ All the tests for our app will live in the ``blog/tests.py`` file. Delete everyt
 
     class EntryModelTest(TestCase):
 
-        def test_unicode_representation(self):
+        def test_string_representation(self):
             self.fail("TODO Test incomplete")
 
 Now run the test command to ensure our app's single test fails as expected:
@@ -166,7 +172,7 @@ Now run the test command to ensure our app's single test fails as expected:
     Creating test database for alias 'default'...
     F
     ======================================================================
-    FAIL: test_unicode_representation (blog.tests.EntryModelTest)
+    FAIL: test_string_representation (blog.tests.EntryModelTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
     ...
@@ -192,9 +198,9 @@ Now we're ready to create a real test.
     the code.
 
     .. _unittest: http://docs.python.org/2.7/library/unittest.html
-    .. _Testing Django applications: https://docs.djangoproject.com/en/1.6/topics/testing/overview/
+    .. _Testing Django applications: https://docs.djangoproject.com/en/1.7/topics/testing/overview/
 
-Let's write our test to ensure that a blog entry's unicode representation is equal to its title.  We need to modify our tests file like so:
+Let's write our test to ensure that a blog entry's string representation is equal to its title.  We need to modify our tests file like so:
 
 .. code-block:: python
 
@@ -205,16 +211,9 @@ Let's write our test to ensure that a blog entry's unicode representation is equ
 
     class EntryModelTest(TestCase):
 
-        def test_unicode_representation(self):
+        def test_string_representation(self):
             entry = Entry(title="My entry title")
-            self.assertEqual(unicode(entry), entry.title)
-
-.. HINT::
-    ``__unicode__`` may seem like a strange name, but Unicode is a standard
-    for representing and encoding most of the world's writing systems.
-    All strings that Django passes around are Unicode strings
-    so that Django can be used for applications designed for different
-    languages.
+            self.assertEqual(str(entry), entry.title)
 
 Now let's run our tests again:
 
@@ -227,21 +226,24 @@ Now let's run our tests again:
     Creating test database for alias 'default'...
     F
     ======================================================================
-    FAIL: test_unicode_representation (blog.tests.EntryModelTest)
+    FAIL: test_string_representation (blog.tests.EntryModelTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
     ...
-    AssertionError: u'Entry object' != 'My entry title'
+    AssertionError: 'Entry object' != 'My entry title'
+    - Entry object
+    + My entry title
+
 
     ----------------------------------------------------------------------
-    Ran 1 test in 0.001s
+    Ran 1 test in 0.002s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-Our test fails again, but this time it fails because we haven't customized our ``__unicode__`` method yet so the unicode representation for our model is still the default *Entry object*.
+Our test fails again, but this time it fails because we haven't customized our ``__str__`` method yet so the string representation for our model is still the default *Entry object*.
 
-Let's add a ``__unicode__`` method to our model that returns the entry title.  Our ``models.py`` file should look something like this:
+Let's add a ``__str__`` method to our model that returns the entry title.  Our ``models.py`` file should look something like this:
 
 .. code-block:: python
 
@@ -255,7 +257,7 @@ Let's add a ``__unicode__`` method to our model that returns the entry title.  O
         created_at = models.DateTimeField(auto_now_add=True, editable=False)
         modified_at = models.DateTimeField(auto_now=True, editable=False)
 
-        def __unicode__(self):
+        def __str__(self):
             return self.title
 
 If you start the development server and take a look at the admin interface (http://localhost:8000/admin/) again, you will see the entry titles in the list of entries.
@@ -271,7 +273,7 @@ Now if we run our test again we should see that our single test passes:
     Creating test database for alias 'default'...
     .
     ----------------------------------------------------------------------
-    Ran 1 test in 0.001s
+    Ran 1 test in 0.000s
 
     OK
     Destroying test database for alias 'default'...
@@ -286,14 +288,14 @@ While this may seem like a trivial example, good tests are a way to document the
 Another Test: Entrys
 --------------------
 
-Did you notice that the pluralization of entry is mispelled in the admin interface?  "Entrys" should instead read "Entries".  Let's write a test to verify that when Django correctly pluralizes "entry" to "entries".
+Did you notice that the pluralization of entry is misspelled in the admin interface?  "Entrys" should instead read "Entries".  Let's write a test to verify that when Django correctly pluralizes "entry" to "entries".
 
 Let's add a test to our ``EntryModelTest`` class:
 
 .. code-block:: python
 
     def test_verbose_name_plural(self):
-        self.assertEqual(unicode(Entry._meta.verbose_name_plural), "entries")
+        self.assertEqual(str(Entry._meta.verbose_name_plural), "entries")
 
 .. NOTE::
 
@@ -316,4 +318,4 @@ Add a ``Meta`` inner class inside our ``Entry`` model, like this:
 
     See the Django documentation for information on `verbose_name_plural`_ in the Meta class.
 
-.. _verbose_name_plural: https://docs.djangoproject.com/en/1.6/ref/models/options/#verbose-name-plural
+.. _verbose_name_plural: https://docs.djangoproject.com/en/1.7/ref/models/options/#verbose-name-plural

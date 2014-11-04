@@ -19,17 +19,34 @@ First we need to add a ``Comment`` model in ``blog/models.py``.
         modified_at = models.DateTimeField(auto_now=True, editable=False)
 
 
-Let's write a ``__unicode___`` method for our ``Comment`` model like we did for our ``Entry`` model earlier.
+Since we have added a new model, we also need to make sure that this model
+gets synced to our SQLite database.
 
-First we should create a test in ``blog/tests.py``.  Our test should look very similar to the ``__unicode__`` test we wrote for entries earlier.  This should suffice:
+.. code-block:: bash
+
+    $ python manage.py makemigrations
+    Migrations for 'blog':
+      0002_auto_20141019_0232.py:
+        - Create model Comment
+        - Change Meta options on entry
+    $ python manage.py migrate
+    Operations to perform:
+      Apply all migrations: contenttypes, blog, admin, auth, sessions
+    Running migrations:
+      Applying blog.0002_auto_20141019_0232... OK
+
+
+Let's write a ``__str__`` method for our ``Comment`` model like we did for our ``Entry`` model earlier.
+
+First we should create a test in ``blog/tests.py``.  Our test should look very similar to the ``__str__`` test we wrote for entries earlier.  This should suffice:
 
 .. code-block:: python
 
     class CommentModelTest(TestCase):
 
-        def test_unicode_representation(self):
+        def test_string_representation(self):
             comment = Comment(body="My comment body")
-            self.assertEqual(unicode(comment), "My comment body")
+            self.assertEqual(str(comment), "My comment body")
 
 Don't forget to import our ``Comment`` model:
 
@@ -47,21 +64,25 @@ Now let's run our tests to make sure our new test fails:
 ::
 
     Creating test database for alias 'default'...
-    F.
+    F..........
     ======================================================================
-    FAIL: test_unicode_representation (blog.tests.CommentModelTest)
+    FAIL: test_string_representation (blog.tests.CommentModelTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-    ...
-    AssertionError: u'Comment object' != 'My comment body'
+      ...
+    AssertionError: 'Comment object' != 'My comment body'
+    - Comment object
+    + My comment body
+
 
     ----------------------------------------------------------------------
-    Ran 11 tests in 0.077s
+    Ran 11 tests in 0.154s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-Great. So it looks like our test fails. Now we should implement the ``__unicode__`` method for the comment body,
+
+Great. So it looks like our test fails. Now we should implement the ``__str__`` method for the comment body,
 an exercise we leave to the reader. After implementing the method, run the test again to see it pass:
 
 .. code-block:: bash
@@ -73,17 +94,10 @@ an exercise we leave to the reader. After implementing the method, run the test 
     Creating test database for alias 'default'...
     ...........
     ----------------------------------------------------------------------
-    Ran 11 tests in 0.072s
+    Ran 11 tests in 0.085s
 
     OK
     Destroying test database for alias 'default'...
-
-Since we have added a new model, we also need to make sure that this model
-gets synced to our SQLite database.
-
-.. code-block:: bash
-
-    $ python manage.py syncdb
 
 
 Adding comments on the admin site

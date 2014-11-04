@@ -20,7 +20,7 @@ display recent blog entries in the sidebar on every page.
 
 .. NOTE::
   A custom template tag that itself fires a SQL query enables our HTML
-  templates to add more SQL queries to our view. That hides some behavor. It's
+  templates to add more SQL queries to our view. That hides some behavior. It's
   too early at this point, but that query should be cached if we expect to use
   this often.
 
@@ -40,26 +40,33 @@ package).
 
 We should now have something like this::
 
-    ├── blog
-    │   ├── __init__.py
-    │   ├── admin.py
-    │   ├── forms.py
-    │   ├── models.py
-    │   ├── templatetags
-    │   │   ├── __init__.py
-    │   │   └── blog_tags.py
-    │   ├── tests.py
-    │   ├── urls.py
-    │   └── views.py
+    blog
+    ├── admin.py
+    ├── forms.py
+    ├── __init__.py
+    ├── migrations
+    │   ├── 0001_initial.py
+    │   ├── 0002_auto_20141019_0232.py
+    │   └── __init__.py
+    ├── models.py
+    ├── templatetags
+    │   ├── blog_tags.py
+    │   └── __init__.py
+    ├── tests.py
+    ├── urls.py
+    └── views.py
 
 
 Creating an inclusion tag
 -------------------------
 
 Let's create an `inclusion tag`_ to query for recent blog entries and render a list
-of them.  We'll name our template tag ``entry_history``.  To start we'll render a ``blog/_entry_history.html`` template.
+of them.  We'll name our template tag ``entry_history``. To start we'll render a
+``blog/_entry_history.html`` template.
 
-Let's start by rendering an empty template with an empty template context dictionary.  First let's create a ``templates/blog/_entry_history.html`` file with some dummy text:
+Let's start by rendering an empty template with an empty template context
+dictionary. First let's create a ``templates/blog/_entry_history.html``
+file with some dummy text:
 
 .. code-block:: html
 
@@ -70,7 +77,6 @@ Now we'll create our ``blog/templatetags/blog_tags.py`` module with our ``entry_
 .. code-block:: python
 
     from django import template
-
 
     register = template.Library()
 
@@ -101,7 +107,10 @@ Make it work
 
 We just wrote code without writing any tests.  Let's write some tests now.
 
-At the top of ``blog/tests.py`` we need to add ``from django.template import Template, Context``.  We need those imports because we will be manually rendering template strings to test our template tag.
+At the top of ``blog/tests.py`` we need to add
+``from django.template import Template, Context``. We need those
+imports because we will be manually rendering template strings to test
+our template tag.
 
 Now let's add a basic test to our ``blog/tests.py`` file:
 
@@ -112,12 +121,12 @@ Now let's add a basic test to our ``blog/tests.py`` file:
         TEMPLATE = Template("{% load blog_tags %} {% entry_history %}")
 
         def setUp(self):
-            user = get_user_model().objects.create(username='zoidberg')
-            self.entry = Entry.objects.create(author=user, title="My entry title")
+            self.user = get_user_model().objects.create(username='zoidberg')
 
         def test_entry_shows_up(self):
+            entry = Entry.objects.create(author=user, title="My entry title")
             rendered = self.TEMPLATE.render(Context({}))
-            self.assertIn(self.entry.title, rendered)
+            self.assertIn(entry.title, rendered)
 
 
 The tricky bits here are ``TEMPLATE``, ``Context({})`` and that ``render()`` call. These should all look somewhat familiar
@@ -130,21 +139,23 @@ As expected, our test fails because we are not actually displaying any entries w
 
     $ python manage.py test blog
     Creating test database for alias 'default'...
-    .....F..............
+    .....F...............
     ======================================================================
     FAIL: test_entry_shows_up (blog.tests.EntryHistoryTagTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-        ...
-    AssertionError: 'My entry title' not found in u' <p>Dummy text.</p>\n'
+      ...
+    AssertionError: 'My entry title' not found in ' <p>Dummy text.</p>'
 
     ----------------------------------------------------------------------
-    Ran 21 tests in 0.222s
+    Ran 21 tests in 0.132s
 
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-Let's make our template tag actually display entry history.  First we will import our ``Entry`` model at the top of our template tag library module:
+Let's make our template tag actually display entry history. First we
+will import our ``Entry`` model at the top of our template tag library
+module:
 
 .. code-block:: python
 
@@ -162,14 +173,15 @@ Now let's send the last 5 entries in our sidebar:
         entries = Entry.objects.all()[:5]
         return {'entries': entries}
 
-Now we need to update our ``_entry_history.html`` file to display the titles of these blog entries:
+Now we need to update our ``_entry_history.html`` file to display the
+titles of these blog entries:
 
 .. code-block:: html
 
     <ul>
-    {% for entry in entries %}
-        <li>{{ entry.title }}</li>
-    {% endfor %}
+        {% for entry in entries %}
+            <li>{{ entry.title }}</li>
+        {% endfor %}
     </ul>
 
 Let's run our tests again and make sure they all pass.
@@ -177,7 +189,9 @@ Let's run our tests again and make sure they all pass.
 Making it a bit more robust
 ---------------------------
 
-What happens if we don't have any blog entries yet?  The sidebar might look a little strange without some text indicating that there aren't any blog entries yet.
+What happens if we don't have any blog entries yet? The sidebar might
+look a little strange without some text indicating that there aren't
+any blog entries yet.
 
 Let's add a test for when there are no blog posts:
 
@@ -187,27 +201,36 @@ Let's add a test for when there are no blog posts:
         rendered = self.TEMPLATE.render(Context({}))
         self.assertIn("No recent entries", rendered)
 
-The above test is for an edge case.  Let's add a test for another edge case: when there are more than 5 recent blog entries.  When there are 6 posts, only the last 5 should be displayed.  Let's add a test for this case also:
+The above test is for an edge case. Let's add a test for another edge
+case: when there are more than 5 recent blog entries.  When there are 6
+posts, only the last 5 should be displayed.  Let's add a test for this
+case also:
 
 .. code-block:: python
 
     def test_many_posts(self):
-        for n in range(6):
+        for n in range(1, 6):
             Entry.objects.create(author=self.user, title="Post #{0}".format(n))
         rendered = self.TEMPLATE.render(Context({}))
         self.assertIn("Post #5", rendered)
         self.assertNotIn("Post #6", rendered)
 
-The ``{% for %}`` template tag allows us to define an ``{% empty %}`` tag which we will be displayed when there are no blog entries (see `for loops`_ documentation).
+The ``{% for %}`` template tag allows us to define an ``{% empty %}``
+tag which we will be displayed when there are no blog entries (see
+`for loops`_ documentation).
 
-Update the ``_entry_history.html`` template to utilize the ``{% empty %}`` tag and make sure the tests pass.
+Update the ``_entry_history.html`` template to utilize the
+``{% empty %}`` tag and make sure the tests pass.
 
-.. code-block:: python
+.. code-block:: html
 
-
-    def setUp(self):
-        self.user = get_user_model().objects.create(username='zoidberg')
-        self.entry = Entry.objects.create(author=self.user, title="My entry title")
+    <ul>
+        {% for entry in entries %}
+            <li>{{ entry.title }}</li>
+        {% empty %}
+            <li>No recent entries</li>
+        {% endfor %}
+    </ul>
 
 It looks like we still have some problems because our tests still fail:
 
@@ -215,25 +238,25 @@ It looks like we still have some problems because our tests still fail:
 
     $ python manage.py test blog
     Creating test database for alias 'default'...
-    ......EF..............
+    .....EE................
+    ======================================================================
+    ERROR: test_entry_shows_up (blog.tests.EntryHistoryTagTest)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      ...
+    AttributeError: 'EntryHistoryTagTest' object has no attribute 'entry'
+
     ======================================================================
     ERROR: test_many_posts (blog.tests.EntryHistoryTagTest)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-        ...
+      ...
     AttributeError: 'EntryHistoryTagTest' object has no attribute 'user'
 
-    ======================================================================
-    FAIL: test_no_posts (blog.tests.EntryHistoryTagTest)
     ----------------------------------------------------------------------
-    Traceback (most recent call last):
-        ...
-    AssertionError: 'No recent entries' not found in u' <ul>\n\n    <li>My entry title</li>\n\n</ul>\n'
+    Ran 23 tests in 0.164s
 
-    ----------------------------------------------------------------------
-    Ran 23 tests in 0.240s
-
-    FAILED (failures=1, errors=1)
+    FAILED (errors=2)
     Destroying test database for alias 'default'...
 
 Try to fix the bugs on your own but don't be afraid to ask for help.
