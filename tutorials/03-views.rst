@@ -184,7 +184,10 @@ Now we need to route the homepage URL to the home view.  Our URL file ``myblog/u
     ]
 
 
-Now let's visit http://localhost:8000/ in a web browser to check our work.  You should see a webpage that looks like this:
+Now let's visit http://localhost:8000/ in a web browser to check our
+work. (Restart your server with the command
+`python manage.py runserver`.) You should see a webpage that looks like
+this:
 
 .. image:: _static/03-01_myblog.png
 
