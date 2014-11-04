@@ -66,8 +66,13 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
 Creating a model
 ----------------
 
-First let's create a blog entry model.  Models are objects used to interface with your data, and are described in the `Django model documentation`_.
-This will correspond to a database table which will hold our blog entry.  A blog entry will be represented by an instance of our ``Entry`` model class and each ``Entry`` model instance will identify a row in our database table.
+First, let's create a blog entry model by writing the code below in our
+`blog/models.py` file. Models are objects used to interface with your
+data, and are described in the `Django model documentation`_. Our model
+will correspond to a database table which will hold the data for our
+blog entry. A blog entry will be represented by an instance of our
+``Entry`` model class and each ``Entry`` model instance will identify a
+row in our database table.
 
 .. _Django model documentation: https://docs.djangoproject.com/en/1.7/topics/db/models/
 
