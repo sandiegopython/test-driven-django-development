@@ -150,7 +150,11 @@ Our blog entry was created
 Our first test: __str__ method
 ----------------------------------
 
-In the admin change list our entries all have the unhelpful name *Entry object*.  We can customize the way models are referenced by creating a ``__str__`` method on our model class. Models are a good place to put this kind of reusable code that is specific to a model.
+In the admin change list our entries have the unhelpful name
+*Entry object*. Add another entry just like the first one, they will
+look identical. We can customize the way models are referenced by
+creating a ``__str__`` method on our model class. Models are a good
+place to put this kind of reusable code that is specific to a model.
 
 Let's first create a test demonstrating the behavior we'd like to see.
 
@@ -204,6 +208,11 @@ Now we're ready to create a real test.
 
     .. _unittest: http://docs.python.org/2.7/library/unittest.html
     .. _Testing Django applications: https://docs.djangoproject.com/en/1.7/topics/testing/overview/
+
+.. NOTE::
+   `django.test.TestCase` extends the `unittest.TestCase` class.
+   Anything you would do in the base `unittest` class will work in
+   Django's `TestCase` as well.
 
 Let's write our test to ensure that a blog entry's string representation is equal to its title.  We need to modify our tests file like so:
 
