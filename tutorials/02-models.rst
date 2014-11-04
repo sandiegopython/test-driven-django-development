@@ -306,6 +306,8 @@ Another Test: Entrys
 
 Did you notice that the pluralization of entry is misspelled in the admin interface?  "Entrys" should instead read "Entries".  Let's write a test to verify that when Django correctly pluralizes "entry" to "entries".
 
+.. image:: _static/02-05_entrys_spelling.png
+
 Let's add a test to our ``EntryModelTest`` class:
 
 .. code-block:: python
