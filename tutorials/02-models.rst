@@ -13,14 +13,14 @@ Let's create an app for blog entries and related models.  We'll call the app ``b
 
     $ python manage.py startapp blog
 
-This command should have created a ``blog`` directory with the following files::
+This command should have created a ``blog`` directory with the following files and a subdirectory, migrations::
 
-    admin.py
     __init__.py
+    admin.py
+    migrations
     models.py
     tests.py
     views.py
-    migrations/__init__.py
 
 We'll be focusing on the ``models.py`` file below.
 
@@ -66,8 +66,13 @@ Before we can use our app we need to add it to our ``INSTALLED_APPS`` in our set
 Creating a model
 ----------------
 
-First let's create a blog entry model.  Models are objects used to interface with your data, and are described in the `Django model documentation`_.
-This will correspond to a database table which will hold our blog entry.  A blog entry will be represented by an instance of our ``Entry`` model class and each ``Entry`` model instance will identify a row in our database table.
+First, let's create a blog entry model by writing the code below in our
+`blog/models.py` file. Models are objects used to interface with your
+data, and are described in the `Django model documentation`_. Our model
+will correspond to a database table which will hold the data for our
+blog entry. A blog entry will be represented by an instance of our
+``Entry`` model class and each ``Entry`` model instance will identify a
+row in our database table.
 
 .. _Django model documentation: https://docs.djangoproject.com/en/1.7/topics/db/models/
 
@@ -145,7 +150,11 @@ Our blog entry was created
 Our first test: __str__ method
 ----------------------------------
 
-In the admin change list our entries all have the unhelpful name *Entry object*.  We can customize the way models are referenced by creating a ``__str__`` method on our model class. Models are a good place to put this kind of reusable code that is specific to a model.
+In the admin change list our entries have the unhelpful title
+*Entry object*. Add another entry just like the first one, they will
+look identical. We can customize the way models are referenced by
+creating a ``__str__`` method on our model class. Models are a good
+place to put this kind of reusable code that is specific to a model.
 
 Let's first create a test demonstrating the behavior we'd like to see.
 
@@ -199,6 +208,11 @@ Now we're ready to create a real test.
 
     .. _unittest: http://docs.python.org/2.7/library/unittest.html
     .. _Testing Django applications: https://docs.djangoproject.com/en/1.7/topics/testing/overview/
+
+.. NOTE::
+   `django.test.TestCase` extends the `unittest.TestCase` class.
+   Anything you would do in the base `unittest` class will work in
+   Django's `TestCase` as well.
 
 Let's write our test to ensure that a blog entry's string representation is equal to its title.  We need to modify our tests file like so:
 
@@ -262,6 +276,8 @@ Let's add a ``__str__`` method to our model that returns the entry title.  Our `
 
 If you start the development server and take a look at the admin interface (http://localhost:8000/admin/) again, you will see the entry titles in the list of entries.
 
+.. image:: _static/02-04_entry_w_name.png
+
 Now if we run our test again we should see that our single test passes:
 
 .. code-block:: bash
@@ -289,6 +305,8 @@ Another Test: Entrys
 --------------------
 
 Did you notice that the pluralization of entry is misspelled in the admin interface?  "Entrys" should instead read "Entries".  Let's write a test to verify that when Django correctly pluralizes "entry" to "entries".
+
+.. image:: _static/02-05_entrys_spelling.png
 
 Let's add a test to our ``EntryModelTest`` class:
 

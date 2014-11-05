@@ -214,10 +214,10 @@ Okay now let's finally write our form code.
 
         def __init__(self, *args, **kwargs):
             self.entry = kwargs.pop('entry')   # the blog entry instance
-            super(CommentForm, self).__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)
 
         def save(self):
-            comment = super(CommentForm, self).save(commit=False)
+            comment = super().save(commit=False)
             comment.entry = self.entry
             comment.save()
             return comment
