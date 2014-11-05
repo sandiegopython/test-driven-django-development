@@ -178,18 +178,26 @@ What would happen if we changed the slug or an invalid date was given
 in the URL?  This shouldn't matter because we only check for the model
 ``pk``.
 
-Let's write a test for this case to make sure the correct page is
-displayed in this case. Our test should look like this:
+Let's write a couple more tests for this case to make sure the correct
+page is displayed in this case, and for when the id does not exist. Our
+tests should look like this:
 
 .. code-block:: python
 
-    def test_invalid_url(self):
-        entry = Entry.objects.create(title="title", body="body",
-                                     author=self.user)
-        response = self.client.get("/0000/00/00/{0}-invalid/".format(entry.id))
+    def test_misdated_url(self):
+        entry = Entry.objects.create(
+            title="title", body="body", author=self.user)
+        url = "/0000/00/00/{0}-misdated/".format(entry.id)
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response,
-                                template_name='blog/entry_detail.html')
+        self.assertTemplateUsed(
+            response, template_name='blog/entry_detail.html')
+
+    def test_invalid_url(self):
+        entry = Entry.objects.create(
+            title="title", body="body", author=self.user)
+        response = self.client.get("/0000/00/00/0-invalid/")
+        self.assertEqual(response.status_code, 404)
 
 Now let's run our tests and make sure they still pass.
 

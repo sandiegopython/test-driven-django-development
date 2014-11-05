@@ -176,13 +176,20 @@ class CommentFormTest(TestCase):
         self.assertTemplateUsed(response,
                                 template_name='blog/entry_detail.html')
 
-    def test_invalid_url(self):
-        entry = Entry.objects.create(title="title", body="body",
-                                     author=self.user)
-        response = self.client.get("/0000/00/00/{0}-invalid/".format(entry.id))
+    def test_misdated_url(self):
+        entry = Entry.objects.create(
+            title="title", body="body", author=self.user)
+        url = "/0000/00/00/{0}-misdated/".format(entry.id)
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response,
-                                template_name='blog/entry_detail.html')
+        self.assertTemplateUsed(
+            response, template_name='blog/entry_detail.html')
+
+    def test_invalid_url(self):
+        entry = Entry.objects.create(
+            title="title", body="body", author=self.user)
+        response = self.client.get("/0000/00/00/0-invalid/")
+        self.assertEqual(response.status_code, 404)
 
 
 class EntryHistoryTagTest(TestCase):
