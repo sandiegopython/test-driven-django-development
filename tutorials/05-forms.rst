@@ -512,7 +512,7 @@ Now only one test fails:
     FAILED (errors=1)
     Destroying test database for alias 'default'...
 
-Let's fix this by adding a ``get_success_url`` to our view:
+Let's fix this by adding a ``get_success_url`` to our view, ``EntryDetail``, in ``blog/views.py``:
 
 .. code-block:: python
 
