@@ -207,8 +207,14 @@ Now let's run our tests and make sure they still pass.
     If you try to add an entry in the admin, you will notice that you
     must write a slug (it isn't optional) but then whatever you write
     is overwritten in the ``Entry.save()`` method. There are a couple
-    ways to resolve this but one way is to set the ``SlugField`` to be
-    ``editable=False`` which will hide it in the admin or other forms.
+    ways to resolve this but one way is to set the ``SlugField`` in
+    our ``Entry`` model to be ``editable=False`` which will hide it in
+    the admin or other forms:
+
+    .. code-block:: python
+
+        slug = SlugField(editable=False)
+
     See the Django docs on editable_ for details.
 
     .. _editable: https://docs.djangoproject.com/en/1.7/ref/models/fields/#editable
