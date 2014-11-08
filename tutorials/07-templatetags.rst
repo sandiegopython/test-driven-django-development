@@ -61,8 +61,7 @@ Creating an inclusion tag
 -------------------------
 
 Let's create an `inclusion tag`_ to query for recent blog entries and render a list
-of them.  We'll name our template tag ``entry_history``. To start we'll render a
-``blog/_entry_history.html`` template.
+of them.  We'll name our template tag ``entry_history``.
 
 Let's start by rendering an empty template with an empty template context
 dictionary. First let's create a ``templates/blog/_entry_history.html``
