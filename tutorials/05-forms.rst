@@ -419,8 +419,9 @@ Now our tests pass again:
     OK
     Destroying test database for alias 'default'...
 
-Let's test that our form actually submits. We should write two tests:
-one to test for errors, and one to test a successful form submission.
+Let's test that our form actually submits. We should write two tests
+in our ``EntryViewTest``: one to test for errors, and one to test a
+successful form submission.
 
 .. code-block:: python
 
