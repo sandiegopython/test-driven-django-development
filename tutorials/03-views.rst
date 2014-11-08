@@ -420,7 +420,7 @@ We should add a test for that
         response = self.client.get('/')
         self.assertContains(response, 'No blog entries yet.')
 
-And that gives us the expected failure
+This test gives us the expected failure
 
 .. code-block:: bash
 
