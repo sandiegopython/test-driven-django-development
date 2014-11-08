@@ -214,6 +214,11 @@ Now we're ready to create a real test.
    Anything you would do in the base `unittest` class will work in
    Django's `TestCase` as well.
 
+   You can read more about `django.test.TestCase`_ in the Django documentation and the `unittest.TestCase`_ parent class in the Python documentation.
+
+   .. _django.test.TestCase: https://docs.djangoproject.com/en/1.7/topics/testing/tools/#django.test.TestCase
+   .. _unittest.TestCase: https://docs.python.org/3.4/library/unittest.html#unittest.TestCase
+
 Let's write our test to ensure that a blog entry's string representation is equal to its title.  We need to modify our tests file like so:
 
 .. code-block:: python
