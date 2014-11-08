@@ -134,7 +134,7 @@ Now inform Django of this new ``templates`` directory by adding this at the bott
 
     # Template files
     # https://docs.djangoproject.com/en/1.7/topics/templates/
-    
+
     TEMPLATE_DIRS = (
         os.path.join(BASE_DIR, 'templates'),
     )
