@@ -439,7 +439,7 @@ This test gives us the expected failure
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-The easiest way to add this is to use the `empty`_ clause. See if you can add this in yourself to make the test pass.
+The easiest way to implement this feature is to use the `empty`_ clause. See if you can add this in yourself to make the test pass.
 
 What about viewing an individual blog entry?
 
