@@ -36,12 +36,11 @@ gets synced to our SQLite database.
       Applying blog.0002_auto_20141019_0232... OK
 
 
-Add a ``__str__`` method for our ``Comment`` model, similar to the one
-we previously added for our ``Entry`` model.
+Before we create a ``__str__`` method for our ``Comment`` model
+similar to the one we previously added for our ``Entry`` model, let's create a test in ``blog/tests.py``.
 
-Now we need to create a test in ``blog/tests.py``. Our test should look
-very similar to the ``__str__`` test we wrote in ``EntryModelTest``
-earlier. This should suffice:
+Our test should look very similar to the ``__str__`` test we wrote in
+``EntryModelTest`` earlier. This should suffice:
 
 .. code-block:: python
 
