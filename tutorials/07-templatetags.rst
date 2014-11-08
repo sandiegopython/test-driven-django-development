@@ -262,7 +262,14 @@ Try to fix the bugs on your own but don't be afraid to ask for help.
 
 .. HINT::
 
-    There are multiple bugs in our test code.
+    There are multiple bugs in our test code. Let's give you a couple of hints on how you can approach debugging and resolving them.
+
+    First of all, for the ``test_no_posts``, think about what is initially being set up in the function ``setUp``. How many entries have been created? What could we do to have no entries created when ``test_no_posts`` is called and executed?
+
+    Secondly, for ``test_many_posts``, read about `slicing`_ and the `range`_ function to resolve the errors that appear during testing.
+
+    .. _range: https://docs.python.org/2/library/functions.html?highlight=slice#range
+    .. _slicing: https://docs.python.org/2/library/functions.html?highlight=slice#slice
 
 
 .. _custom template tag: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-tags
