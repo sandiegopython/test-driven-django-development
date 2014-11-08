@@ -505,7 +505,7 @@ Let's write a test our new blog entry pages:
             response = self.client.get(self.entry.get_absolute_url())
             self.assertEqual(response.status_code, 200)
 
-This test fails because we didn't define the ``get_absolute_url`` method for our model (`Django Model Instance Documentation`_). We need to create a URL and a view for blog entry pages now. We'll need to create a ``blog/urls.py`` file and reference it in the ``myblog/urls.py`` file.
+This test fails because we didn't define the ``get_absolute_url`` method for our ``Entry`` model (`Django Model Instance Documentation`_). We need to create a URL and a view for blog entry pages now. We'll need to create a ``blog/urls.py`` file and reference it in the ``myblog/urls.py`` file.
 
 Our ``blog/urls.py`` file is the very short
 
