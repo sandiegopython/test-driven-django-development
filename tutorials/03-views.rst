@@ -441,6 +441,9 @@ This test gives us the expected failure
 
 The easiest way to implement this feature is to use the `empty`_ clause. See if you can add this in yourself to make the test pass.
 
+.. HINT::
+    Remember that the phrase in the empty clause must contain the same phrase we check for in our test ("No blog entries yet.").
+
 What about viewing an individual blog entry?
 
 Blog Entry Detail
