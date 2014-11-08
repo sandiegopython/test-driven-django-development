@@ -128,7 +128,7 @@ Displaying comments on the website
 
 Now we can create comments in the admin interface, but we can't see them on the website yet.  Let's display comments on the detail page for each blog entry.
 
-At the end of our ``content`` block in ``templates/blog/entry_detail.html`` let's add the following:
+After the ``<hr>`` element inside of our content block in ``templates/blog/entry_detail.html`` let's add the following:
 
 .. code-block:: html
 
