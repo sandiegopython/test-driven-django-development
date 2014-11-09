@@ -97,7 +97,7 @@ To create the database table for our ``Entry`` model we need to make a migration
     $ python manage.py makemigrations
     $ python manage.py migrate
 
-Don't worry about migrations just yet, we'll get to them later.
+Don't worry about the details of migrations just yet, we'll learn about them in a later section of the tutorial. For now, just think of migrations as Django's way of managing changes to models and the corresponding database.
 
 .. TIP::
     If you notice, this code is written in a very particular way. There are
