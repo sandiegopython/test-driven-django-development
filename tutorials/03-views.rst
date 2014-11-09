@@ -446,14 +446,14 @@ The easiest way to implement this feature is to use the `empty`_ clause. See if 
 
 What about viewing an individual blog entry?
 
-Blog Entry Detail
------------------
+Blog Entries, URLs, and Views
+-----------------------------
 
-To save a bit of time let's make our urls look like ``http://myblog.com/ID/`` where ID is the database ID of the blog entry we want to see.
+For simplicity, let's agree on a project guideline to form our urls to look like ``http://myblog.com/ID/`` where ID is the database ID of the specific blog entry that we want to display. In this section, we will be creating a `blog entry detail` page and using our project's url guideline.
 
-Before we create this page, let's move the template content that displays our blog entries on our homepage into a separate template file so we can reuse it on our blog entry detail page.
+Before we create this page, let's move the template content that displays our blog entries on our homepage (``templates/index.html``) into a new, separate template file so we can reuse the blog entry display logic on our `blog entry details` page.
 
-Let's make a file called ``templates/_entry.html`` and put the following in it:
+Let's make a template file called ``templates/_entry.html`` and put the following in it:
 
 .. code-block:: html
 
@@ -493,7 +493,7 @@ Now let's change our homepage template (``templates/index.html``) to include the
 
     We use the ``with entry=entry only`` convention in our ``include`` tag for better encapsulation (as mentioned in `An Architecture for Django Templates`_).  Check the Django documentation more information on the `include tag`_.
 
-Let's write a test our new blog entry pages:
+Great job. Now, let's write a test our new blog entry pages:
 
 .. code-block:: python
 
@@ -508,9 +508,11 @@ Let's write a test our new blog entry pages:
             response = self.client.get(self.entry.get_absolute_url())
             self.assertEqual(response.status_code, 200)
 
-This test fails because we didn't define the ``get_absolute_url`` method for our ``Entry`` model (`Django Model Instance Documentation`_). We need to create a URL and a view for blog entry pages now. We'll need to create a ``blog/urls.py`` file and reference it in the ``myblog/urls.py`` file.
+This test fails because we didn't define the ``get_absolute_url`` method for our ``Entry`` model (`Django Model Instance Documentation`_). We will need an absolute URL to correspond to an individual blog entry.
 
-Our ``blog/urls.py`` file is the very short
+We need to create a URL and a view for blog entry pages now. We'll make a new ``blog/urls.py`` file and reference it in the ``myblog/urls.py`` file.
+
+Our ``blog/urls.py`` file is the very short:
 
 .. code-block:: python
 
@@ -540,11 +542,12 @@ The urlconf in ``myblog/urls.py`` needs to reference ``blog.urls``:
     ]
 
 
-Now we need to define an ``EntryDetail`` view in our ``blog/views.py``
+Remember, we are working on creating a way to see individual entries. 
+Now we need to define an ``EntryDetail`` view class in our ``blog/views.py``
 file. To implement our blog entry page we'll use another class-based
 generic view: the `DetailView`_. The ``DetailView`` is a view for
 displaying the details of an instance of a model and rendering it to a
-template. Let's replace our ``blog/views.py`` file with the following:
+template. Let's replace the contents of ``blog/views.py`` file with the following:
 
 .. code-block:: python
 
@@ -556,7 +559,7 @@ template. Let's replace our ``blog/views.py`` file with the following:
         model = Entry
 
 
-Finally we need to create the ``get_absolute_url()`` function which should return the entry detail URL for each entry. We should create a test first.  Let's add the following test to our ``EntryModelTest`` class:
+Let's look at how to create the ``get_absolute_url()`` function which should return the individual, absolute entry detail URL for each blog entry. We should create a test first.  Let's add the following test to our ``EntryModelTest`` class:
 
 .. code-block:: python
 
@@ -576,9 +579,9 @@ Now we need to implement our ``get_absolute_url`` method in our ``Entry`` class 
     def get_absolute_url(self):
         return reverse('entry_detail', kwargs={'pk': self.pk})
 
-We should now have passing tests again.
+We should now have passing tests again since we just defined a ``get_absolute_url`` method.
 
-Let's make the blog entry detail page actually display a blog entry.  First we'll write some tests in our ``EntryViewTest`` class:
+Let's make the blog entry detail view page actually display a blog entry.  First we'll write some tests in our ``EntryViewTest`` class:
 
 .. code-block:: python
 
