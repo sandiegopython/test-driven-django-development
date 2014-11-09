@@ -631,7 +631,9 @@ Now we'll see some ``TemplateDoesNotExist`` errors when running our tests again:
     FAILED (errors=3)
     Destroying test database for alias 'default'...
 
-These errors are telling us that we're referencing a ``blog/entry_detail.html`` template but we haven't created that file yet.  Let's create a ``templates/blog/entry_detail.html``. The ``DetailView`` should provide us with a ``entry`` context variable that we can use to reference our ``Entry`` model instance.  Our template should look similar to this:
+These errors are telling us that we're referencing a ``blog/entry_detail.html`` template but we haven't created that file yet.  
+
+We're very close to being able to see individual blog entry details. Let's do it. First, create a ``templates/blog/entry_detail.html`` as our blog entry detail view template. The ``DetailView`` will use an ``entry`` context variable to reference our ``Entry`` model instance.  Our new blog entry detail view template should look similar to this:
 
 .. code-block:: html
 
