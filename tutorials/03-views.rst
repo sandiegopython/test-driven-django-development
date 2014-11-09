@@ -579,7 +579,14 @@ Now we need to implement our ``get_absolute_url`` method in our ``Entry`` class 
     def get_absolute_url(self):
         return reverse('entry_detail', kwargs={'pk': self.pk})
 
-We should now have passing tests again since we just defined a ``get_absolute_url`` method.
+.. TIP::
+    For further reading about the utility function, reverse, see the
+    Django documentation on `django.core.urlresolvers.reverse`_.
+
+    .. _django.core.urlresolvers.reverse: https://docs.djangoproject.com/en/1.7/ref/urlresolvers/
+
+
+Now, run the tests again. We should have passing tests since we just defined a ``get_absolute_url`` method.
 
 Let's make the blog entry detail view page actually display a blog entry.  First we'll write some tests in our ``EntryViewTest`` class:
 
