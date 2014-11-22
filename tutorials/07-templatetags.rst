@@ -61,8 +61,7 @@ Creating an inclusion tag
 -------------------------
 
 Let's create an `inclusion tag`_ to query for recent blog entries and render a list
-of them.  We'll name our template tag ``entry_history``. To start we'll render a
-``blog/_entry_history.html`` template.
+of them.  We'll name our template tag ``entry_history``.
 
 Let's start by rendering an empty template with an empty template context
 dictionary. First let's create a ``templates/blog/_entry_history.html``
@@ -209,7 +208,7 @@ case also:
 .. code-block:: python
 
     def test_many_posts(self):
-        for n in range(1, 6):
+        for n in range(6):
             Entry.objects.create(author=self.user, title="Post #{0}".format(n))
         rendered = self.TEMPLATE.render(Context({}))
         self.assertIn("Post #5", rendered)
@@ -263,7 +262,14 @@ Try to fix the bugs on your own but don't be afraid to ask for help.
 
 .. HINT::
 
-    There are multiple bugs in our test code.
+    There are multiple bugs in our test code. Let's give you a couple of hints on how you can approach debugging and resolving them.
+
+    First of all, for the ``test_no_posts``, think about what is initially being set up in the function ``setUp``. How many entries have been created? What could we do to have no entries created when ``test_no_posts`` is called and executed?
+
+    Secondly, for ``test_many_posts``, read about `slicing`_ and the `range`_ function to resolve the errors that appear during testing.
+
+    .. _range: https://docs.python.org/2/library/functions.html?highlight=slice#range
+    .. _slicing: https://docs.python.org/2/library/functions.html?highlight=slice#slice
 
 
 .. _custom template tag: https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-tags

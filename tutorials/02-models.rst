@@ -97,7 +97,7 @@ To create the database table for our ``Entry`` model we need to make a migration
     $ python manage.py makemigrations
     $ python manage.py migrate
 
-Don't worry about migrations just yet, we'll get to them later.
+Don't worry about the details of migrations just yet, we'll learn about them in a later section of the tutorial. For now, just think of migrations as Django's way of managing changes to models and the corresponding database.
 
 .. TIP::
     If you notice, this code is written in a very particular way. There are
@@ -213,6 +213,11 @@ Now we're ready to create a real test.
    `django.test.TestCase` extends the `unittest.TestCase` class.
    Anything you would do in the base `unittest` class will work in
    Django's `TestCase` as well.
+
+   You can read more about `django.test.TestCase`_ in the Django documentation and the `unittest.TestCase`_ parent class in the Python documentation.
+
+   .. _django.test.TestCase: https://docs.djangoproject.com/en/1.7/topics/testing/tools/#django.test.TestCase
+   .. _unittest.TestCase: https://docs.python.org/3.4/library/unittest.html#unittest.TestCase
 
 Let's write our test to ensure that a blog entry's string representation is equal to its title.  We need to modify our tests file like so:
 
