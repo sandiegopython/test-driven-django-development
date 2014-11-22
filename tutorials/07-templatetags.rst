@@ -208,7 +208,7 @@ case also:
 .. code-block:: python
 
     def test_many_posts(self):
-        for n in range(1, 6):
+        for n in range(6):
             Entry.objects.create(author=self.user, title="Post #{0}".format(n))
         rendered = self.TEMPLATE.render(Context({}))
         self.assertIn("Post #5", rendered)
