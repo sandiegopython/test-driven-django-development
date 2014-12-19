@@ -98,7 +98,7 @@ Then modify our second column to use our ``entry_history`` template tag:
         {% entry_history %}
     </div>
 
-Reload the homepage and make sure our dummy text appears.
+Restart the server and make sure our dummy text appears.
 
 
 Make it work
