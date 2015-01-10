@@ -28,7 +28,7 @@ class Entry(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
+        super(Entry, self).save(*args, **kwargs)
 
 class Comment(models.Model):
     entry = models.ForeignKey(Entry)
