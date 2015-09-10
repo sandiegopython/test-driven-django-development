@@ -39,7 +39,7 @@ top of the file:
 
 .. code-block:: python
 
-    from django.template.defaultfilters import slugify
+    from django.utils.text import slugify
 
 Now create a save method in our ``Entry`` model that slugifies the
 title upon saving:
