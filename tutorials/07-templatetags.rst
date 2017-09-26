@@ -123,7 +123,7 @@ Now let's add a basic test to our ``blog/tests.py`` file:
             self.user = get_user_model().objects.create(username='zoidberg')
 
         def test_entry_shows_up(self):
-            entry = Entry.objects.create(author=user, title="My entry title")
+            entry = Entry.objects.create(author=self.user, title="My entry title")
             rendered = self.TEMPLATE.render(Context({}))
             self.assertIn(entry.title, rendered)
 
