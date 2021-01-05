@@ -83,7 +83,11 @@ row in our database table.
 
     class Entry(models.Model):
         title = models.CharField(max_length=500)
-        author = models.ForeignKey('auth.User')
+        author = models.ForeignKey(
+            settings.AUTH_USER_MODEL,
+            default=1,
+            on_delete=models.SET_DEFAULT
+        )
         body = models.TextField()
         created_at = models.DateTimeField(auto_now_add=True, editable=False)
         modified_at = models.DateTimeField(auto_now=True, editable=False)
@@ -206,8 +210,8 @@ Now we're ready to create a real test.
     projects adopt similar conventions, developers can more easily understand
     the code.
 
-    .. _unittest: http://docs.python.org/2.7/library/unittest.html
-    .. _Testing Django applications: https://docs.djangoproject.com/en/1.7/topics/testing/overview/
+    .. _unittest: https://docs.python.org/3.9/library/unittest.html
+    .. _Testing Django applications: https://docs.djangoproject.com/en/3.1/topics/testing/
 
 .. NOTE::
    `django.test.TestCase` extends the `unittest.TestCase` class.
@@ -216,8 +220,8 @@ Now we're ready to create a real test.
 
    You can read more about `django.test.TestCase`_ in the Django documentation and the `unittest.TestCase`_ parent class in the Python documentation.
 
-   .. _django.test.TestCase: https://docs.djangoproject.com/en/1.7/topics/testing/tools/#django.test.TestCase
-   .. _unittest.TestCase: https://docs.python.org/3.4/library/unittest.html#unittest.TestCase
+   .. _django.test.TestCase: https://docs.djangoproject.com/en/3.1/topics/testing/tools/#testcase
+   .. _unittest.TestCase: https://docs.python.org/3.9/library/unittest.html#unittest.TestCase
 
 Let's write our test to ensure that a blog entry's string representation is equal to its title.  We need to modify our tests file like so:
 
@@ -271,7 +275,11 @@ Let's add a ``__str__`` method to our model that returns the entry title.  Our `
 
     class Entry(models.Model):
         title = models.CharField(max_length=500)
-        author = models.ForeignKey('auth.User')
+        author = models.ForeignKey(
+            settings.AUTH_USER_MODEL,
+            default=1,
+            on_delete=models.SET_DEFAULT
+        )
         body = models.TextField()
         created_at = models.DateTimeField(auto_now_add=True, editable=False)
         modified_at = models.DateTimeField(auto_now=True, editable=False)
@@ -341,4 +349,4 @@ Add a ``Meta`` inner class inside our ``Entry`` model, like this:
 
     See the Django documentation for information on `verbose_name_plural`_ in the Meta class.
 
-.. _verbose_name_plural: https://docs.djangoproject.com/en/1.7/ref/models/options/#verbose-name-plural
+.. _verbose_name_plural: https://docs.djangoproject.com/en/3.1/ref/models/options/#verbose-name-plural
